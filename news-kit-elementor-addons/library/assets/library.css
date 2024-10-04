@@ -1,0 +1,439 @@
+#nekit-library-popup {
+    display: none;
+}
+
+#nekit-library-popup.modal-active {
+    display: block;
+    z-index: 999;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.templates-tab-content .widgets-category-title-wrap {
+    display: block;
+    text-align: center;
+}
+
+.templates-tab-content .widgets-category-title-wrap li {
+    width: 150px;
+    display: inline-block;
+}
+
+
+.tab-blocks-list-wrap .tab-blocks-list figure img {
+    display: block;
+    border-style: none;
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+}
+
+.tab-blocks-list-wrap .tab-blocks-list .template-item > a {
+    display: block;
+    padding: 8px 8px 0 8px;
+}
+
+/*------------------------------
+    DEMO LISTING
+------------------------------*/
+
+    .nekit-library-popup div.header {
+        display: flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        align-items: center;
+        -webkit-align-items: center;
+        background-color: #fff;
+        padding: 0 25px;
+        box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 12%);
+        -webkit-box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 12%);
+        -moz-box-shadow: 0px 2px 5px 0px rgb(0 0 0 / 12%);
+    }
+
+    .nekit-library-popup .logo {
+        width: 35px;
+    }
+
+    .nekit-library-popup .templates-tabs > div {
+        display: inline-block;
+        padding: 20px 30px;
+        position: relative;
+        cursor: pointer;
+        font-family: 'Roboto';
+        font-weight: 500;
+        color: #545454;
+        font-size: 15px;
+    }
+
+    .nekit-library-popup .templates-tabs .tab-title.isActive {
+        background: linear-gradient(180deg, #fff 10%,#f738591c 100%);
+        color: #f73859;
+    }
+
+    .nekit-library-popup .templates-tabs .tab-title.isActive:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: #f73859;
+        left: 0;
+        bottom: 0;
+    }
+
+    .nekit-library-popup .popup-close-trigger {
+        color: #f73859;
+        font-size: 17px;
+        cursor: pointer;
+    }
+
+    .nekit-library-popup .templates-tab-content {
+        padding: 25px 25px 25px 40px;
+    }
+
+    .nekit-library-popup .templates-tab-content .filter-tab-search-wrap {
+        display: flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        align-items: center;
+        -webkit-align-items: center;
+    }
+
+    .nekit-library-popup .templates-tab-content .active-filter {
+        background-color: #fff;
+        padding: 6px 15px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        border-radius: 3px;
+        box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -webkit-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -moz-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+    }
+
+    .nekit-library-popup .templates-tab-content .active-filter .filter-text {
+        font-size: 14px;
+        font-family: 'Roboto';
+        text-transform: capitalize;
+        margin-right: 10px;
+    }
+
+    .nekit-library-popup .templates-tab-content .active-filter .dashicons {
+        font-size: 14px;
+        vertical-align: middle;
+        line-height: 20px;
+    }
+
+    .nekit-library-popup .templates-tab-content .active-filter .dashicons:before {
+        vertical-align: middle;
+    }
+
+    .nekit-library-popup .templates-tab-content .filter-list {
+        margin: 0;
+        padding: 20px;
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        width: 50%;
+        background-color: #fff;
+        align-items: center;
+        position: absolute;
+        z-index: 1;
+        border-radius: 3px;
+        box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -webkit-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -moz-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+    }
+
+    .nekit-library-popup .templates-tab-content .filter-list li {
+        width: 25%;
+        font-size: 13px;
+        text-transform: capitalize;
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: all .3s ease;
+        font-family: 'Roboto';
+        color: #898989;
+    }
+
+    .nekit-library-popup .templates-tab-content .filter-list li:hover {
+        background-color: #f7f7f7;
+        border-radius: 3px;
+    }
+
+    .nekit-library-popup .filter-tab-search-wrap input {
+        border: none;
+        padding: 8px 15px;
+        margin-bottom: 20px;
+        font-family: 'Roboto';
+        font-size: 14px;
+        border-radius: 3px;
+        margin-right: 18px;
+        width: 250px;
+        box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -webkit-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -moz-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+    }
+
+    .nekit-library-popup .filter-tab-search-wrap input::placeholder {
+        color: #898989;
+        font-size: 14px;
+        font-family: 'Roboto';
+    }
+
+    .nekit-library-popup .tab-blocks-list-wrap {
+        overflow: auto;
+        height: calc(100vh - 150px);
+        padding-right: 15px;
+    }
+
+    /* SCROLL BAR STYLES */
+        .nekit-library-popup .tab-blocks-list-wrap::-webkit-scrollbar,
+        .nekit-library-popup .tab-pages-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .nekit-library-popup .tab-blocks-list-wrap::-webkit-scrollbar-thumb,
+        .nekit-library-popup .tab-pages-list::-webkit-scrollbar-thumb {
+            background-color: #f73859;
+            border-radius: 20px;
+        }
+
+    .nekit-library-popup .widgets-blocks-library {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        /* display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 30px; */
+    }
+
+    .nekit-library-popup .tab-blocks-list .template-item {
+        background-color: #fff;
+        float: left;
+        margin: 0;
+        width: calc( 20% - 30px );
+        margin-bottom: 30px;
+        border-radius: 3px;
+        box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -webkit-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+        -moz-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+    }
+
+    .nekit-library-popup .tab-blocks-list .template-item a {
+        display: block;
+    }
+
+    .nekit-library-popup .template-item .button-actions {
+        padding: 12px 15px;
+        display: flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        align-items: center;
+        -webkit-align-items: center;
+        background-color: #fff;
+        border-radius: 0 0 3px 3px;
+    }
+
+    .nekit-library-popup .template-item .widget-name {
+        color: #898989;
+        font-size: 13px;
+        font-family: 'Roboto';
+    }
+
+    .nekit-library-popup .template-item .insert-data-button {
+        border: none;
+        background-color: #2753FF;
+        color: #fff;
+        padding: 4px 13px 6px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .nekit-library-popup .template-item .insert-data-button a{
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .nekit-library-popup .pages-tab-content {
+        display: none;
+    }
+
+    /* PAGES */
+        .nekit-library-popup .pages-tab-content .filter-list {
+            display: initial;
+            width: 10%;
+            padding: 15px;
+        }
+
+        .nekit-library-popup .pages-tab-content .filter-list li {
+            width: 100%;
+        }
+
+        .nekit-library-popup .tab-pages-list {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            height: calc(100vh - 150px);
+            overflow: auto;
+            padding-right: 15px;
+        }
+
+        .nekit-library-popup .tab-pages-list .template-item {
+            margin: 0;
+            border-radius: 3px;
+            box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+            -webkit-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+            -moz-box-shadow: 0px 0px 8px 0px rgb(0 0 0 / 14%);
+            height: auto;
+        }
+
+        .nekit-library-popup .tab-pages-list .template-item img {
+            border-radius: 3px 3px 0 0;
+        }
+
+        .nekit-library-popup .tab-pages-list .button-actions {
+            border-radius: 0 0 3px 3px;
+            padding: 8px 15px;
+        }
+
+
+        /* Nekit loader */
+        #nekit-elementor-loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: #fff;
+            z-index: 9999;
+        }
+        
+        .nekit-elementor-loading .elementor-loader-wrapper {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nekit-elementor-loading .elementor-loader {
+            border-radius: 50%;
+            padding: 40px;
+            height: 150px;
+            width: 150px;
+            background-color: var(--e-a-bg-active);
+            box-sizing: border-box;
+            box-shadow: 2px 2px 20px 4px rgba(0,0,0,.02);
+        }
+
+        .nekit-elementor-loading .elementor-loader-boxes {
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+
+        .nekit-elementor-loading .elementor-loader-box {
+            position: absolute;
+            background-color: #3f444b;
+            animation: nekit_load 1.8s linear infinite;
+        }
+
+        .nekit-elementor-loading .elementor-loader-box:first-of-type {
+            width: 20%;
+            height: 100%;
+            left: 0;
+            top: 0;
+        }
+
+        .nekit-elementor-loading .elementor-loader-box:not(:first-of-type) {
+            right: 0;
+            height: 20%;
+            width: 60%;
+        }
+
+        .elementor-loader-box:nth-of-type(2) {
+            top: 0;
+            animation-delay: calc(1.8s / 4 * -1);
+        }
+
+        .elementor-loader-box:nth-of-type(3) {
+            top: 40%;
+            animation-delay: calc(1.8s / 4 * -2);
+        }
+
+        .elementor-loader-box:nth-of-type(4) {
+            bottom: 0;
+            animation-delay: calc(1.8s / 4 * -3);
+        }
+
+        .nekit-elementor-loading .elementor-loading-title {
+            color: #515962;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 7px;
+            text-indent: 7px;
+            font-size: 10px;
+            width: 100%;
+        }
+        
+        @keyframes nekit_load {
+            0% {
+                opacity: .3;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                opacity: .3;
+            }
+        }
+
+        /* image hover effect */
+
+       .nekit-library-popup .tab-blocks-list .template-item > a,
+       .nekit-library-popup .tab-pages-list .template-item > a {
+            position: relative;
+        }
+
+
+        .nekit-library-popup .tab-blocks-list .template-item > a:after,
+        .nekit-library-popup .tab-pages-list .template-item > a:after{
+            content: '';
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            position: absolute; 
+            top: 0;
+            left: 0; 
+            background: rgba(0, 0, 0, 0.2); /* Black see-through */
+            opacity: 0;
+            -webkit-transition: opacity 0.2s ease-in;
+            -o-transition: opacity 0.2s ease-in;
+            transition: opacity 0.2s ease-in;
+            border-radius: 5px 5px 0 0;
+
+        }
+
+        .nekit-library-popup .tab-blocks-list .template-item > a:hover:after,
+        .nekit-library-popup .tab-pages-list .template-item > a:hover:after{
+            opacity: 1;
+        }
+
+        .nekit-library-popup .tab-blocks-list .template-item > a:hover:before,
+        .nekit-library-popup .tab-pages-list .template-item > a:hover:before {
+            content: "\f177";
+            font: 400 20px / 1 dashicons;
+            text-decoration: none;
+            position: absolute;
+            top: 46%;
+            left: 45%;
+            font-size: 28px;
+            color: #2753ff;
+        }
