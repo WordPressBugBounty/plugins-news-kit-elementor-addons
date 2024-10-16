@@ -292,8 +292,14 @@ class Nekit_Render_Templates_Html {
     */
     public function current_builder_template( $template_id = 0 ) {
 		$template_id = ( $template_id != 0 ) ? $template_id : $this->current_builder_id;
-		$elementor = \Elementor\Plugin::instance();
-		$builder_content = $elementor->frontend->get_builder_content_for_display($template_id);
-		return $builder_content;
+		// Check if the post can be viewed by all users
+		$template = get_post($template_id);
+		if ( $template && ($template->post_status === 'publish' || current_user_can('read_post', $template_id)) ) {
+			$elementor = \Elementor\Plugin::instance();
+			$builder_content = $elementor->frontend->get_builder_content_for_display($template_id);
+			return $builder_content;
+		} else {
+			return '';
+		}
     }
 }

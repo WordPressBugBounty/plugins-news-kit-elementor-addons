@@ -15,7 +15,7 @@
         $templates_args = [
             'post_type' => 'elementor_library',
             'meta_key' => '_elementor_template_type',
-            'meta_value' => ['page', 'section'],
+            'meta_value' => ['page', 'section', 'container'],
             'posts_per_page'  => -1
         ];
         $templates = get_posts($templates_args);

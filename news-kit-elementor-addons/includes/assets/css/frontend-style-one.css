@@ -1050,13 +1050,17 @@ elementor-widget-nekit-site-logo-title
 	.nekit_dark_mode .nekit-live-search-widget form .search-submit,
 	.nekit_dark_mode button,
 	.nekit_dark_mode input,
-	.nekit_dark_mode .news-elementor-phone-call,
-	.nekit-menu-desc-absolute .menu-item-description 
+	.nekit_dark_mode .news-elementor-phone-call
 	  {
 		background-color: #202020!important;
 	}
 
-	.nekit-menu-desc-absolute .menu-item-description:after {
+	.nekit_dark_mode .menu-item-description 
+	  {
+		background: #202020!important;
+	}
+
+	.nekit_dark_mode .menu-item-description:after {
 		border-top: 5px solid #202020!important;
 	}
 

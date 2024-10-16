@@ -822,7 +822,7 @@ if( !function_exists( 'nekit_get_builders' ) ) :
             $builder_posts_args = [
                 'post_type' => 'elementor_library',
                 'meta_key' => '_elementor_template_type',
-			    'meta_value' => ['page', 'section'],
+			    'meta_value' => ['page', 'section', 'container'],
                 'posts_per_page'  => -1
             ];
         } else {
