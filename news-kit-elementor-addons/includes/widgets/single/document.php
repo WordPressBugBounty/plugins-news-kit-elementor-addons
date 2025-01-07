@@ -1,6 +1,7 @@
 <?php
-use Elementor\Controls_Manager;
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+use Elementor\Controls_Manager;
+use Elementor\Plugin;
 
 class Nekit_Document extends Elementor\Core\Base\Document {
 	public function get_name() {
@@ -71,15 +72,18 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 				'pages'  => esc_html__( 'Pages', 'news-kit-elementor-addons' )
 			];
 		}
-        $this->start_controls_section(
-            'nekit_preview_section',
-            [
-                'label' => esc_html__( 'News Elementor Preview Settings', 'news-kit-elementor-addons' ),
-                'tab' => \Elementor\Controls_Manager::TAB_SETTINGS,
-            ]
-        );
+		/**
+		 * MARK: NEWS ELEMENTOR PREVIEW
+		 */
+		$this->start_controls_section(
+			'nekit_preview_section',
+			[
+				'label' => esc_html__( 'News Elementor Preview Settings', 'news-kit-elementor-addons' ),
+				'tab' => \Elementor\Controls_Manager::TAB_SETTINGS,
+			]
+		);
 
-        $this->add_control(
+		$this->add_control(
 			'nekit_preview_page',
 			[
 				'label' => esc_html__( 'Preview archive page', 'news-kit-elementor-addons' ),
@@ -90,52 +94,52 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			]
 		);
 
-        $this->add_control(
+		$this->add_control(
 			'nekit_archive_preview_author',
 			[
 				'label' => esc_html__( 'Preview archive page', 'news-kit-elementor-addons' ),
-                'show_label'    => false, 
+				'show_label'    => false, 
 				'type'  => \Elementor\Controls_Manager::SELECT,
 				'default'   => '',
 				'label_block'   => true,
 				'options'   => $this->get_post_authors(),
-                'condition' => [
-                    'nekit_preview_page'    => 'author-archives'
-                ]
+				'condition' => [
+					'nekit_preview_page'    => 'author-archives'
+				]
 			]
 		);
 
-        $this->add_control(
+		$this->add_control(
 			'nekit_archive_preview_category',
 			[
 				'label' => esc_html__( 'Preview category page', 'news-kit-elementor-addons' ),
-                'show_label'    => false, 
+				'show_label'    => false, 
 				'type'  => \Elementor\Controls_Manager::SELECT,
 				'default'   => '',
 				'label_block'   => true,
 				'options'   => $this->get_post_categories(),
-                'condition' => [
-                    'nekit_preview_page'    => 'categories-archives'
-                ]
+				'condition' => [
+					'nekit_preview_page'    => 'categories-archives'
+				]
 			]
 		);
 
-        $this->add_control(
+		$this->add_control(
 			'nekit_archive_preview_tag',
 			[
 				'label' => esc_html__( 'Preview tag page', 'news-kit-elementor-addons' ),
-                'show_label'    => false, 
+				'show_label'    => false, 
 				'type'  => \Elementor\Controls_Manager::SELECT,
 				'default'   => '',
 				'label_block'   => true,
 				'options'   => $this->get_post_tags(),
-                'condition' => [
-                    'nekit_preview_page'    => 'tags-archives'
-                ]
+				'condition' => [
+					'nekit_preview_page'    => 'tags-archives'
+				]
 			]
 		);
 
-        $this->add_control(
+		$this->add_control(
 			'nekit_archive_preview_search',
 			[
 				'label' => esc_html__( 'Search Term', 'news-kit-elementor-addons' ),
@@ -176,7 +180,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			]
 		);
 
-        $this->add_control(
+		$this->add_control(
 			'preview_settings_actions',
 			[
 				'label' => esc_html__( 'Save Settings', 'news-kit-elementor-addons' ),
@@ -186,8 +190,8 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 				'content_classes' => 'nekit-button-actions'
 			]
 		);
-        $this->end_controls_section();
-		
+		$this->end_controls_section();
+			
 		// Default Document Settings
 		parent::register_controls();
 	}
@@ -209,14 +213,14 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 
 	public function get_document_query_args() {
 		$settings = $this->get_settings();
-		$source = $settings['nekit_preview_page'];
 		$args = false;
+		$source = $settings['nekit_preview_page'];
 		// Default Archives
 		switch ( $source ) {
 			case 'recent-posts': $args = [ 
-                                        'post_type' => 'post'
-                                    ];
-				                break;
+										'post_type' => 'post'
+									];
+								break;
 			case 'categories-archives': 
 				$args = $this->get_tax_query_args( 'category', $settings['nekit_archive_preview_category'] );
 								break;
@@ -231,9 +235,9 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 									];
 								break;
 			case 'search-results':  $args = [ 
-                                        's' => $settings['nekit_archive_preview_search']
-                                    ];
-				                break;
+										's' => $settings['nekit_archive_preview_search']
+									];
+								break;
 			case 'pages':  // Get Post
 							$page = get_posts( [
 								'post_type' => 'page',
@@ -272,6 +276,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 				$args['p'] = $post[0]->ID;
 			}
 		}
+
 		return $args;
 	}
 

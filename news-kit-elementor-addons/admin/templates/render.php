@@ -17,6 +17,10 @@ class Nekit_Render_Templates_Html {
 	function set_current_builder_id($id) {
 		$this->current_builder_id = $id;
 	}
+
+	public function get_current_builder_id() {
+		return $this->current_builder_id;
+	}
     /**
     ** Check if a Template has Conditions
     */
@@ -279,8 +283,6 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
-			} else {
-				return false;
 			}
 		} else {
 			return false;
@@ -291,8 +293,10 @@ class Nekit_Render_Templates_Html {
     ** Current html template
     */
     public function current_builder_template( $template_id = 0 ) {
-		$template_id = ( $template_id != 0 ) ? $template_id : $this->current_builder_id;
 		// Check if the post can be viewed by all users
+		$template_id = ( $template_id != 0 ) ? $template_id : $this->current_builder_id;
+
+		/* Execute only if not array */
 		$template = get_post($template_id);
 		if ( $template && ($template->post_status === 'publish' || current_user_can('read_post', $template_id)) ) {
 			$elementor = \Elementor\Plugin::instance();

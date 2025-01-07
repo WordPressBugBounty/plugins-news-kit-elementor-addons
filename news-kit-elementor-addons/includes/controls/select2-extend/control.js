@@ -1,14 +1,15 @@
 jQuery(window).on("elementor:init", (function() {
     "use strict";
-    
+
     var nekitSelect2ExtendHandler = elementor.modules.controls.BaseData.extend({
+        dependency: '',
         onReady: function() {
             var $this = this,
                 $select = $this.ui.select,
                 restUrl = $select.attr("data-rest-url"),
                 nonce = window.wpApiSettings.nonce;
-                
-            var querySlug = '' !== $select.attr('data-query-slug') ? $select.attr('data-query-slug') : '';
+            this.dependency = $select.data( 'dependency' );
+            var querySlug  = ( this.dependency ) ? $this.getCustomPostTypes() : $select.data( 'query-slug' )
             $select.select2({
                 ajax: {
                     url: restUrl,
@@ -25,6 +26,12 @@ jQuery(window).on("elementor:init", (function() {
                 },
                 cache: !0
             });
+
+            if( this.dependency ) {
+                $select.on('select2:open', function(e) {
+                    querySlug = $this.getCustomPostTypes()
+                });
+            }
 
             var controlValue = void 0 !== $this.getControlValue() ? $this.getControlValue() : "";
             controlValue.isArray && (controlValue = $this.getControlValue().join()), jQuery.ajax({
@@ -53,6 +60,11 @@ jQuery(window).on("elementor:init", (function() {
                     }))
                 }
             }))
+        },
+        getCustomPostTypes: function(){
+            var panelView = elementor.getPanelView().getCurrentPageView();
+            let customPostTypes = panelView.model.get('settings').get( this.dependency ); // works
+            return customPostTypes
         },
         onBeforeDestroy: function() {
             this.ui.select.data("select2") && this.ui.select.select2("destroy"), this.el.remove()

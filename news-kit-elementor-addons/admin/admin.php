@@ -1207,14 +1207,14 @@ class Admin {
 																		foreach( $assigned_pages_split as $assigned_page_key => $assigned_page ) :
 																			$archive_assigned_page = $singular_assigned_page = $single_posts_assigned_page = 'all';
 																			$is_archives = strpos( $assigned_page, 'archives' );
-																			if( $is_archives !== false ) {
+																			if( $is_archives !== false ) {	// runs if archive is selected
 																				$splits_placement = explode( '-', $assigned_page );
 																				$assigned_page = $splits_placement[0];
 																				$archive_assigned_page = $splits_placement[1];
 																			}
 
 																			$is_singular = strpos( $assigned_page, 'singular' );
-																			if( $is_singular !== false ) {
+																			if( $is_singular !== false ) {	// runs if singular is selected
 																				$splits_placement = explode( '-', $assigned_page );
 																				$assigned_page = $splits_placement[0];
 																				$singular_assigned_page = $splits_placement[1];
@@ -1253,7 +1253,7 @@ class Admin {
 																						<?php
 																							endif;
 
-																							if( in_array( $tab, ['header-builder','footer-builder'] ) ) :
+																							if( in_array( $tab, [ 'header-builder', 'footer-builder' ] ) ) :
 																						?>
 																								<select class="template-display-archives-pages <?php if( $assigned_page == 'archives' ) echo esc_attr( 'field-show' ); ?>">
 																									<option value="all" <?php selected( $archive_assigned_page, 'all', true ); ?>><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></option>
@@ -1521,7 +1521,7 @@ class Admin {
 							$decoded_page = apply_filters( 'nekit_theme_builder_callback_value_filter', 'inner-builder-callback-condition', $decoded_page );
 						}
 					endif;
-					nekit_update_builder_post_meta($decoded_conditions[$decoded_page_key],$decoded_page,$template_id);
+					nekit_update_builder_post_meta( $decoded_conditions[$decoded_page_key], $decoded_page, $template_id );
 				endforeach;
 			}
 			$res['updated'] = true;

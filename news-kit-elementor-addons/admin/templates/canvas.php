@@ -27,9 +27,9 @@ $woocommerce_class =  $is_preview_mode && class_exists( 'WooCommerce' ) ? 'wooco
 	?>
 </head>
 
-<body <?php body_class($woocommerce_class); ?>>
+<body <?php body_class([ $woocommerce_class ]); ?>>
 	<?php
-		Elementor\Modules\PageTemplates\Module::body_open();
+		if ( method_exists( 'Elementor\Modules\PageTemplates\Module', 'body_open' ) ) Elementor\Modules\PageTemplates\Module::body_open();
 		/**
 		 * Before canvas page template content.
 		 *

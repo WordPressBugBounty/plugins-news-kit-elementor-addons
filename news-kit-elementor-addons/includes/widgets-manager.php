@@ -176,8 +176,8 @@ if( ! function_exists( 'nekit_register_document_type' ) ) :
      * Register custom document type for plugin
      * 
      * @since 1.0.0
-     */
-    function nekit_register_document_type($documents_manager) {
+     */ 
+    function nekit_register_document_type( $documents_manager ) {
         // custom documents
         require NEKIT_PATH . '/includes/widgets/single/document.php';
 		$documents_manager->register_document_type( 'nekit-document', 'Nekit_Document' );

@@ -50,6 +50,9 @@ class Nekit_Select2_Extend_Api {
 		return $this->{$request['action']}($request);
 	}
 
+	/**
+	 * MARK: Post Type
+	 */
 	public function get_posts_by_post_type($request) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;   
@@ -59,7 +62,7 @@ class Nekit_Select2_Extend_Api {
 		$args = [
 			'post_type' => $post_type,
 			'post_status' => 'publish',
-			'posts_per_page' => 6,
+			'posts_per_page' => 10,
 		];
 
 		if ( isset( $request['ids'] ) ) {
@@ -68,7 +71,7 @@ class Nekit_Select2_Extend_Api {
 		}
 		
 		if ( isset( $request['s'] ) ) {
-			$args['s'] = $request['s'];
+			$args['s'] = esc_html( $request['s'] );
 		}
 
 		if ( 'attachment' === $post_type ) {
@@ -93,17 +96,20 @@ class Nekit_Select2_Extend_Api {
 		return [ 'results' => $options ];
 	}
 
+	/**
+	 * MARK: Taxonomies
+	 */
 	public function get_taxonomies( $request ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;   
 		}
-		$tax = isset($request['query_slug']) ? $request['query_slug'] : '';
+		$tax = isset($request['query_slug']) ? $request['query_slug'] : null;
 		$args = [
-			'taxonomy'	=> esc_html($tax),
+			'taxonomy'	=> $tax,
 			'orderby' => 'name', 
-			'order' => 'DESC',
-			'hide_empty' => true,
-			'number' => 6,
+			'order' => 'DESC',	
+			'hide_empty' => false,
+			'number' => 10,
 		];
 
 		if ( isset( $request['ids'] ) ) {
@@ -113,7 +119,7 @@ class Nekit_Select2_Extend_Api {
 		}
 		
 		if ( isset( $request['s'] ) ) {
-			$args['name__like'] = $request['s'];
+			$args['search'] = esc_html( $request['s'] );
 		}
 		
 		$options = [];
@@ -133,13 +139,16 @@ class Nekit_Select2_Extend_Api {
 		return [ 'results' => $options ];
 	}
 
+	/**
+	 * MARK: Users
+	 */
 	public function get_users( $request ) {
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			return;   
 		}
 
 		$args = [
-			'number' => '6'
+			'number' => '10'
 			// 'blog_id' => 0
 		];
 
@@ -149,7 +158,7 @@ class Nekit_Select2_Extend_Api {
 		}
 
 		if ( isset( $request['s'] ) ) {
-			$args['search'] = '*'. $request['s'] .'*';
+			$args['search'] = '*'. esc_html( $request['s'] ) .'*';
 		}
 
 		$options = [];
@@ -168,5 +177,61 @@ class Nekit_Select2_Extend_Api {
 		wp_die();
 	}
 
+	/**
+	 * MARK: Custom Post Types
+	 */
+	public function get_custom_post_types() {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;   
+		}
+		$all_post_types = get_post_types([
+			'_builtin'	=>	false,
+			'public'	=>	true,
+			'exclude_from_search'	=>	false
+		], 'objects' );
+		$options = [
+			[
+				'id'	=>	'post',
+				'text'	=>	esc_html__( 'Post', 'news-kit-elementor-addons' )
+			]
+		];
+		if( count( $all_post_types ) > 0 ) :
+			foreach( $all_post_types as $slug => $object ) :
+				$options[] = [
+					'id'	=>	$slug,
+					'text'	=>	$object->label
+				];
+			endforeach;
+		endif;
+		return [ 'results' => $options ];
+	}
+
+	/**
+	 * MARK: Custom Taxonomies
+	 */
+	public function get_custom_taxonomies( $request ) {
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return;   
+		}
+		$post_type = isset($request['query_slug']) ? $request['query_slug'] : 'post';
+		/* If select taxonomies control is independent of select post type control */
+		if( $post_type === 'any' ) :
+			$taxonomies = get_taxonomies([], 'objects');
+		else:
+			$taxonomies = get_object_taxonomies( $post_type, 'objects' );
+		endif;
+		$options = [];
+		if( count( $taxonomies ) > 0 ) :
+			foreach( $taxonomies as $slug => $object ) :
+				if( ! in_array( $slug, [ 'post_tag' ] ) ) :
+					$options[] = [
+						'id'	=>	$slug,
+						'text'	=>	$object->label
+					];
+				endif;
+			endforeach;
+		endif;
+		return [ 'results' => $options ];
+	}
 }
 new Nekit_Select2_Extend_Api();

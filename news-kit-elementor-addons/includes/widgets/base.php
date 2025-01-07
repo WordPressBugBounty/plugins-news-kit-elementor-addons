@@ -100,62 +100,108 @@ class Base extends \Elementor\Widget_Base {
 		);
 	}
 
-	function add_categories_select_control($name = 'post_categories') {
+	function add_post_type_select_control( $name = 'post_custom_post_types' , $label = 'Select Post Types' ) {
 		$this->add_control(
 			$name,
 			[
-				'label'	=> esc_html__( 'Post categories', 'news-kit-elementor-addons' ),
+				'label'	=> esc_html( $label ),
 				'label_block'	=> true,
 				'multiple'	=> true,
 				'type' => 'nekit-select2-extend',
-				'options'	=> 'select2extend/get_taxonomies',
-				'query_slug'	=> 'category'
+				'default'	=>	[ 'post' ],
+				'options'	=> 'select2extend/get_custom_post_types',
+				// 'condition'	=> apply_filters( 'nekit_query_control_condition_filter', [ 'post_order'	=> 'random' ] )
 			]
 		);
 	}
 
-	function add_tags_select_control($name = 'post_tags') {
+	function add_taxonomy_select_control( $name = 'post_custom_taxonomies' , $label = 'Select Taxonomies', $args = [] ) {
+		$control_args = [
+			'label'	=> esc_html( $label ),
+			'label_block'	=> true,
+			'multiple'	=> true,
+			'type' => 'nekit-select2-extend',
+			'default'	=>	[ 'category' ],
+			'options'	=> 'select2extend/get_custom_taxonomies'
+		];
+		if( count( $args ) > 0 ) $control_args += $args;
+
 		$this->add_control(
 			$name,
-			[
-				'label'	=> esc_html__( 'Post tags', 'news-kit-elementor-addons' ),
-				'label_block'	=> true,
-				'multiple'	=> true,
-				'type' => 'nekit-select2-extend',
-				'options'	=> 'select2extend/get_taxonomies',
-				'query_slug'	=> 'post_tag',
-				'condition'	=> apply_filters( 'nekit_query_control_condition_filter', [ 'post_order'	=> 'random' ] )
-			]
+			$control_args
 		);
 	}
 
-	function add_posts_exclude_select_control($name = 'post_to_exclude', $query_slug = 'post', $label = 'Posts' ) {
+	function add_categories_select_control( $name = 'post_categories', $args = [] ) {
+		$control_args = [
+			'label'	=> esc_html__( 'Post categories ( Terms to include )', 'news-kit-elementor-addons' ),
+			'label_block'	=> true,
+			'multiple'	=> true,
+			'type' => 'nekit-select2-extend',
+			'options'	=> 'select2extend/get_taxonomies',
+			'query_slug'	=> 'category',
+			'default'	=>	[],
+		];
+
+		if( count( $args ) > 0 ) $control_args += $args;
+
 		$this->add_control(
 			$name,
-			[
-				'label'	=> $label . esc_html__( ' to exclude', 'news-kit-elementor-addons' ),
-				'description'	=> $label . esc_html__( ' to exclude from the query', 'news-kit-elementor-addons' ),
-				'label_block'	=> true,
-				'multiple'	=> true,
-				'type'	=> 'nekit-select2-extend',
-				'options'	=> 'select2extend/get_posts_by_post_type',
-				'query_slug'=> $query_slug,
-				'condition'	=> apply_filters( 'nekit_query_control_condition_filter', [ 'post_order'	=> 'random' ] )
-			]	
+			$control_args
 		);
 	}
-	function add_posts_include_select_control($name = 'post_to_include', $query_slug = 'post', $label = 'Posts' ) {
+
+	function add_tags_select_control( $name = 'post_tags', $args = [] ) {
+		$control_args = [
+			'label'	=> esc_html__( 'Post tags', 'news-kit-elementor-addons' ),
+			'label_block'	=> true,
+			'multiple'	=> true,
+			'type' => 'nekit-select2-extend',
+			'options'	=> 'select2extend/get_taxonomies',
+			'query_slug'	=> 'post_tag'
+		];
+
+		if( count( $args ) > 0 ) $control_args += $args;
+
 		$this->add_control(
 			$name,
-			[
-				'label'	=> $label . esc_html__( ' to include', 'news-kit-elementor-addons' ),
-				'description'	=> $label . esc_html__( ' to include in the query', 'news-kit-elementor-addons' ),
-				'label_block'	=> true,
-				'multiple'	=> true,
-				'type'	=> 'nekit-select2-extend',
-				'options'	=> 'select2extend/get_posts_by_post_type',
-				'query_slug'=> $query_slug
-			]	
+			$control_args
+		);
+	}
+
+	function add_posts_exclude_select_control($name = 'post_to_exclude', $query_slug = 'post', $label = 'Posts', $args = [] ) {
+		$control_args = [
+			'label'	=> $label . esc_html__( ' to exclude', 'news-kit-elementor-addons' ),
+			'description'	=> $label . esc_html__( ' to exclude from the query', 'news-kit-elementor-addons' ),
+			'label_block'	=> true,
+			'multiple'	=> true,
+			'type'	=> 'nekit-select2-extend',
+			'options'	=> 'select2extend/get_posts_by_post_type',
+			'query_slug'=> $query_slug
+		];
+		if( count( $args ) > 0 ) $control_args += $args;
+
+		$this->add_control(
+			$name,
+			$control_args
+		);
+	}
+
+	function add_posts_include_select_control($name = 'post_to_include', $query_slug = 'post', $label = 'Posts', $args = [] ) {
+		$control_args = [
+			'label'	=> $label . esc_html__( ' to include', 'news-kit-elementor-addons' ),
+			'description'	=> $label . esc_html__( ' to include in the query', 'news-kit-elementor-addons' ),
+			'label_block'	=> true,
+			'multiple'	=> true,
+			'type'	=> 'nekit-select2-extend',
+			'options'	=> 'select2extend/get_posts_by_post_type',
+			'query_slug'=> $query_slug
+		];
+		if( count( $args ) > 0 ) $control_args += $args;
+
+		$this->add_control(
+			$name,
+			$control_args
 		);
 	}
 
@@ -698,20 +744,23 @@ class Base extends \Elementor\Widget_Base {
 	// prepare the args array for widget query
 	function get_posts_args_for_query( $prefix = 'post' ) {
 		$settings = $this->get_settings_for_display();
+
+		$post_type = isset( $settings[ $prefix . '_custom_post_types' ] ) ? $settings[ $prefix . '_custom_post_types' ] : ['post'];
+		$custom_taxonomies = ( isset( $settings[ $prefix . '_custom_taxonomies' ] ) && is_array( $settings[ $prefix . '_custom_taxonomies' ] ) ) ? $settings[ $prefix . '_custom_taxonomies' ] : [];
+
 		$post_order = ( strpos( $settings[$prefix . '_order'], '-pro' ) === false ) ? $settings[$prefix . '_order']: 'date-desc';
 		$post_order_split = explode( '-', $post_order );
 		$post_count = $settings[$prefix . '_count'];
-		$post_categories = $settings[$prefix . '_categories'];
+		$post_categories = is_array( $settings[$prefix . '_categories'] ) ? $settings[$prefix . '_categories'] : [];
 		$post_tags = $settings[$prefix . '_tags'];
 		$post_authors = $settings[$prefix . '_authors'];
 		$posts_args = [
-			'post_type' => 'post',
+			'post_type' => $post_type,
 			'orderby'	=> $post_order_split[0],
 			'order'	=> $post_order_split[1],
 			'posts_per_page'	=> absint( $post_count )
 		];
 		if( $settings[$prefix . '_offset'] > 0 ) $posts_args['offset'] = absint( $settings[$prefix . '_offset'] );
-		if($post_categories) $posts_args['cat'] = implode( ',', $post_categories );
 		if($post_authors) $posts_args['author'] = implode( ',', $post_authors );
 		if($post_tags) $posts_args['tag__in'] = $post_tags;
 		if( $settings[$prefix . '_hide_post_without_thumbnail'] === 'yes' ) {
@@ -726,6 +775,21 @@ class Base extends \Elementor\Widget_Base {
 		if( isset( $settings[$prefix . '_to_include'] ) ) :
 			if( $settings[$prefix . '_to_include'] ) $posts_args['post__in'] = $settings[$prefix . '_to_include'];
 		endif;
+
+		$tax_query = [];
+		if( count( $custom_taxonomies ) > 0 ) :
+			$tax_query = [
+				'relation'	=>	"OR"
+			];
+			foreach( $custom_taxonomies as $tax ) :
+				$tax_query[] = [
+					'taxonomy'	=>	$tax,
+					'terms'	=>	$post_categories,
+					'operator'	=>	( count( $post_categories ) > 0 ) ? 'IN' : 'EXISTS'
+				];
+			endforeach;
+		endif;
+		if( ! empty( $tax_query ) ) $posts_args['tax_query'] = $tax_query;
 		return apply_filters( 'nekit_widgets_query_args_filter', $posts_args );
 	}
 }

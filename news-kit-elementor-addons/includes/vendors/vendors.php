@@ -799,7 +799,7 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                         ]
                     ]
                 ];
-                $builder_posts = get_posts($builder_posts_args);
+                $builder_posts = get_posts( $builder_posts_args );
                 if( $builder_posts ) {
                     return $builder_posts[0]->ID;
                 } else {

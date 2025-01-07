@@ -79,6 +79,19 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				'tab'	=>	\Elementor\Controls_Manager::TAB_CONTENT
 			]
 		);
+		$this->add_post_type_select_control( 'slider_post_custom_post_types' );
+		$this->add_taxonomy_select_control( 'slider_post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'slider_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_post_order_select_control('slider_post_order');
 		$this->add_control(
 			'slider_post_count',
@@ -92,9 +105,47 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 			]
 		);
 		$this->add_authors_select_control('slider_post_authors');
-		$this->add_categories_select_control('slider_post_categories');
-		$this->add_tags_select_control('slider_post_tags');
-		$this->add_posts_include_select_control( 'slider_post_to_include' );
+		$this->add_categories_select_control( 'slider_post_categories', [
+			'dependency'	=>	'slider_post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'slider_post_tags', [
+			'dependency'	=>	'slider_post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'contains',
+						'value'	=>	'post'
+					]
+				]
+			]
+		] );
+		$this->add_posts_include_select_control( 'slider_post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'slider_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'slider_post_offset',
@@ -108,7 +159,18 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				'default'	=>	0
 			]
 		);
-		$this->add_posts_exclude_select_control('slider_post_to_exclude');
+		$this->add_posts_exclude_select_control( 'slider_post_to_exclude', 'post', 'Posts', [
+			'dependency'	=>	'slider_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_control(
 			'slider_post_hide_post_without_thumbnail',
 			[
@@ -583,6 +645,20 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				'tab'	=>	\Elementor\Controls_Manager::TAB_CONTENT
 			]
 		);
+
+		$this->add_post_type_select_control( 'latest_tab_custom_post_type' );
+		$this->add_taxonomy_select_control( 'latest_tab_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'latest_tab_custom_post_type',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'latest_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		
 		$this->add_control(
 			'latest_tab_post_order',
@@ -596,9 +672,48 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 		);
 
 		$this->add_authors_select_control('latest_tab_post_authors');
-		$this->add_categories_select_control('latest_tab_post_categories');
-		$this->add_tags_select_control('latest_tab_post_tags');
-		$this->add_posts_include_select_control( 'latest_post_to_include' );
+
+		$this->add_categories_select_control( 'latest_tab_post_categories', [
+			'dependency'	=>	'latest_tab_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'latest_tab_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'latest_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'latest_tab_post_tags', [
+			'dependency'	=>	'latest_tab_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'latest_tab_custom_post_type',
+						'operator'	=>	'contains',
+						'value'	=>	'post'
+					]
+				]
+			]
+		] );
+		$this->add_posts_include_select_control( 'latest_post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'latest_tab_custom_post_type',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'latest_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'latest_tab_post_offset',
@@ -612,7 +727,18 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				'default'	=>	0
 			]
 		);
-		$this->add_posts_exclude_select_control('latest_tab_exclude_posts');
+		$this->add_posts_exclude_select_control( 'latest_tab_exclude_posts', 'post', 'Posts', [
+			'dependency'	=>	'latest_tab_custom_post_type',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'latest_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		
 		$this->add_control(
 			'latest_tab_hide_post_without_thumbnail',
@@ -670,6 +796,20 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				'tab'	=>	\Elementor\Controls_Manager::TAB_CONTENT
 			]
 		);
+
+		$this->add_post_type_select_control( 'popular_tab_custom_post_type' );
+		$this->add_taxonomy_select_control( 'popular_tab_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'popular_tab_custom_post_type',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		
 		$this->add_control(
 			'popular_tab_post_order',
@@ -682,9 +822,48 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 			]
 		);
 		$this->add_authors_select_control('popular_tab_post_authors');
-		$this->add_categories_select_control('popular_tab_post_categories');
-		$this->add_tags_select_control('popular_tab_post_tags');
-		$this->add_posts_include_select_control( 'popular_post_to_include' );
+
+		$this->add_categories_select_control( 'popular_tab_post_categories', [
+			'dependency'	=>	'popular_tab_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'popular_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'popular_tab_post_tags', [
+			'dependency'	=>	'popular_tab_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_custom_post_type',
+						'operator'	=>	'contains',
+						'value'	=>	'post'
+					]
+				]
+			]
+		] );
+		$this->add_posts_include_select_control( 'popular_post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'popular_tab_custom_post_type',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_control(
 			'popular_tab_post_offset',
 			[
@@ -697,7 +876,18 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				'default'	=>	0
 			]
 		);
-		$this->add_posts_exclude_select_control('popular_tab_exclude_posts');
+		$this->add_posts_exclude_select_control( 'popular_tab_exclude_posts', 'post', 'Posts', [
+			'dependency'	=>	'popular_tab_custom_post_type',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_custom_post_type',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		
 		$this->add_control(
 			'popular_tab_hide_post_without_thumbnail',
@@ -1894,6 +2084,41 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * Custom post type support
+	 * MARK: Post Type
+	 */
+	public function main_banner_post_type_support( $tab ) {
+		$settings = $this->get_settings_for_display();
+		if( ! $tab ) return;
+		$custom_taxonomies = $post_categories = '';
+		switch( $tab ) :
+			case 'latest':
+				$custom_taxonomies = is_array( $settings['latest_tab_custom_taxonomies'] ) ? $settings['latest_tab_custom_taxonomies'] : [];		
+				$post_categories = is_array( $settings['latest_tab_post_categories'] ) ? $settings['latest_tab_post_categories'] : [];		
+				break;
+			case 'popular':
+				$custom_taxonomies = is_array( $settings['popular_tab_custom_taxonomies'] ) ? $settings['popular_tab_custom_taxonomies'] : [];		
+				$post_categories = is_array( $settings['popular_tab_post_categories'] ) ? $settings['popular_tab_post_categories'] : [];		
+				break;
+		endswitch;
+		if( count( $custom_taxonomies ) > 0 ) :
+			$tax_query = [
+				'relation'	=>	"OR"
+			];
+			foreach( $custom_taxonomies as $tax ) :
+				$tax_query[] = [
+					'taxonomy'	=>	$tax,
+					'terms'	=>	$post_categories,
+					'operator'	=>	( count( $post_categories ) > 0 ) ? 'IN' : 'EXISTS'
+				];
+			endforeach;
+			return $tax_query;
+		else :
+			return;
+		endif;
+	}
+
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 		//  post title attributes
@@ -2041,17 +2266,16 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 																		if( $settings['latest_tab_show'] == 'yes' ) :
 																			$latest_tab_post_order = $settings['latest_tab_post_order'];
 																			$latest_tab_post_order_split = explode( '-', $latest_tab_post_order );
-																			$latest_tab_post_categories = $settings['latest_tab_post_categories'];
 																			$latest_tab_post_tags = $settings['latest_tab_post_tags'];
 																			$latest_tab_post_authors = $settings['latest_tab_post_authors'];
+																			$latest_tab_custom_post_type = is_array( $settings['latest_tab_custom_post_type'] ) ? $settings['latest_tab_custom_post_type'] : 'post';
 																			$latest_tab_posts_args = [
-																				'post_type' => 'post',
+																				'post_type' => $latest_tab_custom_post_type,
 																				'orderby'	=> $latest_tab_post_order_split[0],
 																				'order'	=> $latest_tab_post_order_split[1],
 																				'posts_per_page'	=> 4
 																			];
 																			if( $settings['latest_tab_post_offset'] > 0 ) $latest_tab_posts_args['offset'] = absint($settings['latest_tab_post_offset']);
-																			if($latest_tab_post_categories) $latest_tab_posts_args['cat'] = implode( ',', $latest_tab_post_categories );
 																			if($latest_tab_post_authors) $latest_tab_posts_args['author'] = implode( ',', $latest_tab_post_authors );
 																			if($latest_tab_post_tags) $latest_tab_posts_args['tag__in'] = $latest_tab_post_tags;
 																			if( $settings['latest_tab_hide_post_without_thumbnail'] === 'yes' ) {
@@ -2064,6 +2288,9 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 																			}
 																			if( $settings['latest_post_to_include'] ) $latest_tab_posts_args['post__in'] = $settings['latest_post_to_include'];
 																			if( $settings['latest_tab_exclude_posts'] ) $latest_tab_posts_args['post__not_in'] = $settings['latest_tab_exclude_posts'];
+																			/* Tax Query */
+																			$latest_tab_tax_query = $this->main_banner_post_type_support( 'latest' );
+																			if( ! $latest_tab_tax_query ) $latest_tab_posts_args['tax_query'] = $latest_tab_tax_query;
 																			$latest_tab_posts = get_posts( $latest_tab_posts_args );
 																			if( $latest_tab_posts ) :
 																				foreach( $latest_tab_posts as $latest_tab_post ) :
@@ -2111,17 +2338,16 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 																		if( $settings['popular_tab_show'] == 'yes' ) :
 																			$popular_tab_post_order = $settings['popular_tab_post_order'];
 																			$popular_tab_post_order_split = explode( '-', $popular_tab_post_order );
-																			$popular_tab_post_categories = $settings['popular_tab_post_categories'];
 																			$popular_tab_post_tags = $settings['popular_tab_post_tags'];
 																			$popular_tab_post_authors = $settings['popular_tab_post_authors'];
+																			$popular_tab_custom_post_type = is_array( $settings['popular_tab_custom_post_type'] ) ? $settings['popular_tab_custom_post_type'] : 'post';
 																			$popular_tab_posts_args = [
-																				'post_type' => 'post',
+																				'post_type' => $popular_tab_custom_post_type,
 																				'orderby'	=> $popular_tab_post_order_split[0],
 																				'order'	=> $popular_tab_post_order_split[1],
 																				'posts_per_page'	=> 4
 																			];
 																			if( $settings['popular_tab_post_offset'] > 0 ) $popular_tab_posts_args['offset'] = absint($settings['popular_tab_post_offset']);
-																			if($popular_tab_post_categories) $popular_tab_posts_args['cat'] = implode( ',', $popular_tab_post_categories );
 																			if($popular_tab_post_authors) $popular_tab_posts_args['author'] = implode( ',', $popular_tab_post_authors );
 																			if($popular_tab_post_tags) $popular_tab_posts_args['tag__in'] = $popular_tab_post_tags;
 																			if( $settings['popular_tab_hide_post_without_thumbnail'] === 'yes' ) {
@@ -2134,6 +2360,9 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 																			}
 																			if( $settings['popular_post_to_include'] ) $popular_tab_posts_args['post__in'] = $settings['popular_post_to_include'];
 																			if( $settings['popular_tab_exclude_posts'] ) $popular_tab_posts_args['post__not_in'] = $settings['popular_tab_exclude_posts'];
+																			/* Tax Query */
+																			$popular_tab_tax_query = $this->main_banner_post_type_support( 'popular' );
+																			if( ! $popular_tab_tax_query ) $popular_tab_posts_args['tax_query'] = $popular_tab_tax_query;
 																			$popular_tab_posts = get_posts( $popular_tab_posts_args );
 																				if( $popular_tab_posts ) :
 																					foreach( $popular_tab_posts as $popular_tab_post ) :

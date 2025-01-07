@@ -157,6 +157,21 @@ class Full_Width_Banner_Module extends \Nekit_Widget_Base\Base {
                 ]
             ]
         );
+
+        $this->add_post_type_select_control();
+		$this->add_taxonomy_select_control( 'post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+        
         $this->add_post_order_select_control();
         $this->add_control(
             'post_count',
@@ -170,9 +185,46 @@ class Full_Width_Banner_Module extends \Nekit_Widget_Base\Base {
             ]
         );
         $this->add_authors_select_control();
-        $this->add_categories_select_control();
-        $this->add_tags_select_control();
-        $this->add_posts_include_select_control( $name = 'post_to_include', $query_slug = 'post', $label = esc_html__( 'Posts', 'news-kit-elementor-addons' ) );
+        $this->add_categories_select_control( 'post_categories', [
+			'dependency'	=>	'post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'post_tags', [
+			'conditions'	=>	[
+				'terms'	=>	[
+                    [
+                        'name'	=>	'post_custom_post_types',
+                        'operator'	=>	'contains',
+                        'value'	=>	'post'
+                    ]
+                ]
+			]
+		]);
+        $this->add_posts_include_select_control( 'post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
         $this->add_control(
             'post_offset',
             [
@@ -185,7 +237,18 @@ class Full_Width_Banner_Module extends \Nekit_Widget_Base\Base {
                 'description'   =>  esc_html__( 'Number of posts to displace or pass over.', 'news-kit-elementor-addons' )
             ]
         );
-        $this->add_posts_exclude_select_control();
+		$this->add_posts_exclude_select_control( 'post_to_exclude', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+                    [
+                        'name'	=>	'post_custom_post_types',
+                        'operator'	=>	'!=',
+                        'value'	=>	''
+                    ]
+                ]
+			]
+		]);
         $this->add_control(
             'post_hide_post_without_thumbnail',
             [

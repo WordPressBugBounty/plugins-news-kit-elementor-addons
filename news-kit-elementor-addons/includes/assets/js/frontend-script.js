@@ -75,7 +75,7 @@ jQuery(document).ready(function($) {
     }
 
     // back to top widget script
-    var btTop = $( ".nekit-back-to-top-wrap.widget-position--fixed" );
+    var btTop = $( ".nekit-back-to-top-wrap" );
     if( btTop.length ) {
         btTop.hide()
         var showAt = btTop.data("show")
@@ -1126,4 +1126,107 @@ jQuery(document).ready(function($) {
             })
         })
     }
+
+    /**
+     * Nekit Popup Builder
+     * MARK: Popup Builder
+     */
+    const NekitPopupBuilder = {
+        nekitPopupSelector: $( '.nekit-popup-wrapper' ),
+        init: function(){
+            if( this.nekitPopupSelector.length > 0 ) {
+                this.closeButton()
+                this.closePopupOnESCPress()
+                this.showPopup()
+            }
+        },
+        /* Close Button Handle */
+        closeButton: function(){
+            this.nekitPopupSelector.each(function(){
+                let _this = $(this), closeButton = _this.find( '.nekit-popup-close' );
+    
+                /* Close Button click event */
+                closeButton.on('click', function(){
+                    let _thisButton = $(this)
+                    _thisButton.parent().removeClass( 'is-open' )
+                })
+            })
+        },
+        /* Close Popup on ESC Button Press */
+        closePopupOnESCPress: function(){
+            $(document).on( 'keydown', function( event ) {
+                let nekitPopupcount = $( '.nekit-popup-wrapper.is-open' ).length
+                if( nekitPopupcount > 0 && event.key === "Escape" ) {
+                    let nekitPopup = $( '.nekit-popup-wrapper.is-open' )[ 0 ]   /* Always the first one. */
+                    let settings = $( nekitPopup ).data( 'settings' )
+                    let { nekit_popup_close_on_esc: isOkToCloseOnESC } = settings
+                    if( isOkToCloseOnESC ) {
+                        $( nekitPopup ).removeClass( 'is-open' )
+                    }
+                }
+            });
+        },
+        /* Show popup after how many seconds */
+        delayPopupShow: function( popupElement, delay ){
+            setTimeout(function(){
+                popupElement.addClass( 'is-open' )
+            }, delay )
+        },
+        /* When to Show popup */
+        showPopup: function(){
+            let self = this
+            this.nekitPopupSelector.each(function(){
+                let _this = $(this), settings = _this.data( 'settings' )
+                let { nekit_open_popup: openPopup, nekit_delay_after_page_load: seconds, nekit_element_id: element } = settings
+                let miliseconds = seconds * 1000
+                switch( openPopup ) {
+                    case 'after-user-exit-intent' :
+
+                        break;
+                    case 'page-scroll' :
+                        $( document ).on( 'scroll', function(){
+                            _this.addClass( 'is-open' )
+                        });
+                        break;
+                    case 'scroll-to-element' :
+                        /* Detect the element only once. */
+                        let hasBeenSeen = false
+                        $( document ).on( 'scroll', function(){
+                            if( ! hasBeenSeen ) {
+                                let inViewPort = self.isInViewport( $( element ) )
+                                if( inViewPort ) {
+                                    hasBeenSeen = true
+                                    _this.addClass( 'is-open' )
+                                }
+                            }
+                        });
+                        break;
+                    case 'after-specific-date' :
+
+                        break;
+                    case 'after-user-inactivity' :
+
+                        break;
+                    case 'custom-trigger' :
+                        $( element ).on( 'click', function(){
+                            _this.addClass( 'is-open' )
+                        });
+                        break;
+                    default :   /* page-load */
+                        self.delayPopupShow( _this, miliseconds )
+                        break;
+                }
+            })
+        },
+        /* Check if element in viewport */
+        isInViewport: function( element ) {
+            let elementTop = element.offset().top;
+            let elementBottom = elementTop + element.outerHeight();
+            let viewportTop = $( window ).scrollTop();
+            let viewportBottom = viewportTop + $( window ).height();
+        
+            return elementBottom > viewportTop && elementTop < viewportBottom;
+        }
+    }
+    NekitPopupBuilder.init()
 })

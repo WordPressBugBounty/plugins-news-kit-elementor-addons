@@ -59,6 +59,20 @@ class Carousel_Module extends \Nekit_Widget_Base\Base {
 			]
 		);
 
+		$this->add_post_type_select_control();
+		$this->add_taxonomy_select_control( 'post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+
 		$this->add_control(
 			'post_order',
 			[
@@ -82,9 +96,48 @@ class Carousel_Module extends \Nekit_Widget_Base\Base {
 			]
 		);
 		$this->add_authors_select_control();
-		$this->add_categories_select_control();
-		$this->add_tags_select_control();
-		$this->add_posts_include_select_control();
+		
+		$this->add_categories_select_control( 'post_categories', [
+			'dependency'	=>	'post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'post_tags', [
+			'dependency'	=>	'post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'contains',
+						'value'	=>	'post'
+					]
+				]
+			]
+		] );
+		$this->add_posts_include_select_control( 'post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'post_offset',
@@ -98,7 +151,18 @@ class Carousel_Module extends \Nekit_Widget_Base\Base {
 				'default' => 0,
 			]
 		);
-		$this->add_posts_exclude_select_control();
+		$this->add_posts_exclude_select_control( 'post_to_exclude', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_control(
 			'post_hide_post_without_thumbnail',
 			[

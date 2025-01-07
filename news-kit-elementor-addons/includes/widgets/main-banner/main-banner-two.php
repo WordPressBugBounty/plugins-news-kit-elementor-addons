@@ -79,6 +79,19 @@ class Main_Banner_Widget_Two extends \Nekit_Widget_Base\Base {
 				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 			]
 		);
+		$this->add_post_type_select_control( 'slider_post_custom_post_types' );
+		$this->add_taxonomy_select_control( 'slider_post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'slider_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_post_order_select_control('slider_post_order');
 		$this->add_control(
 			'slider_post_count',
@@ -92,9 +105,47 @@ class Main_Banner_Widget_Two extends \Nekit_Widget_Base\Base {
 			]
 		);
 		$this->add_authors_select_control('slider_post_authors');
-		$this->add_categories_select_control('slider_post_categories');
-		$this->add_tags_select_control('slider_post_tags');
-		$this->add_posts_include_select_control( 'slider_post_to_include' );
+		$this->add_categories_select_control( 'slider_post_categories', [
+			'dependency'	=>	'slider_post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'slider_post_tags', [
+			'dependency'	=>	'slider_post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'contains',
+						'value'	=>	'post'
+					]
+				]
+			]
+		] );
+		$this->add_posts_include_select_control( 'slider_post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'slider_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'slider_post_offset',
@@ -108,7 +159,18 @@ class Main_Banner_Widget_Two extends \Nekit_Widget_Base\Base {
 				'default' => 0,
 			]
 		);
-		$this->add_posts_exclude_select_control('slider_post_to_exclude');
+		$this->add_posts_exclude_select_control( 'slider_post_to_exclude', 'post', 'Posts', [
+			'dependency'	=>	'slider_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'slider_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'slider_post_hide_post_without_thumbnail',
@@ -401,6 +463,20 @@ class Main_Banner_Widget_Two extends \Nekit_Widget_Base\Base {
 				'tab' => \Elementor\Controls_Manager::TAB_CONTENT,
 			]
 		);
+
+		$this->add_post_type_select_control( 'popular_tab_post_custom_post_types' );
+		$this->add_taxonomy_select_control( 'popular_tab_post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'popular_tab_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_post_order_select_control('popular_tab_post_order');
 		
 		$this->add_control(
@@ -415,9 +491,48 @@ class Main_Banner_Widget_Two extends \Nekit_Widget_Base\Base {
 			]
 		);
 		$this->add_authors_select_control('popular_tab_post_authors');
-		$this->add_categories_select_control('popular_tab_post_categories');
-		$this->add_tags_select_control('popular_tab_post_tags');
-		$this->add_posts_include_select_control( 'popular_tab_post_to_include' );
+
+		$this->add_categories_select_control( 'popular_tab_post_categories', [
+			'dependency'	=>	'popular_tab_post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_post_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'popular_tab_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$this->add_tags_select_control( 'popular_tab_post_tags', [
+			'dependency'	=>	'popular_tab_post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_post_custom_post_types',
+						'operator'	=>	'contains',
+						'value'	=>	'post'
+					]
+				]
+			]
+		] );
+		$this->add_posts_include_select_control( 'popular_tab_post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'popular_tab_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 		$this->add_control(
 			'popular_tab_post_offset',
 			[
@@ -430,7 +545,18 @@ class Main_Banner_Widget_Two extends \Nekit_Widget_Base\Base {
 				'default' => 0,
 			]
 		);
-		$this->add_posts_exclude_select_control('popular_tab_post_to_exclude');
+		$this->add_posts_exclude_select_control( 'popular_tab_post_to_exclude', 'post', 'Posts', [
+			'dependency'	=>	'popular_tab_post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'popular_tab_post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'popular_tab_post_hide_post_without_thumbnail',

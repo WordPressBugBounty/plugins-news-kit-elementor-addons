@@ -33,7 +33,7 @@ class Select2_Extend extends \Elementor\Base_Data_Control {
 			<label for="<?php echo esc_attr($control_uid); ?>" class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
                 <# var multiple = ( data.multiple ) ? 'multiple' : ''; #>
-				<select id="<?php echo esc_attr($control_uid); ?>" class="elementor-control-type-nekit-select2-extend" {{ multiple }} data-query-slug="{{data.query_slug}}" data-setting="{{ data.name }}" data-rest-url="<?php echo esc_attr( get_rest_url(). 'nekit/v1' . '/{{data.options}}/' ); ?>">
+				<select id="<?php echo esc_attr($control_uid); ?>" class="elementor-control-type-nekit-select2-extend" {{ multiple }} data-query-slug="{{data.query_slug}}" data-setting="{{ data.name }}" data-rest-url="<?php echo esc_attr( get_rest_url(). 'nekit/v1' . '/{{data.options}}/' ); ?>" data-dependency="{{ data.dependency }}">
 				</select>
 			</div>
 		</div>

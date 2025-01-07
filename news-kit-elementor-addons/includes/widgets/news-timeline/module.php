@@ -148,6 +148,20 @@
             ]
         );
 
+        $this->add_post_type_select_control();
+		$this->add_taxonomy_select_control( 'post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+
         $this->add_control(
             'post_order',
             [
@@ -193,10 +207,39 @@
 				'multiple'  =>  true,
 				'type'  =>   'nekit-select2-extend',
 				'options'   =>  'select2extend/get_taxonomies',
-				'query_slug'    =>  'category'
+				'query_slug'    =>  'category',
+                'dependency'	=>	'post_custom_taxonomies',
+                'conditions'	=>	[
+                    'terms'	=>	[
+                        [
+                            'name'	=>	'post_custom_taxonomies',
+                            'operator'	=>	'!=',
+                            'value'	=>	''
+                        ],
+                        [
+                            'name'	=>	'post_custom_post_types',
+                            'operator'	=>	'!=',
+                            'value'	=>	''
+                        ]
+                    ]
+                ]
 			]
 		);
 
+        $post_tag_terms = [
+			[
+				'name'	=>	'post_custom_post_types',
+				'operator'	=>	'contains',
+				'value'	=>	'post'
+			]
+		];
+		$post_tag_filter = [
+			'name'	=>	'content_type',
+            'operator'	=>	'===',
+            'value'	=>	'pro'
+		];
+		$post_tag_condition	= apply_filters( 'nekit_timeline_post_authors_condition_filter', $post_tag_filter );
+		if( ! empty( $post_tag_condition ) ) array_push( $post_tag_terms, $post_tag_condition );
 		$this->add_control(
 			'post_tags',
 			[
@@ -206,12 +249,23 @@
 				'type'  =>   'nekit-select2-extend',
 				'options'   =>  'select2extend/get_taxonomies',
 				'query_slug'    =>  'post_tag',
-                'condition' => apply_filters( 'nekit_timeline_post_authors_condition_filter', [
-                    'content_type'  => 'pro'
-                ])
+                'conditions' => [
+                    'terms' =>  $post_tag_terms
+                ]
 			]
 		);
-        $this->add_posts_include_select_control( $name = 'post_to_include', $query_slug = 'post', $label = 'Posts' );
+        $this->add_posts_include_select_control( 'post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
         $this->add_control(
             'offset',
             [
@@ -224,7 +278,21 @@
                 'description'   =>  esc_html__( 'Number of posts to displace or pass over', 'news-kit-elementor-addons' )
             ]
         );
-        
+
+        $post_to_exclude_terms = [
+			[
+				'name'	=>	'post_custom_post_types',
+				'operator'	=>	'!=',
+				'value'	=>	''
+			]
+		];
+		$post_to_exclude_filter = [
+			'name'	=>	'content_type',
+            'operator'	=>	'==',
+            'value'	=>	'pro'
+		];
+		$post_to_exclude_condition	= apply_filters( 'nekit_timeline_post_authors_condition_filter', $post_to_exclude_filter );
+		if( ! empty( $post_to_exclude_condition ) ) array_push( $post_to_exclude_terms, $post_to_exclude_condition );
         $this->add_control(
 			'post_exclude',
 			[
@@ -234,9 +302,9 @@
 				'type'  =>   'nekit-select2-extend',
 				'options'   =>  'select2extend/get_posts_by_post_type',
 				'query_slug'    =>  'post',
-                'condition' => apply_filters( 'nekit_timeline_post_authors_condition_filter', [
-                    'content_type'  => 'pro'
-                ])
+                'conditions' => [
+                    'terms' =>  $post_to_exclude_terms
+                ]
 			]
 		);
         $this->end_controls_section();
@@ -251,6 +319,8 @@
                 ]
             ]
         );
+
+
 
         $this->add_control(
             'pages_order',
@@ -1054,6 +1124,41 @@
     if( $this->polyline_icon )  echo '<span class="polyline-icon">' .wp_kses_post( $this->polyline_icon ). '</span>';
    }
 
+   /**
+	 * Custom post type support
+	 * MARK: Post Type
+	 */
+	public function timeline_post_type_support( $tab ) {
+		$settings = $this->get_settings_for_display();
+		if( ! $tab ) return;
+		$custom_taxonomies = $post_categories = '';
+		switch( $tab ) :
+			case 'latest':
+				$custom_taxonomies = is_array( $settings['latest_tab_custom_taxonomies'] ) ? $settings['latest_tab_custom_taxonomies'] : [];		
+				$post_categories = is_array( $settings['latest_tab_post_categories'] ) ? $settings['latest_tab_post_categories'] : [];		
+				break;
+			case 'popular':
+				$custom_taxonomies = is_array( $settings['popular_tab_custom_taxonomies'] ) ? $settings['popular_tab_custom_taxonomies'] : [];		
+				$post_categories = is_array( $settings['popular_tab_post_categories'] ) ? $settings['popular_tab_post_categories'] : [];		
+				break;
+		endswitch;
+		if( count( $custom_taxonomies ) > 0 ) :
+			$tax_query = [
+				'relation'	=>	"OR"
+			];
+			foreach( $custom_taxonomies as $tax ) :
+				$tax_query[] = [
+					'taxonomy'	=>	$tax,
+					'terms'	=>	$post_categories,
+					'operator'	=>	( count( $post_categories ) > 0 ) ? 'IN' : 'EXISTS'
+				];
+			endforeach;
+			return $tax_query;
+		else :
+			return;
+		endif;
+	}
+
     protected function render() {
         $settings = $this->get_settings_for_display();
         $elementClass = 'nekit-news-timeline-wrap';
@@ -1132,9 +1237,10 @@
                                 endif;
                         break;
                     default : 
+                            $custom_post_types = is_array( $settings['post_custom_post_types'] ) ? $settings['post_custom_post_types'] : 'post';
                             $post_order = explode( "-",$settings['post_order'] );
                             $posts_args = [
-                                'post_type' =>  'post',
+                                'post_type' =>  $custom_post_types,
                                 'post_status'   =>  'publish',
                                 'posts_per_page'    =>  absint( $settings['posts_to_display'] ),
                                 'offset'    =>  absint( $settings['offset'] ),
@@ -1142,11 +1248,27 @@
                                 'orderby'   =>  esc_attr( $post_order[0] )
                             ];
                             if( isset( $settings['post_authors'] ) && $settings['post_authors'] ) $posts_args['author'] = implode( ",", $settings['post_authors'] );
-                            if( $settings['post_categories'] ) $posts_args['cat'] = implode( ",", $settings['post_categories'] );
+                            // if( $settings['post_categories'] ) $posts_args['cat'] = implode( ",", $settings['post_categories'] );
                             if( isset( $settings['post_tags'] ) && $settings['post_tags'] ) $posts_args['tag__in'] = $settings['post_tags'];
                             if( isset( $settings['post_exclude'] ) && $settings['post_exclude'] ) $posts_args['post__not_in'] = $settings['post_exclude'];
                             if( $settings['post_to_include'] ) $posts_args['post__in'] = $settings['post_to_include'];
-                            $post_query = new \WP_Query($posts_args);
+                            $post_tax_query = [];
+                            $post_categories = is_array( $settings['post_categories'] ) ? $settings['post_categories'] : [];
+                            $custom_taxonomies = is_array( $settings['post_custom_taxonomies'] ) ? $settings['post_custom_taxonomies'] : [];
+                            if( count( $custom_taxonomies ) > 0 ) :
+                                $post_tax_query = [
+                                    'relation'	=>	"OR"
+                                ];
+                                foreach( $custom_taxonomies as $tax ) :
+                                    $post_tax_query[] = [
+                                        'taxonomy'	=>	$tax,
+                                        'terms'	=>	$post_categories,
+                                        'operator'	=>	( count( $post_categories ) > 0 ) ? 'IN' : 'EXISTS'
+                                    ];
+                                endforeach;
+                            endif;
+                            if( ! empty( $post_tax_query ) ) $posts_args['tax_query'] = $post_tax_query;
+                            $post_query = new \WP_Query( $posts_args );
                             if( $post_query->have_posts() ) :
                                 while( $post_query->have_posts() ) :
                                     $post_query->the_post();

@@ -198,7 +198,6 @@ jQuery(document).ready(function($) {
                         if( ! pages.includes(page) ) pages.push(page)
                         conditions.push(conditionType)
                         if( ( valuefieldsGroupIndex + 1 ) == valuefieldsGroup.length ) {
-                            console.log( pages )
                             $.ajax({
                                 method: 'POST',
                                 url: adminObject.ajaxUrl,
@@ -243,7 +242,7 @@ jQuery(document).ready(function($) {
                                 console.log(parsedRes)
                             }
                         }
-                    })      
+                    })
                 }
             })
             

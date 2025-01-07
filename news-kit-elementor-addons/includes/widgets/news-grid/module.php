@@ -60,6 +60,20 @@ class Grid_Module extends \Nekit_Widget_Base\Base {
 			]
 		);
 		
+		$this->add_post_type_select_control();
+		$this->add_taxonomy_select_control( 'post_custom_taxonomies', 'Select Taxonomies', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+
 		$this->add_control(
 			'post_order',
 			[
@@ -83,10 +97,55 @@ class Grid_Module extends \Nekit_Widget_Base\Base {
 			]
 		);
 		$this->add_authors_select_control();
-		$this->add_categories_select_control();
-		$this->add_tags_select_control();
+		$this->add_categories_select_control( 'post_categories', [
+			'dependency'	=>	'post_custom_taxonomies',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_taxonomies',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					],
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
+		$post_tag_terms = [
+			[
+				'name'	=>	'post_custom_post_types',
+				'operator'	=>	'contains',
+				'value'	=>	'post'
+			]
+		];
+		$post_tag_filter = [
+			'name'	=>	'post_order',
+			'operator'	=>	'==',
+			'value'	=>	'random'
+		];
+		$post_tag_condition	= apply_filters( 'nekit_query_control_condition_filter', $post_tag_filter );
+		if( ! empty( $post_tag_condition ) ) array_push( $post_tag_terms, $post_tag_condition );
+		$this->add_tags_select_control( 'post_tags', [
+			'conditions'	=>	[
+				'terms'	=>	$post_tag_terms
+			]
+		]);
 
-		$this->add_posts_include_select_control();
+		$this->add_posts_include_select_control( 'post_to_include', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	[
+					[
+						'name'	=>	'post_custom_post_types',
+						'operator'	=>	'!=',
+						'value'	=>	''
+					]
+				]
+			]
+		]);
 
 		$this->add_control(
 			'post_offset',
@@ -100,7 +159,26 @@ class Grid_Module extends \Nekit_Widget_Base\Base {
 				'default'	=>	0
 			]
 		);
-		$this->add_posts_exclude_select_control();
+		$post_to_exclude_terms = [
+			[
+				'name'	=>	'post_custom_post_types',
+				'operator'	=>	'!=',
+				'value'	=>	''
+			]
+		];
+		$post_to_exclude_filter = [
+			'name'	=>	'post_order',
+			'operator'	=>	'==',
+			'value'	=>	'random'
+		];
+		$post_to_exclude_condition	= apply_filters( 'nekit_query_control_condition_filter', $post_to_exclude_filter );
+		if( ! empty( $post_to_exclude_condition ) ) array_push( $post_to_exclude_terms, $post_to_exclude_condition );
+		$this->add_posts_exclude_select_control( 'post_to_exclude', 'post', 'Posts', [
+			'dependency'	=>	'post_custom_post_types',
+			'conditions'	=>	[
+				'terms'	=>	$post_to_exclude_terms
+			]
+		]);
 		$this->add_control(
 			'post_hide_post_without_thumbnail',
 			[

@@ -68,15 +68,29 @@ class Categories_Collection_Module extends \Nekit_Widget_Base\Base {
             ]
         );
 
+		$this->add_taxonomy_select_control( 'post_custom_taxonomies', 'Select Taxonomies', [
+            'query_slug'	=>	'any'
+        ]);
+
         $this->add_control(
 			'categories_include',
 			[
-				'label'	=> esc_html__( 'Categories to Include', 'news-kit-elementor-addons' ),
+				'label'	=> esc_html__( 'Categories to Include (Terms to Include)', 'news-kit-elementor-addons' ),
 				'label_block'	=> true,
 				'multiple'	=> true,
 				'type' => 'nekit-select2-extend',
 				'options'	=> 'select2extend/get_taxonomies',
-				'query_slug'	=> 'category'
+				'query_slug'	=> 'category',
+                'dependency'	=>	'post_custom_taxonomies',
+                'conditions'	=>	[
+                    'terms'	=>	[
+                        [
+                            'name'	=>	'post_custom_taxonomies',
+                            'operator'	=>	'!=',
+                            'value'	=>	''
+                        ],
+                    ]
+                ]
 			]
 		);
 
@@ -1653,15 +1667,18 @@ class Categories_Collection_Module extends \Nekit_Widget_Base\Base {
                 $badges_items[1]= $temp;
             }
         endif;
+        $custom_taxonomies = is_array( $settings['post_custom_taxonomies'] ) ? $settings['post_custom_taxonomies'] : [];
+        $categories_include = is_array( $settings['categories_include'] ) ? $settings['categories_include'] : [];
+
         $this->add_render_attribute( 'wrapper', 'class', $elementClass );
         ?>
         <div <?php echo wp_kses_post($this->get_render_attribute_string( 'wrapper' )); ?> data-arrows="<?php echo esc_attr( wp_json_encode( $settings['show_arrows'] == 'yes' ) ); ?>" data-autoplay="<?php echo esc_attr( wp_json_encode( $settings['enable_autoplay'] == 'yes' ) ); ?>" data-autoplayspeed="<?php echo esc_attr( wp_json_encode( $settings['autoplay_speed'] == 'yes' ) ); ?>" data-fade="<?php echo esc_attr( wp_json_encode( $settings['show_fade'] == 'yes' ) ); ?>" data-infinite="<?php echo esc_attr( wp_json_encode( $settings['show_infinite'] == 'yes' ) ); ?>" data-speed="<?php echo esc_attr( $settings['carousel_speed'] ); ?>" data-slidestoshow = "<?php echo absint($widget_column); ?>" data-prev="<?php echo esc_attr( $prev_arrow ); ?>" data-next="<?php echo esc_attr( $next_arrow )?>" data-mobile="<?php echo esc_attr( $widget_column_mobile ); ?>" data-tablet="<?php echo esc_attr( $widget_column_tablet ); ?>">
             <?php
                 $cc_args = [
-                    'taxonomy'  => 'category'
+                    'taxonomy'  => $custom_taxonomies
                 ];
-                if( empty( $settings['categories_include'] ) ) $cc_args['number'] = 3;
-                if( $settings['categories_include'] ) $cc_args['include'] = $settings['categories_include'];
+                if( empty( $categories_include ) ) $cc_args['number'] = 3;
+                if( $categories_include ) $cc_args['include'] = $categories_include;
                 if( $settings['categories_hide_empty'] != 'yes' ) $cc_args['hide_empty'] = ( $settings['categories_hide_empty'] == 'yes' );
                 $cc_query = get_terms($cc_args);
                 foreach( $cc_query as $category ):

@@ -8,6 +8,8 @@
 namespace Nekit_Addon;
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+use Elementor\Plugin as Elementor_Plugin;
+
 final class Plugin {
     /**
      * Instance
@@ -211,7 +213,7 @@ final class Plugin {
 		wp_register_script( 'typed-js', plugins_url( 'assets/external/typed-main/typed.umd.js', __FILE__ ), [], '3', true );
 		wp_register_script( 'jquery-cookie', plugins_url( 'assets/external/jquery-cookie/jquery-cookie.js', __FILE__ ), ['jquery'], '1.4.1', true );
 		wp_register_script( 'nekit-main-frontend-data-source', plugins_url( 'assets/js/frontend-script-data.js', __FILE__ ), [ 'jquery' ], '1.0.0', false );
-		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.min.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
+		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
 		wp_enqueue_script( 'slick' );
 		wp_enqueue_script( 'js-marquee' );
 		wp_enqueue_script( 'typed-js' );
