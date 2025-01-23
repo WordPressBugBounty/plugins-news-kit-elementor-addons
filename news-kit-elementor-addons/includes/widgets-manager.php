@@ -211,10 +211,12 @@ if( ! function_exists( 'nekit_register_new_controls' ) ) :
         require_once( __DIR__ . '/controls/select2-extend/select2-control.php' );
         require_once( __DIR__ . '/controls/radio-image/radio-image-control.php' );
         require_once( __DIR__ . '/controls/sortable/sortable-control.php' );
+        require_once( __DIR__ . '/controls/number-select/number-select-control.php' );
 
         $controls_manager->register( new \Nekit_Elementor_Controls\Radio_Image_Control() );
         $controls_manager->register( new \Nekit_Elementor_Controls\Select2_Extend() );
         $controls_manager->register( new \Nekit_Elementor_Controls\Sortable_Control() );
+        $controls_manager->register( new \Nekit_Elementor_Controls\Number_Select_Control() );
     }
     add_action( 'elementor/controls/register', 'nekit_register_new_controls' );
 endif;

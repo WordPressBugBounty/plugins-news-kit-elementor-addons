@@ -48,6 +48,7 @@
 		.nekit-single-featured-image {
 			overflow: hidden;
 			position: relative;
+			height: 100%;
 		}
 
 		.nekit-single-featured-image .has-image-overlay {
@@ -55,7 +56,7 @@
 		}
 
 	/* alignment center */
-		.elementor .elementor-widget:not(.elementor-widget-text-editor):not(.elementor-widget-theme-post-content) figure.nekit-single-featured-image.alignment--center{
+		.elementor .elementor-widget:not(.elementor-widget-text-editor):not(.elementor-widget-theme-post-content) figure.nekit-single-featured-image.alignment--center {
 			margin: 0 auto;
 		}
 

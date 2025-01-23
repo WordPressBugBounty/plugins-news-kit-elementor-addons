@@ -1171,9 +1171,11 @@
         }
         $this->add_render_attribute( 'title_hover', 'class', $titleClass );
         if( $content_type != 'custom' ) $this->polyline_icon = nekit_get_base_value( [ 'icon' => $settings['polyline_icon'] ] );
+        $polyline_animation_color = isset( $settings['polyline_animation_color'] ) ? $settings['polyline_animation_color']: '#000000';
+        $icon_initial_color = isset( $settings['icon_initial_color'] ) ? $settings['icon_initial_color']: '#ffffff';
         $this->add_render_attribute( 'wrapper','class',$elementClass );
         ?>
-        <div <?php echo wp_kses_post($this->get_render_attribute_string( 'wrapper' )); ?> data-color="<?php echo esc_attr( $settings['polyline_animation_color'] ); ?>" data-defaultColor="<?php echo esc_attr( $settings['icon_initial_color'] ); ?>">
+        <div <?php echo wp_kses_post($this->get_render_attribute_string( 'wrapper' )); ?> data-color="<?php echo esc_attr( $polyline_animation_color ); ?>" data-defaultColor="<?php echo esc_attr( $icon_initial_color ); ?>">
             <div class="timeline-fixed-bar">
                 <div class="progress-bar"></div>
             </div>

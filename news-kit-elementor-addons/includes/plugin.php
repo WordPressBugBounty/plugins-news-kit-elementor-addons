@@ -129,6 +129,7 @@ final class Plugin {
         add_action( 'elementor/frontend/after_enqueue_styles', [ $this, 'frontend_styles' ], 99 );
 		add_action( 'elementor/frontend/after_register_scripts', [ $this, 'frontend_scripts' ], 99 );
 		add_action( 'elementor/preview/enqueue_scripts', [ $this, 'preview_scripts' ] );
+		add_action( 'elementor/preview/enqueue_styles', [ $this, 'preview_styles' ] );
 		add_action( 'elementor/elements/categories_registered', [ $this, 'add_elementor_widget_categories' ] );
 		add_filter('elementor/editor/localize_settings', [$this, 'register_premium_widgets']);
 		add_action( 'wp_ajax_nekit_live_search_widget_posts_content', [$this,'live_search_widget_posts_content']);
@@ -151,6 +152,10 @@ final class Plugin {
 	    require_once( __DIR__ . '/widgets-manager.php' );
 	    require_once( __DIR__ . '/controls/select2-extend/select2-extend-api.php' );
 	    require_once( NEKIT_PATH . '/custom/meta.php' );
+
+		// add_action( 'wp_footer', [ $this, 'render_popup' ] );
+		// add_filter( 'template_include', [ $this, 'render_test' ] );
+		// add_action( 'elementor/page_templates/canvas/nekit_print_content', [ $this, 'nekit_frontend_template_display' ] );
 	}
 	
     public function frontend_styles() {
@@ -166,6 +171,7 @@ final class Plugin {
 		wp_register_style( 'nekit-text-animation' , plugins_url( 'assets/css/text-animation.css',__FILE__ ) );
 		wp_register_style( 'nekit-main-responsive-one', plugins_url( 'assets/css/frontend-responsive-one.css', __FILE__ ) );
 		wp_register_style( 'nekit-main-responsive', plugins_url( 'assets/css/frontend-responsive.css', __FILE__ ) );
+		wp_register_style( 'nekit-popup', plugins_url( 'assets/css/popup-builder.css', __FILE__ ) );
 
 		// blocks css
 		wp_register_style( 'nekit-grid-css', plugins_url( 'assets/css/widgets/grid.css', __FILE__ ) );
@@ -205,6 +211,7 @@ final class Plugin {
 		wp_enqueue_style( 'nekit-ticker-news-css' );
 		wp_enqueue_style( 'nekit-social-share-css' );
 		wp_enqueue_style( 'nekit-preloader-animation' );
+		wp_enqueue_style( 'nekit-popup' );
 	}
 
 	public function frontend_scripts() {
@@ -213,7 +220,7 @@ final class Plugin {
 		wp_register_script( 'typed-js', plugins_url( 'assets/external/typed-main/typed.umd.js', __FILE__ ), [], '3', true );
 		wp_register_script( 'jquery-cookie', plugins_url( 'assets/external/jquery-cookie/jquery-cookie.js', __FILE__ ), ['jquery'], '1.4.1', true );
 		wp_register_script( 'nekit-main-frontend-data-source', plugins_url( 'assets/js/frontend-script-data.js', __FILE__ ), [ 'jquery' ], '1.0.0', false );
-		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
+		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.min.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
 		wp_enqueue_script( 'slick' );
 		wp_enqueue_script( 'js-marquee' );
 		wp_enqueue_script( 'typed-js' );
@@ -244,6 +251,11 @@ final class Plugin {
         ]);
 	}
 
+	public function preview_styles() {
+		wp_register_style( 'nekit-preview', plugins_url( 'assets/css/frontend-preview.css', __FILE__ ) );
+		wp_enqueue_style( 'nekit-preview' );
+	}
+
 	/**
 	 * Admin notice
 	 *
@@ -270,8 +282,43 @@ final class Plugin {
 	 * 
 	 */
 	public function theme_builder_compatibility() {
+		/* Header */
 		add_action( 'get_header', [ $this, 'render_header' ] );
+		// add_action( 'elementor/page_templates/canvas/before_content', [ $this, 'render_header' ] );
+
+		/* Footer */
 		add_action( 'get_footer', [ $this, 'render_footer' ] );
+		// add_action( 'elementor/page_templates/canvas/after_content', [ $this, 'render_footer' ] );
+	}
+
+	/**
+	 * MARK: TEST
+	 */
+	public function render_test( $template ) {
+		if( is_single() || is_archive() ) :
+			return NEKIT_PATH . '/admin/templates/canvas.php';
+		else:
+			return $template;
+		endif;
+	}
+
+	/**
+	 * MARK: TEST
+	 */
+	public function nekit_frontend_template_display() {
+		$Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
+		$template = '';
+
+		if( is_single() ) {
+			if( $Nekit_render_templates_html->is_template_available( 'single' ) ) :
+				$template =  $Nekit_render_templates_html->current_builder_template();
+			endif;
+		} else if( is_archive() ) {
+			if( $Nekit_render_templates_html->is_template_available( 'archive' ) ) :
+				$template =  $Nekit_render_templates_html->current_builder_template();
+			endif;
+		}
+		echo $template;
 	}
 
 	/**
@@ -326,6 +373,88 @@ final class Plugin {
 				echo $Nekit_render_templates_html->current_builder_template();
 			});
 		}
+	}
+
+	/**
+	 * Render active popup builder content
+	 */
+	function render_popup() {		
+		$default_values = [
+			'nekit_open_popup'	=>	'page-load',
+			'nekit_delay_after_page_load'	=>	1,
+			'nekit_show_again_delay'	=>	[
+				'number'	=>	1,
+				'select'	=>	'minute'
+			],
+			'nekit_to_show_after_scroll'	=>	30,
+			'nekit_element_id'	=>	'',
+			'nekit_popup_close_on_esc'	=>	true,
+			'nekit_popup_enable_automatic_closing'	=>	false,
+			'nekit_delay_close_automatically_after'	=>	5,
+			'nekit_popup_close_button_display'	=>	true,
+			'nekit_popup_close_button_display_delay'	=>	0,
+			'nekit_popup_enable_overlay'	=>	true,
+			'nekit_popup_enable_closing_on_overlay_click'	=>	true,
+			'nekit_popup_on_scroll'	=>	'every',
+			'nekit_popup_disable_page_scroll'	=>	true,
+			'nekit_display_as'	=>	'modal'
+		];
+
+		$Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
+		if( $Nekit_render_templates_html->is_template_available( 'popup' ) ) :
+			$template_ids = $Nekit_render_templates_html->get_current_builder_id();	/* Get Template ids */
+			if( ! empty( $template_ids ) && is_array( $template_ids ) ) :
+				$reversed_template_ids = array_reverse( $template_ids );
+				foreach( $reversed_template_ids as $template_id ):
+					$id_attribute = 'nekit-popup-post-' . $template_id;	/* ID Attribute */
+					$class_attributes = 'nekit-popup-wrapper';	/* Class Attribute */
+					$class_attributes .= ' nekit-popup-template';	/* Class Attribute */
+					$new_control_values = get_post_meta( $template_id, '_elementor_page_settings', true );	/* Meta */
+
+					/* Reponsive */
+					$nekit_display_as = isset( $new_control_values[ 'nekit_display_as' ] ) ? $new_control_values[ 'nekit_display_as' ] : 'model';
+					$nekit_popup_entrance_animation = isset( $new_control_values[ 'nekit_popup_entrance_animation' ] ) ? $new_control_values[ 'nekit_popup_entrance_animation' ] : 'none';
+					$nekit_popup_height_select = isset( $new_control_values[ 'nekit_popup_height_select' ] ) ? $new_control_values[ 'nekit_popup_height_select' ] : 'auto';
+					$enabled_in_desktop = isset( $new_control_values[ 'nekit_popup_show_in_desktop' ] ) ? $new_control_values[ 'nekit_popup_show_in_desktop' ] : true;
+					$enabled_in_tablet = isset( $new_control_values[ 'nekit_popup_show_in_tablet' ] ) ? $new_control_values[ 'nekit_popup_show_in_tablet' ] : true;
+					$enabled_in_smartphone = isset( $new_control_values[ 'nekit_popup_show_in_smartphone' ] ) ? $new_control_values[ 'nekit_popup_show_in_smartphone' ] : true;
+					$class_attributes .= ' as-' . $nekit_display_as;
+					$class_attributes .= ' height-' . $nekit_popup_height_select;
+					if( $enabled_in_desktop ) $class_attributes .= ' desktop--on';
+					if( $enabled_in_tablet ) $class_attributes .= ' tablet--on';
+					if( $enabled_in_smartphone ) $class_attributes .= ' smartphone--on';
+
+					/* Merging default values with new control values */
+					if( ! empty( $new_control_values ) && is_array( $new_control_values ) ) :
+						$needed_settings = array_intersect_key( $new_control_values, $default_values );
+						$control_values = array_merge( $default_values, $needed_settings );
+					else:
+						$control_values = $default_values;
+					endif;
+					$data_attributes = wp_json_encode( $control_values );	/* Data Attribute */
+
+					$innerContainerClass = 'nekit-popup-inner-container';
+					$innerContainerClass .= ' ' . $nekit_popup_entrance_animation;
+					?>
+						<div id="<?php echo esc_attr( $id_attribute ); ?>" class="<?php echo esc_attr( $class_attributes ); ?>" data-settings="<?php echo esc_attr( $data_attributes ); ?>">
+							<div class="nekit-popup-container">
+								<div class="nekit-popup-overlay"></div>
+								<div class="<?php echo esc_attr( $innerContainerClass ); ?>">
+									<?php if( $control_values[ 'nekit_popup_close_button_display' ] ) : ?>
+										<button class="nekit-popup-close">
+											<span class="dashicons dashicons-no"></span>
+										</button>
+									<?php endif; ?>
+									<div class="nekit-popup-wrap">
+										<?php echo $Nekit_render_templates_html->current_builder_template( $template_id ); ?>
+									</div>
+								</div>
+							</div>
+						</div>
+					<?php
+				endforeach;
+			endif;
+		endif;
 	}
 
 	/**

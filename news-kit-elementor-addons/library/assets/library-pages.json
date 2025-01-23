@@ -47,6 +47,42 @@
         "home_slug":  "nekit-free-one-home",
         "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/free-one.zip"
     },
+    "newsroom-one": {
+        "name": "Newsroom One",
+        "category": [ "news", "blog" ],
+        "type": "free",
+        "pages": {
+            "home" : {
+                "name": "Home",
+                "preview_url": "https://prev.blazethemes.com/newsroom-elementor/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsroom-one/home.jpg",
+                "data_route": "sites/newsroom-one/home.json"
+            },
+            "archive" : {
+                "name": "Archive",
+                "preview_url": "https://prev.blazethemes.com/newsroom-elementor/category/technology/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsroom-one/archive.jpg",
+                "data_route": "sites/newsroom-one/archive.json"
+            },
+            "single" : {
+                "name": "Single",
+                "preview_url": "https://prev.blazethemes.com/newsroom-elementor/highlights-from-the-global-stage/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsroom-one/single.jpg",
+                "data_route": "sites/newsroom-one/single.json"
+            },
+            "error" : {
+                "name": "Error",
+                "preview_url": "https://prev.blazethemes.com/newsroom-elementor/lorem",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsroom-one/error.jpg",
+                "data_route": "sites/newsroom-one/error.json"
+            }
+        },
+        "navs": {
+            "menu-1": ""
+        },
+        "home_slug":  "nekit-newsroom-one-home",
+        "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsroom-one.zip"
+    },
     "free-two": {
         "name": "Two",
         "category": [ "news", "blog" ],

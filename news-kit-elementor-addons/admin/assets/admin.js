@@ -9,6 +9,9 @@ jQuery(document).ready(function($) {
                 case 'news-kit_page_news-kit-elementor-addons-theme-builder':
                                         NekitAdminHandler.adminpageLoad()
                                 break;
+                case 'news-kit_page_news-kit-elementor-addons-popup-builder':
+                                        NekitAdminHandler.adminpageLoad()
+                                break;
                 case 'news-kit_page_news-kit-elementor-addons-settings': 
                                         NekitAdminHandler.adminSettingsPage()
                                 break;
@@ -22,7 +25,7 @@ jQuery(document).ready(function($) {
             return results[1] || 0;
         },
         adminSettingsPage: function() {
-            console.log(this.urlParam('page'))
+            // console.log(this.urlParam('page'))
         },
         adminpageLoad: function() {
             var admincontainer = $("#nekit-admin-page")
@@ -278,7 +281,7 @@ jQuery(document).ready(function($) {
         navLoad: function() {
             // close elementor editor
             $(document).on( "click", ".nekit-mega-menu-modal .tab-edit-content .mega-menu-inner-close-btn", function() {
-                console.log( "close elementor editor" )
+                // console.log( "close elementor editor" )
                 $(this).parent().hide()
             })
 

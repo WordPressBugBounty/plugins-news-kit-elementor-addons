@@ -1047,7 +1047,7 @@ jQuery(document).ready(function($) {
         } else {
             var parentSection = $(this).parents('.e-parent')
             if( parentSection.hasClass( 'e-con-boxed' ) ) {
-                var elementor_container = parentSection.find( 'e-con-inner' );
+                var elementor_container = parentSection.find( '.e-con-inner' );
             } else {
                 var elementor_container = parentSection;
             }
@@ -1072,7 +1072,7 @@ jQuery(document).ready(function($) {
             } else {
                 var parentSection = $(this).parents('.e-parent')
                 if( parentSection.hasClass( 'e-con-boxed' ) ) {
-                    var elementor_container = parentSection.find( 'e-con-inner' );
+                    var elementor_container = parentSection.find( '.e-con-inner' );
                 } else {
                     var elementor_container = parentSection;
                 }
@@ -1133,88 +1133,140 @@ jQuery(document).ready(function($) {
      */
     const NekitPopupBuilder = {
         nekitPopupSelector: $( '.nekit-popup-wrapper' ),
+        nekitTemplateIdPrefix: 'nekit-popup-post-',
         init: function(){
             if( this.nekitPopupSelector.length > 0 ) {
+                this.loadNekitLocalStorageVariables()
+                this.setTimer()
                 this.closeButton()
                 this.closePopupOnESCPress()
                 this.showPopup()
+                this.closeAutomaticallyAfter()
+                this.handleOutsideClicks()
+                this.closeButtonDelay()
             }
         },
         /* Close Button Handle */
         closeButton: function(){
+            let self = this
             this.nekitPopupSelector.each(function(){
-                let _this = $(this), closeButton = _this.find( '.nekit-popup-close' );
-    
+                let _this = $(this),
+                    closeButton = _this.find( '.nekit-popup-close' ),
+                    settings = _this.data( 'settings' ),
+                    templateId = self.getPopupId( _this ),   /* Popup Id */
+                    _thisControlValues = self.getControlValuesById( templateId ),
+                    { nekit_show_again_delay: delay, nekit_open_popup: openPopup } = settings;
+                
                 /* Close Button click event */
                 closeButton.on('click', function(){
-                    let _thisButton = $(this)
-                    _thisButton.parent().removeClass( 'is-open' )
+                    if( delay.select !== 'none' && openPopup !== 'custom-trigger' ) {
+                        _thisControlValues[ 'nekit_show_popup_again_timestamp' ] = Date.now() + self.convertToMiliseconds( delay )    /* Determine whether to show popup again or not */
+                    }
+                    if( delay.select === 'none' ) {
+                        _thisControlValues[ 'nekit_show_again' ] = false
+                    }
+                    localStorage.setItem( 'nekitPopupSettings', JSON.stringify({ ...self.getLocalStorageVariables(), [ templateId ]: _thisControlValues }) ) /* Update the local storage variables */
+                    self.nekitRemoveClass( _this )
                 })
             })
         },
         /* Close Popup on ESC Button Press */
         closePopupOnESCPress: function(){
+            let self = this
             $(document).on( 'keydown', function( event ) {
                 let nekitPopupcount = $( '.nekit-popup-wrapper.is-open' ).length
                 if( nekitPopupcount > 0 && event.key === "Escape" ) {
-                    let nekitPopup = $( '.nekit-popup-wrapper.is-open' )[ 0 ]   /* Always the first one. */
-                    let settings = $( nekitPopup ).data( 'settings' )
-                    let { nekit_popup_close_on_esc: isOkToCloseOnESC } = settings
+                    let nekitPopup = $( '.nekit-popup-wrapper.is-open' )[ nekitPopupcount - 1 ],   /* Always the last one. */
+                        settings = $( nekitPopup ).data( 'settings' ),
+                        { nekit_popup_close_on_esc: isOkToCloseOnESC, nekit_show_again_delay: delay, nekit_open_popup: openPopup } = settings;
+
                     if( isOkToCloseOnESC ) {
-                        $( nekitPopup ).removeClass( 'is-open' )
+                        let templateId = self.getPopupId( $( nekitPopup ) ),    /* Popup Id */
+                            _thisControlValues = self.getControlValuesById( templateId )
+
+                        if( delay.select !== 'none' && openPopup !== 'custom-trigger' ) {
+                            _thisControlValues[ 'nekit_show_popup_again_timestamp' ] = Date.now() + self.convertToMiliseconds( delay )    /* Determine whether to show popup again or not */
+                        }
+                        if( delay.select === 'none' ) {
+                            _thisControlValues[ 'nekit_show_again' ] = false
+                        }
+                        localStorage.setItem( 'nekitPopupSettings', JSON.stringify({ ...self.getLocalStorageVariables(), [ templateId ]: _thisControlValues }) ) /* Update the local storage variables */
+                        self.nekitRemoveClass( $( nekitPopup ) )
                     }
                 }
             });
         },
+        /* Close Automatically After */
+        closeAutomaticallyAfter: function(){
+            this.nekitPopupSelector.each(function(){
+                let _this = $(this), 
+                    settings = _this.data( 'settings' ),    /* Popup Settings */
+                    { nekit_popup_enable_automatic_closing: enableAutomaticClosing, nekit_delay_close_automatically_after: secondsToCloseAfter } = settings,
+                    milisecondsToCloseAfter = secondsToCloseAfter * 1000;
+
+                if( enableAutomaticClosing ) {
+                    setTimeout(function(){
+                        self.nekitRemoveClass( _this )
+                    }, milisecondsToCloseAfter )
+                }
+            })
+        },
         /* Show popup after how many seconds */
         delayPopupShow: function( popupElement, delay ){
+            let self = this
             setTimeout(function(){
-                popupElement.addClass( 'is-open' )
+                self.nekitAddClass( popupElement )
             }, delay )
         },
         /* When to Show popup */
         showPopup: function(){
             let self = this
             this.nekitPopupSelector.each(function(){
-                let _this = $(this), settings = _this.data( 'settings' )
-                let { nekit_open_popup: openPopup, nekit_delay_after_page_load: seconds, nekit_element_id: element } = settings
-                let miliseconds = seconds * 1000
-                switch( openPopup ) {
-                    case 'after-user-exit-intent' :
+                let _this = $(this), 
+                    templateId = self.getPopupId( _this ),
+                    settings = _this.data( 'settings' ),
+                    templateValues = self.getControlValuesById( templateId ),   /* Popup Id */
+                    { nekit_show_again: isShowAgain, nekit_show_popup_again_timestamp: showAgainTimestamp } = templateValues,
+                    { nekit_open_popup: openPopup, nekit_delay_after_page_load: seconds, nekit_element_id: element, nekit_popup_on_scroll: showOnScroll } = settings
 
-                        break;
-                    case 'page-scroll' :
-                        $( document ).on( 'scroll', function(){
-                            _this.addClass( 'is-open' )
-                        });
-                        break;
-                    case 'scroll-to-element' :
-                        /* Detect the element only once. */
-                        let hasBeenSeen = false
-                        $( document ).on( 'scroll', function(){
-                            if( ! hasBeenSeen ) {
-                                let inViewPort = self.isInViewport( $( element ) )
-                                if( inViewPort ) {
-                                    hasBeenSeen = true
-                                    _this.addClass( 'is-open' )
+                if( ( isShowAgain && Date.now() > showAgainTimestamp || openPopup === 'custom-trigger' ) ) {
+                    switch( openPopup ) {
+                        case 'page-scroll' :
+                            let { nekit_to_show_after_scroll: scroll } = settings,
+                                documentHeight = $(document).height(),
+                                calculatedScroll = documentHeight * ( scroll / 100 ),    /* Getting specific height from the total document height. */
+                                isPopupShown = false
+
+                            $( document ).on( 'scroll', function(){
+                                if( $(this).scrollTop() > calculatedScroll && ! isPopupShown ) {
+                                    isPopupShown = true
+                                    self.nekitAddClass( _this )
                                 }
-                            }
-                        });
-                        break;
-                    case 'after-specific-date' :
-
-                        break;
-                    case 'after-user-inactivity' :
-
-                        break;
-                    case 'custom-trigger' :
-                        $( element ).on( 'click', function(){
-                            _this.addClass( 'is-open' )
-                        });
-                        break;
-                    default :   /* page-load */
-                        self.delayPopupShow( _this, miliseconds )
-                        break;
+                            });
+                            break;
+                        case 'scroll-to-element' :
+                            /* Detect the element only once. */
+                            let hasBeenSeen = false
+                            $( document ).on( 'scroll', function(){
+                                if( ! hasBeenSeen ) {
+                                    let inViewPort = self.isInViewport( $( element ) )
+                                    if( inViewPort ) {
+                                        if( showOnScroll !== 'every' ) hasBeenSeen = true
+                                        self.nekitAddClass( _this )
+                                    }
+                                }
+                            });
+                            break;
+                        case 'custom-trigger' :
+                            $( element ).on( 'click', function(){
+                                self.nekitAddClass( _this )
+                            });
+                            break;
+                        default :   /* page-load */
+                            let miliseconds = seconds * 1000
+                            self.delayPopupShow( _this, miliseconds )
+                            break;
+                    }
                 }
             })
         },
@@ -1226,6 +1278,181 @@ jQuery(document).ready(function($) {
             let viewportBottom = viewportTop + $( window ).height();
         
             return elementBottom > viewportTop && elementTop < viewportBottom;
+        },
+        /* Load Local Storage Variables */
+        loadNekitLocalStorageVariables: function() {
+            let self = this, localStorageData = {}
+            this.nekitPopupSelector.each(function(){
+                let _this = $(this),
+                    settings = _this.data( 'settings' ),
+                    { nekit_show_again_delay: newDelay } = settings,
+                    templateId = self.getPopupId( _this ),   /* Popup Id */
+                    defaultTemplateData = {
+                        nekit_show_popup_again_timestamp: 0,
+                        nekit_show_again: true,
+                        nekit_show_again_delay: newDelay
+                    },
+                    localStorageVariables = self.getLocalStorageVariables();
+
+                /* Execute if local storage is not set. */
+                if( localStorageVariables === null ) {
+                    localStorageData = { 
+                        ...localStorageData, 
+                        [ templateId ]: defaultTemplateData
+                    }
+                } else {
+                    /* Update local storage value if changed. */
+                    if( templateId in localStorageVariables ) {
+                        let { nekit_show_again_delay: oldDelay = '' } = self.getControlValuesById( templateId )
+                        if( newDelay.select !== oldDelay.select || newDelay.number !== oldDelay.number ) {
+                            localStorageData = { 
+                                ...localStorageData, 
+                                [ templateId ]: defaultTemplateData
+                            }
+                        } else {
+                            /* Don't change local storage values if not changed. */
+                            localStorageData = { 
+                                ...localStorageData, 
+                                [ templateId ]: self.getControlValuesById( templateId )
+                            }
+                        }
+                    } else {
+                        /* Add new data if template id not exists */
+                        localStorageData = { 
+                            ...localStorageData, 
+                            [ templateId ]: defaultTemplateData
+                        }
+                    }
+                }
+
+            })
+            localStorage.setItem( 'nekitPopupSettings', JSON.stringify( localStorageData ) )
+        },
+        /* Calculate to milliseconds */
+        convertToMiliseconds: function( delay ) {
+            if( delay === undefined || delay === null ) return 0
+            let { number, select } = delay
+            switch( select ) {
+                case 'second':
+                    return number * 1000
+                    break;
+                case 'minute':
+                    return number * 60 * 1000
+                    break;
+                case 'hour':
+                    return number * 60 * 60 * 1000
+                    break;
+                case 'day':
+                    return number * 24 * 60 * 60 * 1000
+                    break;
+            }
+        },
+        /* Get local storage variables */
+        getLocalStorageVariables: function(){
+            let nekitLocalStorageVariables = localStorage.getItem( 'nekitPopupSettings' )   /* Access Local Storage */
+            let parsedVariables = JSON.parse( nekitLocalStorageVariables )  /* Parsing the local storage value */
+            return parsedVariables
+        },
+        /* Get Control values by Id */
+        getControlValuesById: function( id ){
+            let nekitVariables = this.getLocalStorageVariables()
+            return nekitVariables[ id ]
+        },
+        /* Get local storage variables */
+        getPopupId: function( element ){
+            let _thisIdAttribute = element.attr( 'id' )  /* Fetch Id Attribute of Popup */
+            let templateId = _thisIdAttribute.split( this.nekitTemplateIdPrefix )[1]    /* Split the id and get its template id */
+            return parseInt( templateId )
+        },
+        /* Set timer */
+        setTimer: function(){
+            let self = this
+            setInterval(function(){
+                Object.entries( self.getLocalStorageVariables() ).map(([ templateId, templateValues ]) => {
+                    let templateTimestamp = templateValues[ 'nekit_show_popup_again_timestamp' ],
+                        popupIdAttribute = $( '#' + self.nekitTemplateIdPrefix + templateId ),    /* Popup Element */
+                        popupSettings = popupIdAttribute.data( 'settings' ),
+                        { nekit_show_again_delay: delay, nekit_open_popup: openPopup } = popupSettings
+                    /* Show popup again */
+                    if( ( delay.select !== 'none' ) && ( Date.now() >= templateTimestamp ) && ( templateTimestamp !== 0 ) && ( openPopup !== 'custom-trigger' ) ) {
+                        self.nekitAddClass( popupIdAttribute )
+                        let newLocalStorageData = { 
+                            ...self.getLocalStorageVariables(),
+                            [ templateId ]: { 
+                                ...self.getLocalStorageVariables()[ templateId ],
+                                nekit_show_popup_again_timestamp: 0 
+                            }
+                        }
+                        localStorage.setItem( 'nekitPopupSettings', JSON.stringify( newLocalStorageData ) ) /* Update the local storage variables */
+                    }
+                })
+            }, 1000)
+        },
+        /* Handle Outside click */
+        handleOutsideClicks: function(){
+            let self = this
+            $( document ).mouseup(function ( e ) {
+                let nekitPopupcount = $( '.nekit-popup-wrapper.is-open' ).length
+                if( nekitPopupcount > 0 ) {
+                    let nekitPopup = $( '.nekit-popup-wrapper.is-open' )[ nekitPopupcount - 1 ],   /* Always the last one. */
+                    settings = $( nekitPopup ).data( 'settings' ),
+                    { nekit_popup_enable_closing_on_overlay_click: enableOverlayClick, nekit_show_again_delay: delay, nekit_open_popup: openPopup } = settings;
+
+                    if( enableOverlayClick ) {
+                        if( $( e.target ).is( $( '.nekit-popup-overlay' ) ) ) {
+                            let templateId = self.getPopupId( $( nekitPopup ) ),    /* Popup Id */
+                            _thisControlValues = self.getControlValuesById( templateId )
+    
+                            if( delay.select !== 'none' && openPopup !== 'custom-trigger' ) {
+                                _thisControlValues[ 'nekit_show_popup_again_timestamp' ] = Date.now() + self.convertToMiliseconds( delay )    /* Determine whether to show popup again or not */
+                            }
+                            if( delay.select === 'none' ) {
+                                _thisControlValues[ 'nekit_show_again' ] = false
+                            }
+                            localStorage.setItem( 'nekitPopupSettings', JSON.stringify({ ...self.getLocalStorageVariables(), [ templateId ]: _thisControlValues }) ) /* Update the local storage variables */
+                            self.nekitRemoveClass( $( nekitPopup ) )
+                        }
+                    }
+                }
+            })
+        },
+        /* Add class */
+        nekitAddClass: function( element ){
+            element.addClass( 'is-open' )
+            element.parents( 'body' ).addClass( 'nekit-popup-open' )
+            let settings = element.data( 'settings' ),  /* Popup Settings */
+                { nekit_display_as: displayAs, nekit_popup_disable_page_scroll: disablePageScroll } = settings
+
+            if( displayAs === 'top-bar' ) {
+                element.parents( 'body' ).addClass( 'as-' + displayAs )
+                $( 'body' ).prepend( element )
+            }
+            if( disablePageScroll && ( displayAs !== 'top-bar' ) ) element.parents( 'body' ).addClass( 'nekit-scroll--disabled' )
+        },
+        /* Remove class */
+        nekitRemoveClass: function( element ){
+            let settings = element.data( 'settings' ),  /* Popup Settings */
+                { nekit_popup_disable_page_scroll: disablePageScroll } = settings
+
+            element.removeClass( 'is-open' )
+            if( $( '.nekit-popup-wrapper.is-open' ).length <= 0 ) {
+                element.parents( 'body' ).removeClass( 'nekit-popup-open' )
+            }
+
+            if( disablePageScroll ) element.parents( 'body' ).removeClass( 'nekit-scroll--disabled' )
+        },
+        /* Close button Delay */
+        closeButtonDelay: function(){
+            this.nekitPopupSelector.each(function(){
+                let _this = $( this ),
+                    settings = _this.data( 'settings' ),    /* Popup Settings */
+                    { nekit_popup_close_button_display_delay: closeButtonDelay } = settings,
+                    miliseconds = closeButtonDelay * 1000;
+
+                setTimeout(function(){
+                    _this.find( '.nekit-popup-close' ).show()
+                }, miliseconds )
+            })
         }
     }
     NekitPopupBuilder.init()

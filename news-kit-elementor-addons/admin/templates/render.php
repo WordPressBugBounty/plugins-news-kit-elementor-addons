@@ -65,6 +65,21 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
+			} else if( $type == 'popup' ) {
+				$child_page = is_front_page() ? 'singular-frontpage' : 'singular-page';
+				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => $child_page ]);
+				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
+					foreach( $popup_templates as $popup_template_id ) :
+						if( get_post_status( $popup_template_id ) ) :
+							$this->current_builder_id[] = $popup_template_id;
+						else :
+							continue;
+						endif;
+					endforeach;
+					return ( ! empty( $this->current_builder_id ) ) ? true : false;
+				else:
+					return false;
+				endif;
 			}
 		} else if( is_singular('post') ) {
 			if( $type == 'header' ) {
@@ -103,6 +118,20 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
+			} else if( $type == 'popup' ) {
+				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => 'singular-post' ]);
+				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
+					foreach( $popup_templates as $popup_template_id ) :
+						if( get_post_status( $popup_template_id ) ) :
+							$this->current_builder_id[] = $popup_template_id;
+						else :
+							continue;
+						endif;
+					endforeach;
+					return ( ! empty( $this->current_builder_id ) ) ? true : false;
+				else:
+					return false;
+				endif;
 			}
 		} else if( is_home() ) {
 			if( $type == 'header' ) {
@@ -141,6 +170,20 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
+			} else if( $type == 'popup' ) {
+				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => 'home' ]);
+				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
+					foreach( $popup_templates as $popup_template_id ) :
+						if( get_post_status( $popup_template_id ) ) :
+							$this->current_builder_id[] = $popup_template_id;
+						else :
+							continue;
+						endif;
+					endforeach;
+					return ( ! empty( $this->current_builder_id ) ) ? true : false;
+				else:
+					return false;
+				endif;
 			}
 		} else if( is_archive() ) {
 			if( $type == 'header' ) {
@@ -207,6 +250,30 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
+			} else if( $type == 'popup' ) {
+				if( is_category() ) {
+					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-category']);
+				} else if( is_tag() ) {
+					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-tag']);
+				} else if( is_author() ) {
+					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-author']);
+				} else if( is_date() ) {
+					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-date']);
+				} else if( is_search() ) {
+					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-search']);
+				}
+				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
+					foreach( $popup_templates as $popup_template_id ) :
+						if( get_post_status( $popup_template_id ) ) :
+							$this->current_builder_id[] = $popup_template_id;
+						else :
+							continue;
+						endif;
+					endforeach;
+					return ( ! empty( $this->current_builder_id ) ) ? true : false;
+				else:
+					return false;
+				endif;
 			}
 		} else if( is_search() ) {
 			if( $type == 'header' ) {
@@ -245,6 +312,20 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
+			} else if( $type == 'popup' ) {
+				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => 'archives-search' ]);
+				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
+					foreach( $popup_templates as $popup_template_id ) :
+						if( get_post_status( $popup_template_id ) ) :
+							$this->current_builder_id[] = $popup_template_id;
+						else :
+							continue;
+						endif;
+					endforeach;
+					return ( ! empty( $this->current_builder_id ) ) ? true : false;
+				else:
+					return false;
+				endif;
 			}
 		} else if( is_404() ) {
 			if( $type == 'header' ) {
@@ -283,6 +364,22 @@ class Nekit_Render_Templates_Html {
 				} else {
 					return false;
 				}
+			}  else if( $type == 'popup' ) {
+				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => 'singular-404page' ]);
+				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
+					foreach( $popup_templates as $popup_template_id ) :
+						if( get_post_status( $popup_template_id ) ) :
+							$this->current_builder_id[] = $popup_template_id;
+						else :
+							continue;
+						endif;
+					endforeach;
+					return ( ! empty( $this->current_builder_id ) ) ? true : false;
+				else:
+					return false;
+				endif;
+			} else {
+				return false;
 			}
 		} else {
 			return false;

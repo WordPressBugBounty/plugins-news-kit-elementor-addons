@@ -745,7 +745,7 @@ class Base extends \Elementor\Widget_Base {
 	function get_posts_args_for_query( $prefix = 'post' ) {
 		$settings = $this->get_settings_for_display();
 
-		$post_type = isset( $settings[ $prefix . '_custom_post_types' ] ) ? $settings[ $prefix . '_custom_post_types' ] : ['post'];
+		$post_type = isset( $settings[ $prefix . '_custom_post_types' ] ) ? $settings[ $prefix . '_custom_post_types' ] : [ 'post' ];
 		$custom_taxonomies = ( isset( $settings[ $prefix . '_custom_taxonomies' ] ) && is_array( $settings[ $prefix . '_custom_taxonomies' ] ) ) ? $settings[ $prefix . '_custom_taxonomies' ] : [];
 
 		$post_order = ( strpos( $settings[$prefix . '_order'], '-pro' ) === false ) ? $settings[$prefix . '_order']: 'date-desc';

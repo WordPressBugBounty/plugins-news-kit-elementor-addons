@@ -67,11 +67,11 @@
 		opacity: 1;
 	}
 
-	/* animate slide */`
+	/* animate slide */
 		.nekit-pointer-animate-slide-left .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li > a:before,
 		.nekit-pointer-animate-slide-left .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li > a:after,
 		.nekit-pointer-animate-slide-left .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:before,
-		.nekit-pointer-animate-slide-left .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:after{
+		.nekit-pointer-animate-slide-left .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:after {
 			position: absolute;
 			opacity: 0;
 			width: 0;
@@ -92,7 +92,7 @@
 		.nekit-pointer-animate-slide-right .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:before,
 		.nekit-pointer-animate-slide-right .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:after,
 		.nekit-pointer-animate-slide-right .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:before,
-		.nekit-pointer-animate-slide-right .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:after{
+		.nekit-pointer-animate-slide-right .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li > a:after {
 			position: absolute;
 			left: 100%;
 			opacity: 0;
@@ -213,7 +213,7 @@
 		}
 
 		.nekit-pointer-border .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li:hover > a:before,
-		.nekit-pointer-border .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li:hover > a:before, {
+		.nekit-pointer-border .nekit-nav-menu-container .nekit-nav-menu-list-wrap > li:hover > a:before {
 			opacity: 1;
 		}
 

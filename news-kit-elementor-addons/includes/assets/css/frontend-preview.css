@@ -1,0 +1,40 @@
+/* *
+* Popup Builder
+*/
+
+.elementor-editor-active [data-elementor-type="nekit-document"] .elementor-section-wrap:not(:empty)+#elementor-add-new-section {
+    display: none;
+}
+
+body:not(.nekit-popover-preview) .nekit-popup-wrapper {
+    display: none;
+}
+
+.nekit-template-popup .nekit-popup-container {
+    display: flex;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+}
+
+.nekit-popup-container .nekit-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.nekit-popup-inner-container {
+    position: relative;
+}
+
+.nekit-template-popup .nekit-popup {
+    padding: 20px
+}
+
+/* Top Bar Banner */
+.nekit-template-popup.as-top-bar .nekit-popup-inner-container {
+    width: 100%;
+}

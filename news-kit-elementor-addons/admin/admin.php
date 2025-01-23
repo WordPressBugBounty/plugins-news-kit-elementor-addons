@@ -10,6 +10,7 @@ use Nekit_Utilities;
 use News_Kit_Elementor_Addons_Library;
 use WP_Ajax_Upgrader_Skin;
 use Plugin_Upgrader;
+use Nekit_Popup_Builder;
 
 class Admin {
 	public $ajax_response = [];
@@ -141,6 +142,14 @@ class Admin {
 			'news-kit-elementor-addons-theme-builder',
 			[$this,'admin_page_theme_builder_callback']
 		);
+		// add_submenu_page(
+		// 	'news-kit-elementor-addons',
+		// 	__( 'Popup Builder', 'news-kit-elementor-addons' ),
+		// 	__( 'Popup Builder', 'news-kit-elementor-addons' ),
+		// 	'manage_options',
+		// 	'news-kit-elementor-addons-popup-builder',
+		// 	[$this,'admin_page_popup_builder_callback']
+		// );
 		add_submenu_page(
 			'news-kit-elementor-addons',
 			__( 'Starter Sites', 'news-kit-elementor-addons' ),
@@ -167,7 +176,7 @@ class Admin {
 				<div class="page-header">
 					<h2 class="page-title"><?php echo esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
 					<p><?php echo esc_html__( 'Manage news addon builder settings', 'news-kit-elementor-addons' ); ?></p>
-					<button class="video-redirect-button"><a href="https://www.youtube.com/" target="_blank"><?php echo esc_html__( 'How Does Builder Works?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-controls-play"></span></a></button>
+					<button class="video-redirect-button"><a href="https://www.youtube.com/watch?v=AhNQasgJ-AI&list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4" target="_blank"><?php echo esc_html__( 'How Does Builder Works?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-controls-play"></span></a></button>
 				</div>
 				<div class="page-content">
 					<ul class="tabs-title-wrap">
@@ -185,7 +194,7 @@ class Admin {
 							case 'mega-menu-builder': ?>
 									<div class="tab-content-header">
 										<h2 class="tab-header-title"><?php echo esc_html__( 'How to create Mega Menu with News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
-										<button class="video-redirect-button"><a href="<?php echo esc_url('https://www.youtube.com/channel/UCxb7KK2IkaZyuz_JqxwLUuA'); ?>" target="_blank"><?php echo esc_html__( 'Video Tutorial', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
+										<button class="video-redirect-button"><a href="<?php echo esc_url('https://youtu.be/hrGdMMLqkEw?list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4'); ?>" target="_blank"><?php echo esc_html__( 'Video Tutorial', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
 									</div>
 									<div class="tab-content-body">
 									</div>
@@ -313,7 +322,7 @@ class Admin {
 				<div class="page-header">
 					<h2 class="page-title"><?php echo esc_html__( 'Pre-made Blocks', 'news-kit-elementor-addons' ); ?></h2>
 					<p><?php echo esc_html__( 'Preview and Import all the pre-made blocks.', 'news-kit-elementor-addons' ); ?></p>
-					<button class="video-redirect-button"><a href="<?php echo esc_url('https://www.youtube.com/channel/UCxb7KK2IkaZyuz_JqxwLUuA'); ?>" target="_blank"><?php echo esc_html__( 'How to use pre-made blocks', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
+					<button class="video-redirect-button"><a href="<?php echo esc_url('https://www.youtube.com/watch?v=LFD5KtXVXrc'); ?>" target="_blank"><?php echo esc_html__( 'How to use pre-made blocks', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
 				</div>
 				<div class="page-content">
 					<div class="nekit-library-popup library-popup-inner pre-built-block-wrap">
@@ -611,7 +620,7 @@ class Admin {
 
 	// register scripts and styles
 	function handle_scripts($hook) {
-		if( ! $hook == 'nav-menus.php' && ! in_array( $hook, ['toplevel_page_news-kit-elementor-addons', 'news-kit_page_news-kit-elementor-addons-theme-builder', 'news-kit_page_news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings' ] ) ) return;
+		if( ! $hook == 'nav-menus.php' && ! in_array( $hook, ['toplevel_page_news-kit-elementor-addons', 'news-kit_page_news-kit-elementor-addons-theme-builder', 'news-kit_page_news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit_page_news-kit-elementor-addons-popup-builder' ] ) ) return;
 		require_once NEKIT_PATH . 'admin/assets/wptt-webfont-loader.php';
 		wp_register_style( 'nekit-admin-fonts', wptt_get_webfont_url( $this->get_fonts_url() ), [], null );
 		wp_register_style( 'fontawesome', NEKIT_URL . 'includes/assets/external/fontawesome/css/all.min.css', [], '5.15.3' );
@@ -1253,7 +1262,7 @@ class Admin {
 																						<?php
 																							endif;
 
-																							if( in_array( $tab, [ 'header-builder', 'footer-builder' ] ) ) :
+																							if( in_array( $tab, [ 'header-builder', 'footer-builder', 'popup-builder' ] ) ) :
 																						?>
 																								<select class="template-display-archives-pages <?php if( $assigned_page == 'archives' ) echo esc_attr( 'field-show' ); ?>">
 																									<option value="all" <?php selected( $archive_assigned_page, 'all', true ); ?>><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></option>
@@ -1348,7 +1357,7 @@ class Admin {
 					<?php
 						endif;
 						
-						if( in_array( $tab, ['header','footer'] ) ) :
+						if( in_array( $tab, [ 'header', 'footer', 'popup' ] ) ) :
 					?>
 							<select class="template-display-archives-pages">
 								<option value="all"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></option>
@@ -1450,6 +1459,7 @@ class Admin {
 			'post_content' => '',
 			'post_status'	=> 'publish'
 		];
+		if( $template === 'popup-builder' ) $new_template_args[ 'post_content' ] = '<h2>' . esc_html__( 'This Popup content will appear on your site according to builder display conditions.', 'news-kit-elementor-addons' ) . '</h2>';
 		$new_template_id = wp_insert_post( $new_template_args );
 		if( $template == 'single-builder' || $template == 'archive-builder' ) {
 			update_post_meta( $new_template_id, '_elementor_template_type', 'nekit-document' );
@@ -1650,5 +1660,9 @@ class Admin {
 		$option = ( isset( $_POST['option'] ) ) ? $_POST['option'] : '';
 		update_option( 'nekit_404_active_template', $option );
 		wp_die();	
+	}
+
+	public function admin_page_popup_builder_callback() {
+		new Nekit_Popup_Builder\Popup_Builder();
 	}
 }

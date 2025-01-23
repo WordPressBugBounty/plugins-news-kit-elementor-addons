@@ -176,5 +176,57 @@
 			previewContainer.closest("body").find("#nekit-library-btn").trigger("click")
 		});
 	}
-	$(window).on( 'elementor:init', NekitPanelHandler.init );
+
+	/**
+	 * MARK: NEKIT POPUP
+	 */
+	const NekitPopupHandler = {
+		init: function(){
+			/* On Preview Load */
+			window.elementor.on( 'preview:loaded', this.previewLoad );
+
+			/* On Congrol change */
+			elementor.settings.page.model.on( 'change', this.onControlChange );
+		},
+		/* Called when preview is loaded */
+		previewLoad: function(){
+			if( window.elementorFrontend && elementorFrontend.hooks !== undefined ) {
+				elementorFrontend.hooks.addAction( 'frontend/element_ready/global', function( $scope ) {
+					let popup = $scope.closest( '.nekit-template-popup' ),
+						currentSettings = elementor.settings.page.model.attributes
+					
+					/* Add as-top-bar class */
+					if( 'nekit_display_as' in currentSettings ) popup.addClass( 'as-' + currentSettings[ 'nekit_display_as' ] )
+				});
+			}
+		},
+		/* Called when control values changes */
+		onControlChange: function( model ){
+			let iframe = document.getElementById( 'elementor-preview-iframe' ),
+				iframeContent = iframe.contentDocument || iframe.contentWindow.document,
+				isPopupBuilder = $( '.nekit-popover-preview', iframeContent );
+
+			if( isPopupBuilder.length > 0 ) {
+				let popup = $( '.nekit-template-popup', iframeContent );
+				
+				/* Display As */
+				if ( model.changed.hasOwnProperty( 'nekit_display_as' ) ) {
+					popup.removeClass( 'as-modal as-top-bar' ).addClass( 'as-' + model.changed[ 'nekit_display_as' ] )
+				}
+	
+				/* Entrance animation */
+				if ( model.changed.hasOwnProperty( 'nekit_popup_entrance_animation' ) ) {
+					popup.find( '.nekit-popup-inner-container' ).addClass( 'animated ' + model.changed[ 'nekit_popup_entrance_animation' ] )
+				}
+			}
+		}
+	}
+
+	/**
+	 * MARK: INIT
+	 */
+	$(window).on( 'elementor:init', function(){
+		NekitPanelHandler.init()
+		NekitPopupHandler.init()
+	});
 }(jQuery));

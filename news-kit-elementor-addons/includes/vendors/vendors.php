@@ -658,7 +658,17 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
 
         $builder_posts = get_posts($builder_posts_args);
         if( $builder_posts ) {
-            return $builder_posts[0]->ID;
+            if( $setting['parent'] === 'popup-builder' ) :
+                if( ! empty( $builder_posts ) ) :
+                    $builder_ids = [];
+                    foreach( $builder_posts as $popup_builder ) :
+                        $builder_ids[] = $popup_builder->ID;
+                    endforeach;
+                    return $builder_ids;
+                endif;
+            else :
+                return $builder_posts[0]->ID;
+            endif;
         } else {
             $is_archives = strpos( $setting['child'], 'archive' );
             $is_singular = strpos( $setting['child'], 'singular' );
@@ -693,7 +703,17 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                 ];
                 $builder_posts = get_posts($builder_posts_args);
                 if( $builder_posts ) {
-                    return $builder_posts[0]->ID;
+                    if( $setting['parent'] === 'popup-builder' ) :
+                        if( ! empty( $builder_posts ) ) :
+                            $builder_ids = [];
+                            foreach( $builder_posts as $popup_builder ) :
+                                $builder_ids[] = $popup_builder->ID;
+                            endforeach;
+                            return $builder_ids;
+                        endif;
+                    else :
+                        return $builder_posts[0]->ID;
+                    endif;
                 } else {
                     $builder_placement_value = 'entire-site';
                     if( in_array( $setting['parent'], ['archive-builder', 'single-builder'] ) ) {
@@ -721,7 +741,17 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                     ];
                     $builder_posts = get_posts($builder_posts_args);
                     if( $builder_posts ) {
-                        return $builder_posts[0]->ID;
+                        if( $setting['parent'] === 'popup-builder' ) :
+                            if( ! empty( $builder_posts ) ) :
+                                $builder_ids = [];
+                                foreach( $builder_posts as $popup_builder ) :
+                                    $builder_ids[] = $popup_builder->ID;
+                                endforeach;
+                                return $builder_ids;
+                            endif;
+                        else :
+                            return $builder_posts[0]->ID;
+                        endif;
                     } else {
                         return false;
                     }
@@ -749,7 +779,17 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                 ];
                 $builder_posts = get_posts($builder_posts_args);
                 if( $builder_posts ) {
-                    return $builder_posts[0]->ID;
+                    if( $setting['parent'] === 'popup-builder' ) :
+                        if( ! empty( $builder_posts ) ) :
+                            $builder_ids = [];
+                            foreach( $builder_posts as $popup_builder ) :
+                                $builder_ids[] = $popup_builder->ID;
+                            endforeach;
+                            return $builder_ids;
+                        endif;
+                    else :
+                        return $builder_posts[0]->ID;
+                    endif;
                 } else {
                     $builder_posts_args = [
                         'post_type' => 'nekit-mm-cpt',
@@ -773,7 +813,17 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                     ];
                     $builder_posts = get_posts($builder_posts_args);
                     if( $builder_posts ) {
-                        return $builder_posts[0]->ID;
+                        if( $setting['parent'] === 'popup-builder' ) :
+                            if( ! empty( $builder_posts ) ) :
+                                $builder_ids = [];
+                                foreach( $builder_posts as $popup_builder ) :
+                                    $builder_ids[] = $popup_builder->ID;
+                                endforeach;
+                                return $builder_ids;
+                            endif;
+                        else :
+                            return $builder_posts[0]->ID;
+                        endif;
                     } else {
                         return false;
                     }
@@ -801,7 +851,17 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                 ];
                 $builder_posts = get_posts( $builder_posts_args );
                 if( $builder_posts ) {
-                    return $builder_posts[0]->ID;
+                    if( $setting['parent'] === 'popup-builder' ) :
+                        if( ! empty( $builder_posts ) ) :
+                            $builder_ids = [];
+                            foreach( $builder_posts as $popup_builder ) :
+                                $builder_ids[] = $popup_builder->ID;
+                            endforeach;
+                            return $builder_ids;
+                        endif;
+                    else :
+                        return $builder_posts[0]->ID;
+                    endif;
                 } else {
                     return false;
                 }

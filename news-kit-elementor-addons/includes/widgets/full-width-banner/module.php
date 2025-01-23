@@ -1563,8 +1563,8 @@ class Full_Width_Banner_Module extends \Nekit_Widget_Base\Base {
                                             endif;
                                             if( $args['show_post_date'] == 'yes' ):
                                                 echo wp_kses_post(nekit_get_posts_date([
-                                                    'base'  =>  isset( $settings['post_date_icon_position'] ) ? $settings['post_date_icon_position'] : 'prefix',
-                                                    'icon'  =>  isset( $settings['post_date_icon'] ) ? $settings['post_date_icon'] : [
+                                                    'base'  =>  isset( $args['post_date_icon_position'] ) ? $args['post_date_icon_position'] : 'prefix',
+                                                    'icon'  =>  isset( $args['post_date_icon'] ) ? $args['post_date_icon'] : [
                                                         'value' =>  'fas fa-calendar',
                                                         'library'   =>  'fa-solid'
                                                     ],
