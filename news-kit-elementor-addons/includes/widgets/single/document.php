@@ -145,12 +145,10 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 				'label' => esc_html__( 'Open Popup', 'news-kit-elementor-addons' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
 				'default' => 'page-load',
-				'options' => [
+				'options' => apply_filters( 'nekit_filter_open_popup_methods', [
 					'page-load' => esc_html__( 'On Page Load', 'news-kit-elementor-addons' ),
-					'page-scroll' => esc_html__( 'On Page Scroll', 'news-kit-elementor-addons' ),
-					'scroll-to-element'  => esc_html__( 'On Scroll to Element', 'news-kit-elementor-addons' ),
-					'custom-trigger' => esc_html__( 'Custom Trigger', 'news-kit-elementor-addons' ),
-				]
+					'page-scroll' => esc_html__( 'On Page Scroll', 'news-kit-elementor-addons' )
+				])
 			]
 		);
 
@@ -295,52 +293,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			]
 		);
 
-		$this->add_control(
-			'nekit_popup_divider_seven',
-			[
-				'type' => \Elementor\Controls_Manager::DIVIDER
-			]
-		);
-
-		$this->add_control(
-			'nekit_popup_close_on_esc',
-			[
-				'label' => esc_html__( 'Close Popup on ESC Press', 'news-kit-elementor-addons' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'On', 'news-kit-elementor-addons' ),
-				'label_off' => esc_html__( 'Off', 'news-kit-elementor-addons' ),
-				'return_value' => 'yes',
-				'default' => 'yes',
-			]
-		);
-
-		$this->add_control(
-			'nekit_popup_enable_automatic_closing',
-			[
-				'label' => esc_html__( 'Auto Close', 'news-kit-elementor-addons' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'On', 'news-kit-elementor-addons' ),
-				'label_off' => esc_html__( 'Off', 'news-kit-elementor-addons' ),
-				'return_value' => 'yes',
-				'default' => 'no',
-			]
-		);
-
-		$this->add_control(
-			'nekit_delay_close_automatically_after',
-			[
-				'label' => esc_html__( 'Close Automatically After (Sec)', 'news-kit-elementor-addons' ),
-				'type' => \Elementor\Controls_Manager::NUMBER,
-				'min' => 0,
-				'max' => 100,
-				'step' => 1,
-				'default' => 5,
-				'description'	=>	esc_html__( 'After how long should the popup close automatically.', 'news-kit-elementor-addons' ),
-				'condition'	=>	[
-					'nekit_popup_enable_automatic_closing'	=>	'yes'
-				]
-			]
-		);
+		apply_filters( 'nekit_add_popup_closing_options', $this );
 
 		$this->add_control(
 			'nekit_popup_divider_nine',
@@ -378,7 +331,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 				'label_on' => esc_html__( 'On', 'news-kit-elementor-addons' ),
 				'label_off' => esc_html__( 'Off', 'news-kit-elementor-addons' ),
 				'return_value' => 'yes',
-				'default' => 'yes',
+				'default' => 'no',
 				'condition'	=>	[
 					'nekit_display_as!'	=>	'top-bar'
 				]
@@ -601,30 +554,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			]
 		);
 
-		$this->add_control(
-			'nekit_popup_entrance_animation',
-			[
-				'label' => esc_html__( 'Entrance Animation', 'news-kit-elementor-addons' ),
-				'type' => \Elementor\Controls_Manager::ANIMATION,
-				'prefix_class' => 'animated '
-			]
-		);
-
-		$this->add_control(
-			'nekit_popup_animation_duration',
-			[
-				'label' => esc_html__( 'Animation Duration', 'news-kit-elementor-addons' ),
-				'type' => Controls_Manager::NUMBER,
-				'default' => 1,
-				'min' => 0,
-				'max'	=>	1000,
-				'step'	=>	1,
-				'selectors'	=>	[
-					'{{WRAPPER}} .nekit-popup-inner-container'	=>	'animation-duration: {{VALUE}}s'
-				]
-			]
-		);
-
+		apply_filters( 'nekit_popup_layout_settings_tab_controls', $this );
 
 		$this->end_controls_section();
 
@@ -751,20 +681,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			]
 		);
 
-		$this->add_control(
-			'nekit_popup_enable_closing_on_overlay_click',
-			[
-				'label' => esc_html__( 'Close on Overlay Click', 'news-kit-elementor-addons' ),
-				'type' => \Elementor\Controls_Manager::SWITCHER,
-				'label_on' => esc_html__( 'On', 'news-kit-elementor-addons' ),
-				'label_off' => esc_html__( 'Off', 'news-kit-elementor-addons' ),
-				'return_value' => 'yes',
-				'default' => 'yes',
-				'condition'	=>	[
-					'nekit_popup_enable_overlay'	=>	'yes'
-				]
-			]
-		);
+		apply_filters( 'nekit_popup_overlay_settings_tab', $this );
 
 		$this->end_controls_section();
 
@@ -802,7 +719,9 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			[
 				'label' => esc_html__( 'Scroll Bar Control', 'news-kit-elementor-addons' ),
 				'type' => \Elementor\Controls_Manager::COLOR,
-				'selector' => '{{WRAPPER}} .nekit-popup.nekit-scrollbar::-webkit-scrollbar-thumb'
+				'selectors' => [
+					'{{WRAPPER}} .nekit-popup.nekit-scrollbar::-webkit-scrollbar-thumb' => 'background-color: {{VALUE}}',
+				]
 			]
 		);
 

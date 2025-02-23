@@ -259,6 +259,11 @@
 		    width: 100%!important;
 		}
 
+		.nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-container.nekit-megamenu-fit-to-section,
+		.nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-container.nekit-megamenu-fit-to-screen {
+			margin-inline: 0 !important;
+		}
+
 	/** 
 	=====================
 		NAV MENU RESPONSIVE
@@ -853,7 +858,6 @@
 		}
 
 	/** Mega Menu sub menu position **/
-
 		.news-elementor-nav-mega-menu,
 		.news-elementor-mega-menu {
 			position: relative;

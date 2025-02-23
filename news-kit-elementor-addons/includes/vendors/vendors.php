@@ -563,6 +563,26 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
      * @params empty
      */
     function nekit_get_conditions_settings_builder_id($setting) {
+        if( $setting['parent'] !== '404-builder' ) :
+            $builder_update_compatibility_args = [
+                'post_type' => 'nekit-mm-cpt',
+                'meta_query'	=>	[
+                    [
+                        'key'	=>	'builder_type',
+                        'value'	=>	$setting['parent'],
+                        'compare'	=>	'='
+                    ]
+                ]
+            ];
+            $builder_update_compatibility_query = new WP_Query( $builder_update_compatibility_args );
+            if( $builder_update_compatibility_query->have_posts() ) :
+                while( $builder_update_compatibility_query->have_posts() ) :
+                    $builder_update_compatibility_query->the_post();
+                    if( ! metadata_exists( 'post', get_the_ID(), 'nekit_builder_in_use' ) ) update_post_meta( get_the_ID(), 'nekit_builder_in_use', true );   /* update compatible */
+                endwhile;
+                wp_reset_postdata();
+            endif;
+        endif;
         $builder_posts_args = [
             'post_type' => 'nekit-mm-cpt',
             'meta_query'    => [
@@ -570,6 +590,11 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                     'key'   => 'builder_type',
                     'value' => esc_html($setting['parent']),
                     'compare'  => '='
+                ],
+                [
+                    'key' => 'nekit_builder_in_use',
+                    'value' => '1',
+                    'compare' => '='
                 ]
             ]
         ];
@@ -636,7 +661,7 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                         'value' => esc_html($setting['child']),
                         'compare'  => 'LIKE'
                     ],
-                    $builder_posts_args['meta_query'][] = [
+                    [
                         'key'   => 'builder_placement',
                         'value' => esc_html('nekit' .$current_archive_id. 'nekit'),
                         'compare'  => 'LIKE'
@@ -698,6 +723,11 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                             'key'   => 'builder_placement_exclude',
                             'value' => esc_html($setting['child']),
                             'compare'  => 'NOT LIKE'
+                        ],
+                        [
+                            'key' => 'nekit_builder_in_use',
+                            'value' => '1',
+                            'compare' => '='
                         ]
                     ]
                 ];
@@ -736,6 +766,11 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                                 'key'   => 'builder_type',
                                 'value' => esc_html($setting['parent']),
                                 'compare'  => '='
+                            ],
+                            [
+                                'key' => 'nekit_builder_in_use',
+                                'value' => '1',
+                                'compare' => '='
                             ]
                         ]
                     ];
@@ -774,6 +809,11 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                             'key'   => 'builder_type',
                             'value' => esc_html($setting['parent']),
                             'compare'  => '='
+                        ],
+                        [
+                            'key' => 'nekit_builder_in_use',
+                            'value' => '1',
+                            'compare' => '='
                         ]
                     ]
                 ];
@@ -808,6 +848,11 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                                 'key'   => 'builder_type',
                                 'value' => esc_html($setting['parent']),
                                 'compare'  => '='
+                            ],
+                            [
+                                'key' => 'nekit_builder_in_use',
+                                'value' => '1',
+                                'compare' => '='
                             ]
                         ]
                     ];
@@ -846,6 +891,11 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                             'key'   => 'builder_type',
                             'value' => esc_html($setting['parent']),
                             'compare'  => '='
+                        ],
+                        [
+                            'key' => 'nekit_builder_in_use',
+                            'value' => '1',
+                            'compare' => '='
                         ]
                     ]
                 ];
@@ -902,11 +952,16 @@ if( !function_exists( 'nekit_get_builders' ) ) :
         if( $builder_posts ) {
             $builder_posts_info = [];
             foreach( $builder_posts as $builder_post ) :
+                if( ! metadata_exists( 'post', $builder_post->ID, 'nekit_builder_in_use' ) ) :  /* update compatible */
+                    update_post_meta( $builder_post->ID, 'nekit_builder_in_use', true );
+                endif;
+
                 $builder_posts_info[] = [
-                    'id'    => absint($builder_post->ID),
+                    'id'    => absint( $builder_post->ID ),
                     'title' => esc_html($builder_post->post_title),
                     'builder_placement' => get_post_meta($builder_post->ID, 'builder_placement', true),
-                    'builder_placement_exclude' => get_post_meta($builder_post->ID, 'builder_placement_exclude', true)
+                    'builder_placement_exclude' => get_post_meta($builder_post->ID, 'builder_placement_exclude', true),
+                    'nekit_builder_in_use' => get_post_meta( $builder_post->ID, 'nekit_builder_in_use', true )
                 ];
             endforeach;
             return apply_filters( 'nekit_builder_info_filter', $builder_posts_info );

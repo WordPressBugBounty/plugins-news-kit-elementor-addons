@@ -10,7 +10,7 @@ namespace Nekit_Utilities;
 class Utils {
     public static function registered_widgets() {
         return apply_filters( 'nekit_registered_widgets_filter', array(
-            "advanced-heading-icon" => [
+             "advanced-heading-icon" => [
                 'name'  => esc_html__( 'Advanced Heading Icon', 'news-kit-elementor-addons' ),
                 'category'  => 'advanced-heading'
             ],
@@ -243,6 +243,15 @@ class Utils {
                 'category'  => 'tags-cloud-animation'
             ]
         ));
+    }
+
+    public static function get_registered_widgets_with_demo() {
+        $widgets = array_filter( self::registered_widgets(), function( $widget_key ){
+            $widgets_with_no_demo = [ 'back-top-top', 'archive-title', 'archive-posts', 'breadcrumb', 'date-and-time', 'mailbox', 'phone-call', 'random-news', 'single-author-box', 'single-author', 'single-categories', 'single-comment-box', 'single-comment', 'single-date', 'single-featured-image', 'single-post-navigation', 'single-related-post', 'single-table-of-content', 'single-tags', 'single-title', 'site-logo-title', 'site-nav-mega-menu', 'theme-mode', 'ticker-news-one', 'ticker-news-two' ];
+    
+            if( ! in_array( $widget_key, $widgets_with_no_demo ) ) return $widget_key;
+        } , ARRAY_FILTER_USE_KEY );
+        return $widgets;
     }
     
     // Theme Builder Template Check

@@ -38,7 +38,7 @@ class Posts extends \Nekit_Widget_Base\Base {
 				'label' =>  esc_html__( 'Widget Actions', 'news-kit-elementor-addons' ),
 				'show_label'    =>  false,
 				'type'  =>   \Elementor\Controls_Manager::RAW_HTML,
-				'raw'   =>  '<div class="nekit-action-buttons-wrap"><a target="_blank" href="https://prev.blazethemes.com/news-elementor/archive-posts" class="button-item preview-button">' .esc_html__( "Preview", "news-kit-elementor-addons" ). '</a><a href="#" class="button-item preview-library-button">' .esc_html__( "Widget Library", "news-kit-elementor-addons" ). '</a></div>',
+				'raw'   =>  '<div class="nekit-action-buttons-wrap"><a target="_blank" href="https://prev.blazethemes.com/news-elementor/archive-posts" class="button-item preview-button">' .esc_html__( "Preview", "news-kit-elementor-addons" ). '</a></div>',
 				'content_classes'   =>  'nekit-button-actions'
 			]
 		);

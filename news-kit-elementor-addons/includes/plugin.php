@@ -131,7 +131,7 @@ final class Plugin {
 		add_action( 'elementor/preview/enqueue_scripts', [ $this, 'preview_scripts' ] );
 		add_action( 'elementor/preview/enqueue_styles', [ $this, 'preview_styles' ] );
 		add_action( 'elementor/elements/categories_registered', [ $this, 'add_elementor_widget_categories' ] );
-		add_filter('elementor/editor/localize_settings', [$this, 'register_premium_widgets']);
+		add_filter( 'elementor/editor/localize_settings', [$this, 'register_premium_widgets']);
 		add_action( 'wp_ajax_nekit_live_search_widget_posts_content', [$this,'live_search_widget_posts_content']);
 		add_action( 'wp_ajax_nopriv_nekit_live_search_widget_posts_content', [$this,'live_search_widget_posts_content'] );
 		add_action( 'wp_ajax_nekit_news_filter_tab_content_change', [$this,'news_filter_widget_tab_content_change']);
@@ -147,15 +147,17 @@ final class Plugin {
 		add_action( 'wp_ajax_nekit_single_related_posts_widget_ajax_content', [$this,'single_related_posts_widget_ajax_content'] );
 		add_action( 'wp_ajax_nopriv_nekit_single_related_posts_widget_ajax_content', [$this,'single_related_posts_widget_ajax_content'] );
 		add_action( 'wp', [ $this, 'theme_builder_compatibility' ] );
+		add_action( 'elementor/preview/init', [ $this, 'nekit_library_modal_html' ] );
+		add_filter( 'admin_footer_text', [ $this, 'nekit_admin_footer_text' ] );
 		
 		// Load plugin file
 	    require_once( __DIR__ . '/widgets-manager.php' );
 	    require_once( __DIR__ . '/controls/select2-extend/select2-extend-api.php' );
 	    require_once( NEKIT_PATH . '/custom/meta.php' );
 
-		// add_action( 'wp_footer', [ $this, 'render_popup' ] );
-		// add_filter( 'template_include', [ $this, 'render_test' ] );
-		// add_action( 'elementor/page_templates/canvas/nekit_print_content', [ $this, 'nekit_frontend_template_display' ] );
+		add_action( 'wp_footer', [ $this, 'render_popup' ] );
+		add_filter( 'template_include', [ $this, 'render_test' ] );
+		add_action( 'elementor/page_templates/canvas/nekit_print_content', [ $this, 'nekit_frontend_template_display' ] );
 	}
 	
     public function frontend_styles() {
@@ -220,13 +222,15 @@ final class Plugin {
 		wp_register_script( 'typed-js', plugins_url( 'assets/external/typed-main/typed.umd.js', __FILE__ ), [], '3', true );
 		wp_register_script( 'jquery-cookie', plugins_url( 'assets/external/jquery-cookie/jquery-cookie.js', __FILE__ ), ['jquery'], '1.4.1', true );
 		wp_register_script( 'nekit-main-frontend-data-source', plugins_url( 'assets/js/frontend-script-data.js', __FILE__ ), [ 'jquery' ], '1.0.0', false );
-		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.min.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
+		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
+
 		wp_enqueue_script( 'slick' );
 		wp_enqueue_script( 'js-marquee' );
 		wp_enqueue_script( 'typed-js' );
 		wp_enqueue_script( 'jquery-cookie' );
 		wp_enqueue_script( 'nekit-main-frontend-data-source' );
 		wp_enqueue_script( 'nekit-main' );
+
 		wp_localize_script( 'nekit-main-frontend-data-source', 'frontendDataSource', [
             '_wpnonce'	=> wp_create_nonce( 'nekit-frontend-nonce' ),
 			'ajaxUrl'	=> admin_url('admin-ajax.php'),
@@ -242,7 +246,7 @@ final class Plugin {
 	}
 
 	public function preview_scripts() {
-		wp_register_script( 'nekit-preview', plugins_url( 'assets/js/frontend-preview.min.js', __FILE__ ), [ 'jquery', 'masonry' ] );
+		wp_register_script( 'nekit-preview', plugins_url( 'assets/js/frontend-preview.js', __FILE__ ), [ 'jquery', 'masonry' ], '1.3.0', [ 'strategy' => 'defer', 'in_footer' => true ] );
 		wp_enqueue_script('masonry');
 		wp_enqueue_script( 'nekit-preview' );
 		wp_localize_script( 'nekit-preview', 'frontendPreviewData', [
@@ -284,18 +288,58 @@ final class Plugin {
 	public function theme_builder_compatibility() {
 		/* Header */
 		add_action( 'get_header', [ $this, 'render_header' ] );
-		// add_action( 'elementor/page_templates/canvas/before_content', [ $this, 'render_header' ] );
+		add_action( 'elementor/page_templates/canvas/before_content', [ $this, 'render_canvas_header' ] );
 
 		/* Footer */
 		add_action( 'get_footer', [ $this, 'render_footer' ] );
-		// add_action( 'elementor/page_templates/canvas/after_content', [ $this, 'render_footer' ] );
+		add_action( 'elementor/page_templates/canvas/after_content', [ $this, 'render_canvas_footer' ] );
 	}
 
 	/**
 	 * MARK: TEST
 	 */
 	public function render_test( $template ) {
-		if( is_single() || is_archive() ) :
+		$Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
+		$conditions_matches = false;
+		if( is_single() ) {
+			if( $Nekit_render_templates_html->is_template_available( 'single' ) ) $conditions_matches = true;
+		} else if( is_archive() ) {
+
+			if( is_category() ) {
+				$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archivepostcategories-nekitallnekit']);
+			} else if( is_tag() ) {
+				$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archiveposttags-nekitallnekit']);
+			} else if( is_author() ) {
+				$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archiveauthor-nekitallnekit']);
+			} else if( is_date() ) {
+				$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'datearchive']);
+			} else if( is_tax() ) {
+				$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archives-all']);
+			}
+			if( $archive_template ) $conditions_matches = true;
+
+		} else if( is_search() ) {
+
+			$search_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'searchresultsarchive']);
+			if( $search_template ) $conditions_matches = true;
+
+		} else if( is_page() ) {
+
+			$child_page = is_front_page() ? 'frontpage' : 'pages-nekitallnekit';
+			$page_template = nekit_get_conditions_settings_builder_id(['parent' => 'single-builder','child' => $child_page]);
+			if( $page_template ) $conditions_matches = true;
+
+		} else if( is_home() ) {
+
+			$home_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archiveposts']);
+			if( $home_template ) $conditions_matches = true;
+
+		} else if( is_404() ) {
+			$error_page_template = nekit_get_conditions_settings_builder_id(['parent' => '404-builder','child' => '404page']);
+			if( $error_page_template ) $conditions_matches = true;
+		}
+
+		if( $conditions_matches ) :
 			return NEKIT_PATH . '/admin/templates/canvas.php';
 		else:
 			return $template;
@@ -309,12 +353,20 @@ final class Plugin {
 		$Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
 		$template = '';
 
-		if( is_single() ) {
+		if( is_single() || is_page() ) {
+
 			if( $Nekit_render_templates_html->is_template_available( 'single' ) ) :
 				$template =  $Nekit_render_templates_html->current_builder_template();
 			endif;
-		} else if( is_archive() ) {
+
+		} else if( is_archive() || is_search() || is_home() ) {
+
 			if( $Nekit_render_templates_html->is_template_available( 'archive' ) ) :
+				$template =  $Nekit_render_templates_html->current_builder_template();
+			endif;
+			
+		} else if( is_404() ) {
+			if( $Nekit_render_templates_html->is_template_available( '404' ) ) :
 				$template =  $Nekit_render_templates_html->current_builder_template();
 			endif;
 		}
@@ -343,6 +395,28 @@ final class Plugin {
 	}
 
 	/**
+	 * MARK: TEST
+	 */
+	public function render_canvas_header() {
+		$Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
+		$header_rendered = false;
+		if( $Nekit_render_templates_html->is_template_available('header') ) {
+			$header_rendered = true;
+			require NEKIT_PATH . '/admin/templates/parts/builder-header-render.php';
+			$templates   = [];
+			$templates[] = 'header.php';
+			
+			remove_all_actions( 'wp_head' ); // Avoid running wp_head hooks again.
+
+			ob_start();
+			locate_template( $templates, true );
+			ob_get_clean();
+		} else {
+			if( ! \Elementor\Plugin::$instance->preview->is_preview_mode() ) get_header();
+		}
+	}
+
+	/**
 	 * Render active footer builder content
 	 * 
 	 */
@@ -362,6 +436,29 @@ final class Plugin {
 			ob_get_clean();
 		}
 	}
+	
+	/**
+	 * MARK: TEST
+	 */
+	function render_canvas_footer() {
+		$Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
+		$footer_rendered = false;
+		if( $Nekit_render_templates_html->is_template_available('footer') ) {
+			$footer_rendered = true;
+			require NEKIT_PATH . '/admin/templates/parts/builder-footer-render.php';
+			$templates   = [];
+			$templates[] = 'footer.php';
+			
+			remove_all_actions( 'wp_footer' ); // Avoid running wp_footer hooks again.
+
+			ob_start();
+			locate_template( $templates, true );
+			ob_get_clean();
+		} else {
+			if( ! \Elementor\Plugin::$instance->preview->is_preview_mode() ) get_footer();
+		}
+	}
+
 
 	/**
 	 * Render active archive builder content
@@ -378,7 +475,8 @@ final class Plugin {
 	/**
 	 * Render active popup builder content
 	 */
-	function render_popup() {		
+	function render_popup() {
+		if( \Elementor\Plugin::$instance->preview->is_preview_mode() ) return;
 		$default_values = [
 			'nekit_open_popup'	=>	'page-load',
 			'nekit_delay_after_page_load'	=>	1,
@@ -396,7 +494,7 @@ final class Plugin {
 			'nekit_popup_enable_overlay'	=>	true,
 			'nekit_popup_enable_closing_on_overlay_click'	=>	true,
 			'nekit_popup_on_scroll'	=>	'every',
-			'nekit_popup_disable_page_scroll'	=>	true,
+			'nekit_popup_disable_page_scroll'	=>	false,
 			'nekit_display_as'	=>	'modal'
 		];
 
@@ -2252,5 +2350,102 @@ final class Plugin {
 		endif;
 		wp_send_json_success(wp_json_encode($response));
 		wp_die();
+	}
+
+	/**
+	 * Library Modal HTML
+	 * 
+	 * @since 1.2.4
+	 */
+	public function nekit_library_modal_html() {
+		?>
+			<div id="nekit-library-popup">
+				<div class="nekit-library-popup library-popup-inner">
+					<div class="header">
+						<div class="logo">
+							<img src="<?php echo esc_url( plugins_url( 'admin/assets/images/logo.png', __DIR__ ) ); ?>">
+						</div>
+						<div class="templates-tabs">
+							<div class="tab-title isActive" data-tab="blocks"><?php esc_html_e( 'Blocks', 'news-kit-elementor-addons' ); ?></div>
+							<div class="tab-title" data-tab="pages"><?php esc_html_e( 'Pages', 'news-kit-elementor-addons' ); ?></div>
+						</div>
+						<div class="popup-close-trigger">
+							<i class="eicon-close" aria-hidden="true" title="<?php esc_html_e( 'Close', 'news-kit-elementor-addons' ); ?>"></i>
+						</div>
+					</div>
+					<div class="templates-tab-content">
+						<div class="inner-tab-content blocks-tab-content">
+							<div class="filter-tab-search-wrap">   
+								<div class="widgets-category-title-filter">
+									<div class="active-filter"><span class="filter-text"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ) ?></span><span class="dashicons dashicons-arrow-down-alt2"></span></div>
+									<ul class="filter-list"></ul>
+								</div>
+								<div class="free-pro-filter-tabs">
+									<button class="filter-tab free"><?php echo esc_html__( 'Free', 'news-kit-elementor-addons' ); ?></button>
+									<button class="filter-tab pro"><?php echo esc_html__( 'Pro', 'news-kit-elementor-addons' ); ?></button>
+									<button class="filter-tab both active"><?php echo esc_html__( 'Free & Pro', 'news-kit-elementor-addons' ); ?></button>
+								</div>
+								<div class="search-wrapper">
+									<input type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
+									<span class="dashicons dashicons-search"></span>
+								</div>
+							</div>
+							<div class="tab-blocks-list-wrap">
+								<div class="tab-content-wrap tab-blocks-list widgets-blocks-library">
+									<div class="grid-sizer"></div>
+								</div>
+							</div>
+						</div>
+						<div class="inner-tab-content pages-tab-content">
+							<div class="filter-tab-search-wrap">
+								<div class="widgets-category-title-filter">
+									<div class="active-filter"><span class="filter-text"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ) ?></span><span class="dashicons dashicons-arrow-down-alt2"></span></div>
+									<ul class="filter-list"></ul>
+								</div>
+								<div class="free-pro-filter-tabs">
+									<button class="filter-tab free"><?php echo esc_html__( 'Free', 'news-kit-elementor-addons' ); ?></button>
+									<button class="filter-tab pro"><?php echo esc_html__( 'Pro', 'news-kit-elementor-addons' ); ?></button>
+									<button class="filter-tab both active"><?php echo esc_html__( 'Free & Pro', 'news-kit-elementor-addons' ); ?></button>
+								</div>
+								<div class="search-wrapper">
+									<input type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
+									<span class="dashicons dashicons-search"></span>
+								</div>
+							</div>
+							<div class="tab-pages-list-wrap">
+								<div class="tab-content-wrap tab-pages-list pages-library">
+									<div class="grid-sizer"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="nekit-elementor-loading" class="nekit-elementor-loading" style="display: none;">
+					<div class="elementor-loader-wrapper">
+						<div class="elementor-loader" aria-hidden="true">
+							<div class="elementor-loader-boxes">
+							<div class="elementor-loader-box"></div>
+						<div class="elementor-loader-box"></div>
+						<div class="elementor-loader-box"></div>
+						<div class="elementor-loader-box"></div></div></div>
+						<div class="elementor-loading-title"><?php echo esc_html__( 'Loading', 'news-kit-elementor-addons' ); ?></div>
+					</div>
+				</div>
+			</div>
+		<?php
+	}
+
+	/**
+	 * Admin thank you footer text
+	 * MARK: ADMIN FOOTER
+	 * 
+	 * 
+	 * @since 1.2.4
+	 */
+	public function nekit_admin_footer_text( $footer_text ) {
+		global $plugin_page;
+		$is_nekit_page = in_array( $plugin_page, ['news-kit-elementor-addons', 'news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit-elementor-addons-popup-builder' ] );
+		if( $is_nekit_page ) $footer_text = apply_filters( 'nekit_admin_footer_text_filter',  sprintf( esc_html__( 'Thank you for using News Kit Elementor Addons. Please leave us a %1$s', 'news-kit-elementor-addons' ), '<a href="'. esc_url( '//wordpress.org/support/plugin/news-kit-elementor-addons/reviews/?filter=5' ) .'" target="_blank">'. esc_html__( 'Rating', 'news-kit-elementor-addons' ) .'</a>' ) );
+		return $footer_text;
 	}
 }

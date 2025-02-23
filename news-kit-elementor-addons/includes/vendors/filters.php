@@ -45,3 +45,8 @@ add_filter('nekit_array_pop_filter', function($array) {
 
     return $array;
 });
+
+add_filter( 'body_class', function( $classes ){
+    $classes[] = 'nekit';
+    return $classes;
+});

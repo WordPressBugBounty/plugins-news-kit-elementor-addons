@@ -6,45 +6,6 @@ jQuery(document).ready(function($) {
         ndir = "right";
     };
     if( window.elementorFrontend ) {
-        // on library button click
-        $(document).on( "click", "#nekit-library-popup .templates-tabs .tab-title", function() {
-            setTimeout( function() {
-                var activeItems = $(document).find("#nekit-library-popup .widgets-blocks-library .template-item.active")
-                var selectorItem = ".template-item"
-                if( activeItems.length > 0 ) {
-                    var selectorItem = ".template-item.active"
-                }
-                var $masonry = $(document).find("#nekit-library-popup .widgets-blocks-library").masonry({
-                    itemSelector: selectorItem,
-                    columnWidth: selectorItem,
-                    gutter: 30
-                })
-            }, 100)
-        })
-
-        // filter templates library
-        $(document).on( "click", ".widgets-category-title-filter .filter-list .filter-tab", function() {
-            setTimeout( function() {
-                $(document).find("#nekit-library-popup .widgets-blocks-library").masonry('destroy')
-                var $masonry = $(document).find("#nekit-library-popup .widgets-blocks-library").masonry({
-                    itemSelector: ".template-item.active",
-                    columnWidth: ".template-item.active",
-                    gutter: 30
-                })
-            }, 100)
-        })
-
-        // on demo search filter templates library
-        $(document).on( 'change keyup', '.filter-tab-search-wrap input[type="search"]', function() {
-            setTimeout( function() {
-                $(document).find("#nekit-library-popup .widgets-blocks-library").masonry('destroy')
-                var $masonry = $(document).find("#nekit-library-popup .widgets-blocks-library").masonry({
-                    itemSelector: ".template-item.active",
-                    columnWidth: ".template-item.active",
-                    gutter: 30
-                })
-            }, 100)
-        })
         
         var nonceA = frontendData._wpnonce, ajaxUrlA = frontendData.ajaxUrl
         if( typeof( elementorFrontend.hooks ) != 'undefined' ) {

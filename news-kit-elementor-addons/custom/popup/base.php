@@ -36,7 +36,7 @@
                     <div class="page-header">
                         <h2 class="page-title"><?php echo esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
                         <p><?php echo esc_html__( 'Manage popup builder settings', 'news-kit-elementor-addons' ); ?></p>
-                        <button class="video-redirect-button"><a href="https://www.youtube.com/" target="_blank"><?php echo esc_html__( 'How Does Popup Builder Work?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-controls-play"></span></a></button>
+                        <button class="video-redirect-button"><a href="https://www.youtube.com/" target="_blank"><?php echo esc_html__( 'How Does Popup Builder Work?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
                     </div>
                     <div class="page-content">
                         <ul class="tabs-title-wrap">

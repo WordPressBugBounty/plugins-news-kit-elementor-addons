@@ -81,9 +81,9 @@ class Nekit_Render_Templates_Html {
 					return false;
 				endif;
 			}
-		} else if( is_singular('post') ) {
+		} else if( is_single() ) {
 			if( $type == 'header' ) {
-				$page_header = nekit_get_conditions_settings_builder_id(['parent' => 'header-builder','child' => 'singular-post']);
+				$page_header = nekit_get_conditions_settings_builder_id(['parent' => 'header-builder','child' => ( ( 'post' === get_post_type() ) ? 'singular-post' : 'singular-all' ) ]);
 				if( $page_header ) {
 					if( get_post_status($page_header) ) {
 						$this->current_builder_id = $page_header;
@@ -95,7 +95,7 @@ class Nekit_Render_Templates_Html {
 					return false;
 				}
 			} else if( $type == 'footer' ) {
-				$page_footer = nekit_get_conditions_settings_builder_id(['parent' => 'footer-builder','child' => 'singular-post']);
+				$page_footer = nekit_get_conditions_settings_builder_id(['parent' => 'footer-builder','child' => ( ( 'post' === get_post_type() ) ? 'singular-post' : 'singular-all' ) ]);
 				if( $page_footer ) {
 					if( get_post_status($page_footer) ) {
 						$this->current_builder_id = $page_footer;
@@ -107,7 +107,7 @@ class Nekit_Render_Templates_Html {
 					return false;
 				}
 			} else if( $type == 'single' ) {
-				$single_template = nekit_get_conditions_settings_builder_id(['parent' => 'single-builder','child' => 'posts-nekitallnekit']);
+				$single_template = nekit_get_conditions_settings_builder_id(['parent' => 'single-builder','child' => ( ( 'post' === get_post_type() ) ? 'posts-nekitallnekit' : 'singular-all' ) ]);
 				if( $single_template ) {
 					if( get_post_status($single_template) ) {
 						$this->current_builder_id = $single_template;
@@ -119,7 +119,7 @@ class Nekit_Render_Templates_Html {
 					return false;
 				}
 			} else if( $type == 'popup' ) {
-				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => 'singular-post' ]);
+				$popup_templates = nekit_get_conditions_settings_builder_id([ 'parent' => 'popup-builder', 'child' => ( ( 'post' === get_post_type() ) ? 'singular-post' : 'singular-all' )  ]);
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
@@ -197,6 +197,8 @@ class Nekit_Render_Templates_Html {
 					$page_header = nekit_get_conditions_settings_builder_id(['parent' => 'header-builder','child' => 'archives-date']);
 				} else if( is_search() ) {
 					$page_header = nekit_get_conditions_settings_builder_id(['parent' => 'header-builder','child' => 'archives-search']);
+				} else if( is_tax() ) {
+					$page_header = nekit_get_conditions_settings_builder_id(['parent' => 'header-builder','child' => 'archives-all']);
 				}
 				if( $page_header ) {
 					if( get_post_status($page_header) ) {
@@ -219,6 +221,8 @@ class Nekit_Render_Templates_Html {
 					$page_footer = nekit_get_conditions_settings_builder_id(['parent' => 'footer-builder','child' => 'archives-date']);
 				} else if( is_search() ) {
 					$page_footer = nekit_get_conditions_settings_builder_id(['parent' => 'footer-builder','child' => 'archives-search']);
+				} else if( is_tax() ) {
+					$page_footer = nekit_get_conditions_settings_builder_id(['parent' => 'footer-builder','child' => 'archives-all']);
 				}
 				if( $page_footer ) {
 					if( get_post_status($page_footer) ) {
@@ -239,6 +243,8 @@ class Nekit_Render_Templates_Html {
 					$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archiveauthor-nekitallnekit']);
 				} else if( is_date() ) {
 					$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'datearchive']);
+				}  else if( is_tax() ) {
+					$archive_template = nekit_get_conditions_settings_builder_id(['parent' => 'archive-builder','child' => 'archives-all']);
 				}
 				if( $archive_template ) {
 					if( get_post_status($archive_template) ) {
@@ -261,6 +267,8 @@ class Nekit_Render_Templates_Html {
 					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-date']);
 				} else if( is_search() ) {
 					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-search']);
+				} else if( is_tax() ) {
+					$popup_templates = nekit_get_conditions_settings_builder_id(['parent' => 'popup-builder','child' => 'archives-all']);
 				}
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :

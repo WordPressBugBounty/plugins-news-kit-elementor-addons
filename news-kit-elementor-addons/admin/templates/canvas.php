@@ -11,7 +11,7 @@ $is_preview_mode = \Elementor\Plugin::$instance->preview->is_preview_mode();
 // $woocommerce_class = $is_preview_mode && class_exists( 'WooCommerce' ) ? 'woocommerce woocommerce-page woocommerce-shop canvas-test' : '';
 $woocommerce_class =  $is_preview_mode && class_exists( 'WooCommerce' ) ? 'woocommerce woocommerce-page' : '';
 
-$nekit_popup_class = '';
+$nekit_popup_class = 'nekit';
 if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 'popup-builder' ) $nekit_popup_class .= ' nekit-popover-preview';
 
 ?>
@@ -40,7 +40,8 @@ if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'elementor/page_templates/canvas/before_content' );
+		if( ! $is_preview_mode ) do_action( 'elementor/page_templates/canvas/before_content' );
+
 		if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 'popup-builder' ) :
 			
 			echo '<div id="nekit-popup-post-'. esc_attr( get_the_ID() ) .'" class="nekit-template-popup">';
@@ -67,6 +68,7 @@ if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 
 		if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 'popup-builder' ) :
 
 						echo '</div><!-- .nekit-popup-wrap -->';
+						
 					echo '</div><!-- .nekit-popup-inner-container -->';
 
 				echo '</div><!-- .nekit-popup-container -->';
@@ -82,9 +84,9 @@ if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'elementor/page_templates/canvas/after_content' );
+		if( ! $is_preview_mode ) do_action( 'elementor/page_templates/canvas/after_content' );
 
-		wp_footer();
+		if( $is_preview_mode ) wp_footer();	/* Comment this because wp_footer will be called from other files. */
 	?>
 	</body>
 </html>

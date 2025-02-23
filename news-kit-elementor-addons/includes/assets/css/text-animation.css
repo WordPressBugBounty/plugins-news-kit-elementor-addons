@@ -275,9 +275,17 @@
 	=========================
 	*/
 
+		.nekit-advanced-heading-icon-wrap.animation-style--highlighted.animation--circle .highlighted-wrap {
+			padding: 4px 10px 10px;
+		}
+
 		.nekit-advanced-heading-icon-wrap.animation-style--highlighted .highlighted-wrap {
 			position: relative;
-			padding: 4px 10px 10px;
+			padding-bottom: 10px;
+		}
+
+		.nekit-advanced-heading-icon-wrap.animation-style--highlighted.animation--linethrough .highlighted-wrap {
+			padding-bottom: 5px;
 		}
 
 		.nekit-advanced-heading-icon-wrap.animation-style--highlighted .highlighted-wrap .heading {

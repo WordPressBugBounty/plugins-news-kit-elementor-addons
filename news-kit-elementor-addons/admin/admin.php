@@ -77,7 +77,6 @@ class Admin {
 	public function __construct() {
 		if ( ! $this->is_compatible() ) return;
 		$this->current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( wp_unslash( $_GET['tab'] ) ) : 'header-builder';
-
         add_action( 'admin_menu', [$this,'menu_page'] );
 		add_action( 'admin_enqueue_scripts', [$this,'handle_scripts'] );
 		add_filter( 'option_elementor_cpt_support', [$this,'add_mega_menu_cpt_support'] );
@@ -92,7 +91,8 @@ class Admin {
 		add_action( 'wp_ajax_nekit_import_template_action', [ $this, 'import_template_action' ] );
 		add_action( 'wp_ajax_nekit_install_importer', [ $this, 'install_importer' ] );
 		add_action( 'wp_ajax_nekit_404_builder_active', [ $this, 'nekit_404_builder_active' ] );
-		add_action( 'in_admin_header', [ $this, 'remove_admin_notices' ] );
+		add_action( 'wp_ajax_nekit_builder_active', [ $this, 'nekit_builder_active' ] );
+		add_action( 'in_admin_header', [ $this, 'nekit_admin_header' ] );
 	}
 
     /**
@@ -123,7 +123,11 @@ class Admin {
 		return true;
 	}
 
-    // register a custom admin menu page.
+    /**
+	 * register a custom admin menu page.
+	 * 
+	 * MARK: MENU AND SUBMENU PAGES
+	 */
     function menu_page() {
         add_menu_page(
             __( 'News Kit', 'news-kit-elementor-addons' ),
@@ -142,14 +146,14 @@ class Admin {
 			'news-kit-elementor-addons-theme-builder',
 			[$this,'admin_page_theme_builder_callback']
 		);
-		// add_submenu_page(
-		// 	'news-kit-elementor-addons',
-		// 	__( 'Popup Builder', 'news-kit-elementor-addons' ),
-		// 	__( 'Popup Builder', 'news-kit-elementor-addons' ),
-		// 	'manage_options',
-		// 	'news-kit-elementor-addons-popup-builder',
-		// 	[$this,'admin_page_popup_builder_callback']
-		// );
+		add_submenu_page(
+			'news-kit-elementor-addons',
+			__( 'Popup Builder', 'news-kit-elementor-addons' ),
+			__( 'Popup Builder', 'news-kit-elementor-addons' ),
+			'manage_options',
+			'news-kit-elementor-addons-popup-builder',
+			[$this,'admin_page_popup_builder_callback']
+		);
 		add_submenu_page(
 			'news-kit-elementor-addons',
 			__( 'Starter Sites', 'news-kit-elementor-addons' ),
@@ -168,7 +172,11 @@ class Admin {
 		);
     }
 
-	// renders the admin theme builder content
+	/**
+	 * renders the admin theme builder content
+	 * 
+	 * MARK: THEME BUILDER
+	 */
 	function admin_page_theme_builder_callback() {
 		$tab = $this->current_tab;
 		?>
@@ -176,7 +184,7 @@ class Admin {
 				<div class="page-header">
 					<h2 class="page-title"><?php echo esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
 					<p><?php echo esc_html__( 'Manage news addon builder settings', 'news-kit-elementor-addons' ); ?></p>
-					<button class="video-redirect-button"><a href="https://www.youtube.com/watch?v=AhNQasgJ-AI&list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4" target="_blank"><?php echo esc_html__( 'How Does Builder Works?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-controls-play"></span></a></button>
+					<button class="video-redirect-button nekit-admin-button"><a href="https://www.youtube.com/watch?v=AhNQasgJ-AI&list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4" target="_blank"><?php echo esc_html__( 'How Does Builder Works?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
 				</div>
 				<div class="page-content">
 					<ul class="tabs-title-wrap">
@@ -194,7 +202,7 @@ class Admin {
 							case 'mega-menu-builder': ?>
 									<div class="tab-content-header">
 										<h2 class="tab-header-title"><?php echo esc_html__( 'How to create Mega Menu with News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
-										<button class="video-redirect-button"><a href="<?php echo esc_url('https://youtu.be/hrGdMMLqkEw?list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4'); ?>" target="_blank"><?php echo esc_html__( 'Video Tutorial', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
+										<button class="video-redirect-button"><a href="<?php echo esc_url('https://youtu.be/hrGdMMLqkEw?list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4'); ?>" target="_blank"><?php echo esc_html__( 'Video Tutorial', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
 									</div>
 									<div class="tab-content-body">
 									</div>
@@ -315,14 +323,18 @@ class Admin {
 		<?php
 	}
 
-	// renders the sub menu page content
+	/**
+	 * renders the sub menu page content
+	 * 
+	 * MARK: PRE-MADE BLOCKS
+	 */
 	function admin_page_callback() {
 		?>
 			<div id="nekit-sub-admin-page" class="nekit-templates-list">
 				<div class="page-header">
 					<h2 class="page-title"><?php echo esc_html__( 'Pre-made Blocks', 'news-kit-elementor-addons' ); ?></h2>
 					<p><?php echo esc_html__( 'Preview and Import all the pre-made blocks.', 'news-kit-elementor-addons' ); ?></p>
-					<button class="video-redirect-button"><a href="<?php echo esc_url('https://www.youtube.com/watch?v=LFD5KtXVXrc'); ?>" target="_blank"><?php echo esc_html__( 'How to use pre-made blocks', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
+					<button class="video-redirect-button nekit-admin-button"><a href="<?php echo esc_url('https://www.youtube.com/watch?v=LFD5KtXVXrc'); ?>" target="_blank"><?php echo esc_html__( 'How to use pre-made blocks', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
 				</div>
 				<div class="page-content">
 					<div class="nekit-library-popup library-popup-inner pre-built-block-wrap">
@@ -332,9 +344,15 @@ class Admin {
 									<div class="widgets-category-title-filter">
 										<div class="active-filter"><span class="filter-text"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ) ?></span><span class="dashicons dashicons-arrow-down-alt2"></span></div>
 										<ul class="filter-list">
-											<li class="filter-tab" data-value="all"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></li>
+											<li class="filter-tab active" data-value="all">
+												<span class="tab-label"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></span>
+												<div class="count-wrapper">
+													<span class="count free-count"></span>
+													<span class="count pro-count"></span>
+												</div>
+											</li>
 											<?php
-												$widget_list = \Nekit_Utilities\Utils::registered_widgets();
+												$widget_list = \Nekit_Utilities\Utils::get_registered_widgets_with_demo();
 												$widgets_for_option = [];
 												if( $widget_list ) :
 													foreach( $widget_list as $widget ) :
@@ -343,16 +361,33 @@ class Admin {
 												endif;
 												if( $widgets_for_option ) :
 													foreach( $widgets_for_option as $option_key => $option ) :
-														echo '<li class="filter-tab" data-value="' .esc_attr( $option_key ). '">' .esc_html( $option ). '</li>';
+														?>
+															<li class="filter-tab" data-value="<?php echo esc_attr( $option_key ); ?>">
+																<span class="tab-label"><?php echo esc_html( $option ); ?></span>
+																<div class="count-wrapper">
+																	<span class="count free-count"></span>
+																	<span class="count pro-count"></span>
+																</div>
+															</li>
+														<?php
 													endforeach;
 												endif;
 											?>
 										</ul>
 									</div>
-									<input type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
+									<div class="free-pro-filter-tabs">
+										<button class="filter-tab free"><?php echo esc_html__( 'Free', 'news-kit-elementor-addons' ); ?></button>
+										<button class="filter-tab pro"><?php echo esc_html__( 'Pro', 'news-kit-elementor-addons' ); ?></button>
+										<button class="filter-tab both active"><?php echo esc_html__( 'Free & Pro', 'news-kit-elementor-addons' ); ?></button>
+									</div>
+									<div class="search-wrapper">
+										<input value="" type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
+										<span class="dashicons dashicons-search"></span>
+									</div>
 								</div>
 								<div class="tab-blocks-list-wrap">
 									<div class="tab-blocks-list widgets-blocks-library">
+										<div class="grid-sizer"></div>
 										<?php
 											$widgets_demos = Nekit_Utilities\Utils::library_widgets_data();
 											$widgets_demos = json_decode($widgets_demos);
@@ -363,9 +398,9 @@ class Admin {
 													$filter_attr .= is_array( $widget_demo->category ) ? implode( " ", $widget_demo->category ) : $widget_demo->category;
 													?>
 														<figure class="template-item <?php echo esc_attr( $filter_attr ); ?>">
-															<a href="<?php echo esc_url($widget_demo->preview_url); ?>" target="_blank"><img src="<?php echo esc_url($widget_demo->preview_image); ?>"/></a>
+															<a href="<?php echo esc_url($widget_demo->preview_url); ?>" target="_blank"><img src="<?php echo esc_url($widget_demo->preview_image); ?>" loading="lazy" /></a>
 															<div class="button-actions">
-																<span class="widget-name"><?php echo esc_html( $widget_demo->name ); ?></span>
+																<span class="widget-name block-label"><?php echo esc_html( $widget_demo->name ); ?></span>
 																<a class="preview-demo" href="<?php echo esc_url( $widget_demo->preview_url); ?>" target="_blank"><?php echo esc_html__( 'Preview', 'news-kit-elementor-addons' ); ?> <span class="dashicons dashicons-visibility"></span></a>
 															</div>
 														</figure>
@@ -383,48 +418,60 @@ class Admin {
 		<?php
 	}
 
-	// renders the settings page
+	/**
+	 * renders the settings page
+	 * 
+	 * MARK: SETTINGS
+	 */
 	function admin_page_settings_callback() {
-		if( isset($_POST['nekit_submit']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'nekit-admin-setting-form-nonce') ) :
-			$nekit_youtube_api_key = isset($_POST['nekit_youtube_api_key']) ? sanitize_text_field( wp_unslash( $_POST['nekit_youtube_api_key'] ) ): '';
-			nekit_update_settings([
-				'key'	=> 'nekit_youtube_api_key',
-				'value'	=> esc_html( $nekit_youtube_api_key )
-			]);
-		else :
-			$nekit_youtube_api_key = nekit_get_settings([
-				'key'	=> 'nekit_youtube_api_key'
-			]);
+		if( $this->current_tab === 'freevspro' ) :
+			echo 'Free Vs Pro';
+		else:
+			if( isset($_POST['nekit_submit']) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'nekit-admin-setting-form-nonce') ) :
+				$nekit_youtube_api_key = isset($_POST['nekit_youtube_api_key']) ? sanitize_text_field( wp_unslash( $_POST['nekit_youtube_api_key'] ) ): '';
+				nekit_update_settings([
+					'key'	=> 'nekit_youtube_api_key',
+					'value'	=> esc_html( $nekit_youtube_api_key )
+				]);
+			else :
+				$nekit_youtube_api_key = nekit_get_settings([
+					'key'	=> 'nekit_youtube_api_key'
+				]);
+			endif;
+			?>
+				<div id="nekit-sub-admin-page" class="nekit-admin-setting-page">
+					<div class="page-header">
+						<h2 class="page-title"><?php echo esc_html__( 'Settings', 'news-kit-elementor-addons' ); ?></h2>
+						<p><?php echo esc_html__( 'Manage the general settings of the plugin. You can store API keys, category colors and other global settings', 'news-kit-elementor-addons' ); ?></p>
+						<button class="video-redirect-button nekit-admin-button"><a href="<?php echo esc_url( 'https://www.youtube.com/' ); ?>" target="_blank"><?php echo esc_html__( 'Youtube API keys', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
+					</div>
+					<div class="page-content">
+						<form id="nekit-admin-setting-form" method="POST">
+							<?php wp_nonce_field('nekit-admin-setting-form-nonce'); ?>
+							<div class="form-body">
+								<div class="form-field-wrap">
+									<label for="nekit_youtube_api_key" class="form-label"><?php esc_html_e( 'Youtube API Key', 'news-kit-elementor-addons' ); ?></label>
+									<p class="form-description"><?php esc_html_e( 'In order to display pro per title and video duration api key is required. Please go throught this url to know how to generate api key ', 'news-kit-elementor-addons' ); ?><a href="<?php echo esc_url( 'https://blog.hubspot.com/website/how-to-get-youtube-api-key' ); ?>" target="_blank"><?php echo esc_html__( 'here', 'news-kit-elementor-addons' ); ?></a></p>
+									<input type="text" class="form-field" name="nekit_youtube_api_key" placeholder="<?php esc_html_e( 'Please add valid youtube API key', 'news-kit-elementor-addons' ); ?>" value="<?php echo esc_html( $nekit_youtube_api_key ); ?>">
+								</div>
+							</div>
+							<div class="form-footer">
+								<div class="form-field-wrap">
+									<button class="form-field nekit-admin-button" type="submit" name="nekit_submit"><?php esc_html_e( 'Save settings', 'news-kit-elementor-addons' ); ?></button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			<?php
 		endif;
-		?>
-			<div id="nekit-sub-admin-page" class="nekit-admin-setting-page">
-				<div class="page-header">
-					<h2 class="page-title"><?php echo esc_html__( 'Settings', 'news-kit-elementor-addons' ); ?></h2>
-					<p><?php echo esc_html__( 'Manage the general settings of the plugin. You can store API keys, category colors and other global settings', 'news-kit-elementor-addons' ); ?></p>
-					<button class="video-redirect-button"><a href="<?php echo esc_url( 'https://www.youtube.com/' ); ?>" target="_blank"><?php echo esc_html__( 'Youtube API keys', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
-				</div>
-				<div class="page-content">
-					<form id="nekit-admin-setting-form" method="POST">
-						<?php wp_nonce_field('nekit-admin-setting-form-nonce'); ?>
-						<div class="form-body">
-							<div class="form-field-wrap">
-								<label for="nekit_youtube_api_key" class="form-label"><?php esc_html_e( 'Youtube API Key', 'news-kit-elementor-addons' ); ?></label>
-								<p class="form-description"><?php esc_html_e( 'In order to display pro per title and video duration api key is required. Please go throught this url to know how to generate api key ', 'news-kit-elementor-addons' ); ?><a href="<?php echo esc_url( 'https://blog.hubspot.com/website/how-to-get-youtube-api-key' ); ?>" target="_blank"><?php echo esc_html__( 'here', 'news-kit-elementor-addons' ); ?></a></p>
-								<input type="text" class="form-field" name="nekit_youtube_api_key" placeholder="<?php esc_html_e( 'Please add valid youtube API key', 'news-kit-elementor-addons' ); ?>" value="<?php echo esc_html( $nekit_youtube_api_key ); ?>">
-							</div>
-						</div>
-						<div class="form-footer">
-							<div class="form-field-wrap">
-								<button class="form-field" type="submit" name="nekit_submit"><?php esc_html_e( 'Save settings', 'news-kit-elementor-addons' ); ?></button>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		<?php
 	}
 
-	// renders the sub menu templates page content
+	/**
+	 * renders the sub menu templates page content
+	 * 
+	 * MARK: STARTER SITES
+	 */
 	function admin_page_starter_sites_callback() {
 		$page = 'demo-list';
 		$pages_demos = Nekit_Utilities\Utils::library_pages_data();
@@ -434,20 +481,19 @@ class Admin {
 			$demo_type = sanitize_text_field( wp_unslash( $_GET['demo-preview'] ) );
 		endif;
 		$page_class = ( $page == 'demo-preview' ) ? 'main-demo-inner-list' : 'main-demo-list';
+		$is_pro = apply_filters( 'nekit_is_pro_active_filter', false );
 	?>
 			<div id="nekit-sub-admin-page" class="nekit-templates-list <?php echo esc_attr( $page_class ); ?>">
 				<?php
 					switch( $page ) {
+						// MARK: Starter Sites Inner
 						case 'demo-preview' :
 							$preview_demos = $pages_demos[$demo_type]['pages'];
 							$preview_demo_home = $preview_demos['home']['preview_url'];
 							?>
 											<div class="page-header">
 												<div class="main-demo-inner-header-wrap">
-													<div class="logo">
-														<img src="<?php echo esc_url(plugins_url( '/assets/images/logo.png', __FILE__ )); ?>" class="main-demo-inner-logo">
-													</div>
-													<button class="back-to-library-redirect-button">
+													<button class="back-to-library-redirect-button nekit-admin-button">
 														<a class="dashicons dashicons-arrow-left-alt2" href="<?php echo esc_url( admin_url('admin.php') . '?page=news-kit-elementor-addons-starter-sites' );?>">
 															<h2 class="main-demo-inner-header">
 																<?php echo esc_html__( 'Back To Library', 'news-kit-elementor-addons' ); ?>
@@ -465,10 +511,10 @@ class Admin {
 																	foreach( $preview_demos as $preview_demo ) :
 																		?>
 																			<figure class="template-item">
-																				<a href="<?php echo esc_url( $preview_demo['preview_url'] ); ?>" target="_blank"><img src="<?php echo esc_url( $preview_demo['screenshot'] ); ?>"/></a>
+																				<a href="<?php echo esc_url( $preview_demo['preview_url'] ); ?>" target="_blank"><img src="<?php echo esc_url( $preview_demo['screenshot'] ); ?>" loading="lazy"/></a>
 																				<div class="button-actions">
 																					<h2 class="demo-name"><?php echo esc_html( $preview_demo['name'] ); ?></h2>
-																					<button class="demo-link"><a href="<?php echo esc_url( $preview_demo['preview_url'] ); ?>" target="_blank"><?php echo esc_html__( 'Preview', 'news-kit-elementor-addons' ); ?></a></button>
+																					<button class="demo-link nekit-admin-button"><a href="<?php echo esc_url( $preview_demo['preview_url'] ); ?>" target="_blank"><?php echo esc_html__( 'Preview', 'news-kit-elementor-addons' ); ?></a></button>
 																				</div>
 																			</figure>
 																		<?php
@@ -496,8 +542,19 @@ class Admin {
 														$plugin_path = WP_PLUGIN_DIR . '/blaze-demo-importer/blaze-demo-importer.php';
 														if( file_exists( $plugin_path ) ) :
 															if( $check_active ) :
-																echo '<div class="reset-info"><label class="blaze-demo-importer-reset-website-checkbox"><input id="checkbox-reset-blaze-import" type="checkbox" value="1" checked="checked">' .esc_html__( 'Reset Website - Check this box only if you are sure to reset the website.', 'news-kit-elementor-addons' ). '</label><span class="dashicons dashicons-info-outline"><span class="reset-info">' .esc_html__( 'Reseting the website will delete all your post, pages, custom post types, categories, taxonomies, images and all other customizer and theme option settings. It is always recommended to reset the database for a complete demo import.', 'news-kit-elementor-addons' ). '</span></span></div>';
-																echo '<button class="footer-button import-action" data-demo="' . esc_attr( $demo_type ) . '">' .esc_html__( 'Import', 'news-kit-elementor-addons' ). '<span class="dashicons dashicons-download"></span></button>';
+																?>
+																	<div class="reset-info">
+																		<label class="blaze-demo-importer-reset-website-checkbox">
+																			<input id="checkbox-reset-blaze-import" type="checkbox" value="1" checked="checked">
+																			<?php echo esc_html__( 'Reset Website - Check this box only if you are sure to reset the website.', 'news-kit-elementor-addons' ); ?>
+																		</label>
+																	</div>
+																	<button class="footer-button import-action" data-demo="<?php echo esc_attr( $demo_type ); ?>">
+																		<?php echo esc_html__( 'Import', 'news-kit-elementor-addons' ); ?>
+																		<span class="dashicons dashicons-download"></span>
+																		<span class="reset-info"><?php echo esc_html__( 'Reseting the website will delete all your post, pages, custom post types, categories, taxonomies, images and all other customizer and theme option settings. It is always recommended to backup the database for a complete demo import.', 'news-kit-elementor-addons' ); ?></span>
+																	</button>
+																<?php
 															else:
 																echo '<button class="footer-button importer-action activate" data-demo="' . esc_attr( $demo_type ) . '">' .esc_html__( 'Activate Importer', 'news-kit-elementor-addons' ). '<span class="dashicons dashicons-download"></span></button>';
 															endif;
@@ -542,83 +599,121 @@ class Admin {
 											</div>
 										<?php
 											break;
-						default : ?>
+							// MARK: Starter Sites Main
+						default :  ?>
 								<div class="page-header">
-									<h2 class="page-title"><?php echo esc_html__( 'Pre-built Templates', 'news-kit-elementor-addons' ); ?></h2>
-									<p><?php echo esc_html__( 'Preview and Import all the pre-built templates.', 'news-kit-elementor-addons' ); ?></p>
-									<button class="video-redirect-button"><a href="<?php echo esc_url('https://www.youtube.com/watch?v=zCw0bkswns4'); ?>" target="_blank"><?php echo esc_html__( 'How to import pre-built templates', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-video-alt3"></span></a></button>
-									<div class="main-demo-list-tabs">
-										<ol class="ordered-demo-list">
-											<li class="list-item isActive"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></li>
-											<li class="list-item"><?php echo esc_html__( 'News', 'news-kit-elementor-addons' ); ?></li>
-											<li class="list-item"><?php echo esc_html__( 'Sports', 'news-kit-elementor-addons' ); ?></li>
-											<li class="list-item"><?php echo esc_html__( 'Gaming', 'news-kit-elementor-addons' ); ?></li>
-											<li class="list-item"><?php echo esc_html__( 'Politics', 'news-kit-elementor-addons' ); ?></li>
-											<li class="list-item"><?php echo esc_html__( 'Food', 'news-kit-elementor-addons' ); ?></li>
-										</ol>
-										<div class="filter-search-wrap">
-											<select class="demo-type-filter">
-												<option value="all"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></option>
-												<option value="free"><?php echo esc_html__( 'Free', 'news-kit-elementor-addons' ); ?></option>
-												<option value="pro"><?php echo esc_html__( 'Pro', 'news-kit-elementor-addons' ); ?></option>
-											</select>
-											<input type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
-										</div>
+									<div class="page-header">
+										<h2 class="page-title"><?php echo esc_html__( 'Pre-built Templates', 'news-kit-elementor-addons' ); ?></h2>
+										<p><?php echo esc_html__( 'Preview and Import all the pre-built templates.', 'news-kit-elementor-addons' ); ?></p>
+										<button class="video-redirect-button nekit-admin-button"><a href="<?php echo esc_url('https://www.youtube.com/watch?v=zCw0bkswns4'); ?>" target="_blank"><?php echo esc_html__( 'How to import pre-built templates', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
 									</div>
 								</div>
 								<div class="page-content">
 									<div class="nekit-library-popup library-popup-inner">
 										<div class="templates-tab-content">
 											<div class="inner-tab-content tab-pages-list pages-library">
-												<?php
-													$pages_demos = apply_filters( 'nekit_array_pop_filter', $pages_demos );
-													$pages_demos = apply_filters( 'nekit_array_pop_filter', $pages_demos );
-													if( $pages_demos && is_array($pages_demos) ) :
-														foreach( $pages_demos as $page_demo_key => $page_demo ) :
-															$import_status = true;
-                                                            if( $page_demo['type'] == 'pro' ) {
-                                                                $pro_plugin_path = WP_PLUGIN_DIR . '/news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php';
-                                                                $pro_check_active = is_plugin_active( 'news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php' );
-                                                                $import_status = $pro_check_active ? true: false;
-                                                            }
-															if( $import_status ) $page_demo['type'] = 'none';
-															$filter_attr = 'all ' . $page_demo['type'];
-															$filter_attr .= ' ';
-															$filter_attr .= is_array( $page_demo['category'] ) ? implode( " ", $page_demo['category'] ) : $page_demo['category'];
-															?>
-																<figure class="template-item <?php echo esc_attr( $filter_attr ); ?>">
-																	<a href="<?php echo esc_url( $page_demo['pages']['home']['preview_url'] ); ?>" target="_blank"><img src="<?php echo esc_url($page_demo['pages']['home']['screenshot']); ?>"/></a>
-																	<div class="button-actions">
-																		<h2 class="demo-name"><?php echo esc_html( $page_demo['name'] ); ?></h2>
-																		<?php
-																			if( $import_status ) {
-																		?>
-																				<button class="demo-link"><a href="<?php echo esc_url( admin_url('admin.php') . '?page=news-kit-elementor-addons-starter-sites&demo-preview="'.$page_demo_key.'"' ); ?>"><?php echo esc_html__( 'Lets Start', 'news-kit-elementor-addons' ); ?></a></button>
-																		<?php
-																			} else {
-																		?>
-																				<button class="demo-link"><a href="<?php echo esc_url( "https://blazethemes.com/news-kit-elementor-addons/" ) ?>" target="_blank"><?php echo esc_html__( 'Upgrade', 'news-kit-elementor-addons' ); ?></a></button>
-																		<?php
-																			}
-																		?>
-																	</div>
-																</figure>
+												<div class="filter-tab-search-wrap">
+													<div class="templates-category-title-filter">
+														<div class="active-filter"><span class="filter-text"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ) ?></span><span class="dashicons dashicons-arrow-down-alt2"></span></div>
+														<?php
+															$filter_list = [
+																'all'	=>	esc_html__( 'All', 'news-kit-elementor-addons' ),
+																'news'	=>	esc_html__( 'News', 'news-kit-elementor-addons' ),
+																'sports'	=>	esc_html__( 'Sports', 'news-kit-elementor-addons' ),
+																'gaming'	=>	esc_html__( 'Gaming', 'news-kit-elementor-addons' ),
+																'politics'	=>	esc_html__( 'Politics', 'news-kit-elementor-addons' ),
+																'food'	=>	esc_html__( 'Food', 'news-kit-elementor-addons' )
+															];
+														?>
+														<ul class="filter-list">
 															<?php
-														endforeach;
-													endif;
-												?>
-											</div>
-										</div>
-									</div>
-								</div>
+																$count = 0;
+																if( ! empty( $filter_list ) && is_array( $filter_list ) ) :
+																	foreach( $filter_list as $tab_key => $tab_value ) :
+																		$listClass = 'filter-tab';
+																		if( $count === 0 ) $listClass .= ' active';
+																		?>
+																			<li class="<?php echo esc_attr( $listClass ); ?>" data-value="<?php echo esc_attr( $tab_key ); ?>">
+																				<span class="tab-label"><?php echo esc_html( $tab_value ); ?></span>
+																				<div class="count-wrapper">
+																					<span class="count free-count"></span>
+																					<span class="count pro-count"></span>
+																				</div>
+																			</li>
+																		<?php
+																		$count++;
+																	endforeach;
+																endif;
+															?>
+														</ul>
+													</div>
+													<div class="free-pro-filter-tabs">
+														<button class="filter-tab free"><?php echo esc_html__( 'Free', 'news-kit-elementor-addons' ); ?></button>
+														<button class="<?php echo esc_attr( $is_pro ? 'filter-tab pro' : 'filter-tab upgrade' ); ?>"><?php echo esc_html__( 'Pro', 'news-kit-elementor-addons' ); ?></button>
+														<button class="filter-tab both active"><?php echo esc_html__( 'Free & Pro', 'news-kit-elementor-addons' ); ?></button>
+													</div>
+													<div class="search-wrapper">
+														<input value="" type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
+														<span class="dashicons dashicons-search"></span>
+													</div>
+												</div>
+												<div class="tab-blocks-list-wrap">
+													<div class="tab-blocks-list widgets-blocks-library">
+														<?php
+															$pages_demos = apply_filters( 'nekit_array_pop_filter', $pages_demos );
+															$pages_demos = apply_filters( 'nekit_array_pop_filter', $pages_demos );
+															if( $pages_demos && is_array($pages_demos) ) :
+																foreach( $pages_demos as $page_demo_key => $page_demo ) :
+																	$import_status = true;
+																	if( $page_demo['type'] == 'pro' ) {
+																		$pro_plugin_path = WP_PLUGIN_DIR . '/news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php';
+																		$pro_check_active = is_plugin_active( 'news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php' );
+																		$import_status = $pro_check_active ? true: false;
+																		if( ! $is_pro ) $page_demo['type'] = 'upgrade';
+																	}
+																	$filter_attr = 'all ' . $page_demo['type'];
+																	$filter_attr .= ' ';
+																	$filter_attr .= is_array( $page_demo['category'] ) ? implode( " ", $page_demo['category'] ) : $page_demo['category'];
+																	?>
+																		<figure class="template-item <?php echo esc_attr( $filter_attr ); ?>">
+																			<a href="<?php echo esc_url( $page_demo['pages']['home']['preview_url'] ); ?>" target="_blank"><img src="<?php echo esc_url($page_demo['pages']['home']['screenshot']); ?>"/></a>
+																			<div class="button-actions">
+																				<h2 class="demo-name block-label"><?php echo esc_html( $page_demo['name'] ); ?></h2>
+																				<?php
+																					if( $import_status ) {
+																				?>
+																						<button class="demo-link"><a href="<?php echo esc_url( admin_url('admin.php') . '?page=news-kit-elementor-addons-starter-sites&demo-preview="'.$page_demo_key.'"' ); ?>"><?php echo esc_html__( 'Lets Start', 'news-kit-elementor-addons' ); ?></a></button>
+																				<?php
+																					} else {
+																				?>
+																						<button class="demo-link"><a href="<?php echo esc_url( "https://blazethemes.com/news-kit-elementor-addons/" ) ?>" target="_blank"><?php echo esc_html__( 'Upgrade', 'news-kit-elementor-addons' ); ?></a></button>
+																				<?php
+																					}
+																				?>
+																			</div>
+																		</figure>
+																	<?php
+																endforeach;
+															endif;
+														?>
+													</div>
+												</div><!-- .tab-blocks-list-wrap -->
+											</div><!-- .inner-tab-content -->
+										</div><!-- .templates-tab-content -->
+									</div><!-- .nekit-library-popup -->
+								</div><!-- .page-content -->
 						<?php
 					}
 				?>
-			</div>
+			</div><!-- #nekit-sub-admin-page -->
 		<?php
 	}
 
-	// register scripts and styles
+	/**
+	 * register scripts and styles
+	 * 
+	 * MARK: HANDLE SCRIPTS
+	 */
 	function handle_scripts($hook) {
 		if( ! $hook == 'nav-menus.php' && ! in_array( $hook, ['toplevel_page_news-kit-elementor-addons', 'news-kit_page_news-kit-elementor-addons-theme-builder', 'news-kit_page_news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit_page_news-kit-elementor-addons-popup-builder' ] ) ) return;
 		require_once NEKIT_PATH . 'admin/assets/wptt-webfont-loader.php';
@@ -630,9 +725,12 @@ class Admin {
 		wp_enqueue_style( 'nekit-admin-main' );
 		// Add the color picker css file  
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_register_script( 'nekit-admin-main', plugins_url( 'assets/admin.js', __FILE__ ), ['jquery','wp-color-picker', 'masonry'], true );
-		wp_enqueue_script('masonry');
+		wp_register_script( 'nekit-components', plugins_url( 'components.js', __FILE__ ), [ 'jquery' ], '1.3.0', [ 'strategy' => 'defer', 'in_footer' => true ] );
+		wp_enqueue_script( 'nekit-components' );
+		wp_register_script( 'nekit-admin-main', plugins_url( 'assets/admin.js', __FILE__ ), [ 'jquery','wp-color-picker', 'masonry', 'nekit-components' ], '1.3.0', [ 'strategy' => 'defer', 'in_footer' => true ] );
+
 		wp_enqueue_script( 'nekit-admin-main' );
+		wp_enqueue_script( 'masonry' );
 		wp_localize_script( 'nekit-admin-main', 'adminObject', [
 			'_wpnonce'	=> wp_create_nonce( 'nekit-admin-nonce' ),
 			'ajaxUrl'	=> admin_url('admin-ajax.php'),
@@ -660,6 +758,11 @@ class Admin {
 		return array_merge( $value, ['nekit-mm-cpt'] );
 	}
 
+	/**
+	 * Register Custom Post Type
+	 * 
+	 * MARK: REGISTER CPT
+	 */
 	function register_custom_post_types() {
 		// mega menu post
 		$labels = array(
@@ -732,7 +835,11 @@ class Admin {
 		 }, 9999 );
 	}
 
-	// megamenu popup html
+	/**
+	 * megamenu popup html
+	 * 
+	 * MARK: MEGA MENU
+	 */
     function render_mega_menu_modal() {
         check_ajax_referer( 'nekit-admin-nonce', 'security' );
         $menu = isset($_POST['menu']) ? sanitize_text_field(wp_unslash($_POST['menu'])) : '';
@@ -1171,27 +1278,40 @@ class Admin {
 							$template_title = $hb_template['title'];
 							$assigned_pages['include'] = $hb_template['builder_placement'];
 							$assigned_pages['exclude'] = $hb_template['builder_placement_exclude'];
+							$assigned_pages['use'] = $hb_template['nekit_builder_in_use'];
 							$nekit_admin_form_nonce = isset( $_POST['nekit_admin_form_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nekit_admin_form_nonce']) ): '';
 							if ( wp_verify_nonce( $nekit_admin_form_nonce, 'nekit_admin_submit_builder_creation_action' ) ) {
 								$active_manage_condition_template_id = isset( $_POST['condition_id'] ) ? intval( wp_unslash( $_POST['condition_id'] ) ) : 0;
 							} else {
 								$active_manage_condition_template_id = 0;
 							}
+							$nekit_404_active_template = get_option( 'nekit_404_active_template' );
+							$template_active_label = ( $assigned_pages['use'] === '1' ) ? esc_html__( 'Enabled', 'news-kit-elementor-addons' ) : esc_html__( 'Disabled', 'news-kit-elementor-addons' );
+							$builder_active_class = ( isset( $assigned_pages['include'] ) && ! empty( $assigned_pages['include'] ) && sizeof( $assigned_pages['include'] ) > 0 && $assigned_pages['use'] === '1' ) || ( $tab === '404-builder' && $nekit_404_active_template == $template_id );
 							?>
-								<div class="template-list-item <?php if( isset( $assigned_pages['include'] ) && ! empty( $assigned_pages['include'] ) && sizeof( $assigned_pages['include'] ) > 0 ) echo 'builder-active' ?>" data-template="<?php echo absint($template_id); ?>">
-									<h2 class="template-title"><?php echo esc_html($template_title); ?></h2>
+								<div class="template-list-item <?php if( $builder_active_class ) echo 'builder-active' ?>" data-template="<?php echo absint( $template_id ); ?>">
+									<div class="template-title-wrapper">
+										<h2 class="template-title"><?php echo esc_html($template_title); ?></h2>
+										<?php if( $tab !== '404-builder' ) : ?>
+											<span class="template-switch<?php if( $assigned_pages['use'] === '1' ) echo esc_attr( ' isactive' ); ?>">
+												<span class="template-switch-label"><?php echo esc_html( $template_active_label ); ?></span>
+												<span class="template-switch-handle"></span>
+											</span>
+											<span class="template-saved-label"></span>
+										<?php endif; ?>
+									</div>
 									<button class="edit-template" data-template="<?php echo absint($template_id); ?>"><a href="<?php echo esc_url( add_query_arg( [ 'post' => absint($template_id), 'action' => 'elementor' ], admin_url( 'post.php') ) ); ?>" target="_blank"><?php echo esc_html__( 'Edit Template', 'news-kit-elementor-addons' ); ?></a></button>
 									<?php if( $tab != '404-builder' ) : ?>
 										<button class="manage-template-conditions"><?php echo esc_html__( 'Manage Conditions', 'news-kit-elementor-addons' ); ?></button>
 									<?php
 										else:
-											$nekit_404_active_template = get_option( 'nekit_404_active_template' );
 											$isactive_or_not = ( $nekit_404_active_template == $template_id ) ? esc_html__( 'Enabled', 'news-kit-elementor-addons' ) : esc_html__( 'Disabled', 'news-kit-elementor-addons' );
 									?>
 											<span class="error-page-switch<?php if( $nekit_404_active_template == $template_id ) echo esc_attr( ' isactive' ); ?>">
 												<span class="error-page-switch-label"><?php echo esc_html( $isactive_or_not ); ?></span>
 												<span class="error-page-switch-handle"></span>
 											</span>
+											<span class="template-saved-label"></span>
 									<?php endif; ?>
 									<button class="show-delete-template-form" data-template-id="<?php echo absint($template_id); ?>" ><span class="dashicons dashicons-trash"></span></button>
 								</div>
@@ -1234,7 +1354,8 @@ class Admin {
 																			$is_archive_author = strpos( $assigned_page, 'archiveauthor' );
 																			$is_archive_categories = strpos( $assigned_page, 'archivepostcategories' );
 																			$is_archive_tags = strpos( $assigned_page, 'archiveposttags' );
-																			if( $is_single_posts !== false || $is_single_pages !== false || $is_archive_author !== false || $is_archive_categories !== false || $is_archive_tags !== false ) {
+																			$has_dash = strpos( $assigned_page, '-' );
+																			if( ( $is_single_posts !== false || $is_single_pages !== false || $is_archive_author !== false || $is_archive_categories !== false || $is_archive_tags !== false ) && $has_dash !== false ) {
 																				$splits_placement = explode( '-', $assigned_page );
 																				$assigned_page = $splits_placement[0];
 																				$single_posts_assigned_page = str_replace( 'nekit', '', $splits_placement[1] );
@@ -1471,6 +1592,9 @@ class Admin {
 		
 		// add required post meta
 		add_post_meta( $new_template_id, 'builder_type', $template );
+		add_post_meta( $new_template_id, 'nekit_builder_in_use', true );
+		add_post_meta( $new_template_id, 'builder_placement', [ 'entire-site' ] );
+		add_post_meta( $new_template_id, 'builder_placement_exclude', [] );
 		update_post_meta( $new_template_id, '_wp_page_template', 'elementor_canvas' ); // set canvas template
 		$res['updated'] = true;
 		$res['post_id'] = $new_template_id;
@@ -1652,7 +1776,7 @@ class Admin {
 	}
 
 	public function remove_admin_notices() {
-		if( isset( $_GET['page'] ) && in_array( $_GET['page'], ['news-kit-elementor-addons','news-kit-elementor-addons-theme-builder','news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings'] ) ) remove_all_actions( 'admin_notices' );
+		if( isset( $_GET['page'] ) && in_array( $_GET['page'], ['news-kit-elementor-addons','news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-popup-builder','news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings'] ) ) remove_all_actions( 'admin_notices' );
 	}
 
 	public function nekit_404_builder_active() {
@@ -1662,7 +1786,114 @@ class Admin {
 		wp_die();	
 	}
 
+	public function nekit_builder_active() {
+		check_ajax_referer( 'nekit-admin-nonce', 'security' );
+		$template_id = ( isset( $_POST['template_id'] ) ) ? absint( $_POST['template_id'] ) : 0;
+		$template_active = ( isset( $_POST['template_active'] ) ) ? rest_sanitize_boolean( $_POST['template_active'] ) : false;
+		update_post_meta( $template_id, 'nekit_builder_in_use', $template_active );
+		wp_die();	
+	}
+
+	/**
+	 * render contents in popup builder sub menu page
+	 * 
+	 * MARK: POPUP BUILDER
+	 */
 	public function admin_page_popup_builder_callback() {
 		new Nekit_Popup_Builder\Popup_Builder();
+	}
+
+	/**
+	 * Custom Menu page header
+	 * MARK: HEADER
+	 * 
+	 * @package News Kit Elementor Addons
+	 * @since 1.2.4
+	 */
+	public function nekit_admin_header() {
+		$this->remove_admin_notices();
+
+		global $submenu, $menu, $plugin_page;
+		$nekit_main_menu_slug = 'news-kit-elementor-addons';
+		$nekit_menus = $submenu[ $nekit_main_menu_slug ];	/* Contains menu label, capability, etc */
+		$nekit_menu_slugs = [];	/* Contains only slugs */
+		$menuItemClass = 'menu-item';
+
+		if( ! empty( $nekit_menus ) && is_array( $nekit_menus ) ) :
+			foreach( $nekit_menus as $menu ) :
+				/**
+				 * $menu
+				 * 
+				 * 0 = menu title
+				 * 1 = capability
+				 * 2 = submenu slug
+				 * 3 = page title
+				 */
+				$nekit_menu_slugs[] = $menu[2];
+			endforeach;
+		endif;
+
+		if( ! empty( $nekit_menu_slugs ) && is_array( $nekit_menu_slugs ) && in_array( $plugin_page, $nekit_menu_slugs ) ) :
+			if( in_array( $plugin_page, [ 'news-kit-elementor-addons-popup-builder', 'news-kit-elementor-addons-theme-builder' ] ) ) $menuItemClass .= ' active';
+			?>
+				<header class="nekit-section-header" id="nekit-section-header">
+					<div class="nav-menu-wrapper">
+						<div class="logo-wrapper">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=' . $nekit_main_menu_slug ) ); ?>">
+								<img src="<?php echo esc_url( plugins_url( '/assets/images/logo.png', __FILE__ ) ); ?>">
+							</a>
+						</div><!-- .logo-wrapper -->
+						<nav class="nekit-admin-nav-menu">
+							<ul class="nav-menu">
+								<li class="<?php echo esc_attr( $menuItemClass . ' has-sub-menu' ); ?>">
+									<a href="#"><?php echo esc_html__( 'Builder', 'news-kit-elementor-addons' ); ?></a>
+									<ul class="sub-menu">
+										<li class="menu-item<?php if(( $this->current_tab === 'header-builder' ) && ( $plugin_page === 'news-kit-elementor-addons-theme-builder' )) echo ' active'; ?>">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=news-kit-elementor-addons-theme-builder' ) ); ?>"><?php echo esc_html__( 'Header Builder', 'news-kit-elementor-addons' ); ?></a>
+										</li>
+										<li class="menu-item<?php if(( $this->current_tab === 'footer-builder' ) && ( $plugin_page === 'news-kit-elementor-addons-theme-builder' )) echo ' active'; ?>">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=news-kit-elementor-addons-theme-builder&tab=footer-builder' ) ); ?>"><?php echo esc_html__( 'Footer Builder', 'news-kit-elementor-addons' ); ?></a>
+										</li>
+										<li class="menu-item<?php if(( $this->current_tab === 'single-builder' ) && ( $plugin_page === 'news-kit-elementor-addons-theme-builder' )) echo ' active'; ?>">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=news-kit-elementor-addons-theme-builder&tab=single-builder' ) ); ?>"><?php echo esc_html__( 'Single Builder', 'news-kit-elementor-addons' ); ?></a>
+										</li>
+										<li class="menu-item<?php if(( $this->current_tab === 'archive-builder' ) && ( $plugin_page === 'news-kit-elementor-addons-theme-builder' )) echo ' active'; ?>">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=news-kit-elementor-addons-theme-builder&tab=archive-builder' ) ); ?>"><?php echo esc_html__( 'Archive Builder', 'news-kit-elementor-addons' ); ?></a>
+										</li>
+										<li class="menu-item<?php if(( $this->current_tab === '404-builder' ) && ( $plugin_page === 'news-kit-elementor-addons-theme-builder' )) echo ' active'; ?>">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=news-kit-elementor-addons-theme-builder&tab=404-builder' ) ); ?>"><?php echo esc_html__( '404 Builder', 'news-kit-elementor-addons' ); ?></a>
+										</li>
+										<li class="menu-item<?php if( $plugin_page === 'news-kit-elementor-addons-popup-builder' ) echo ' active'; ?>">
+											<a href="<?php echo esc_url( admin_url( 'admin.php?page=news-kit-elementor-addons-popup-builder' ) ); ?>"><?php echo esc_html__( 'Popup Builder', 'news-kit-elementor-addons' ); ?></a>
+										</li>
+									</ul>
+								</li>
+								<li class="menu-item"><a href="<?php echo esc_url( '//blazethemes.com/news-kit-elementor-addons#nekit-pricing-wrap' ); ?>" target="_blank"><?php echo esc_html__( 'Free vs Pro', 'news-kit-elementor-addons' ); ?></a></li>
+								<?php echo apply_filters( 'nekit_header_get_pro_filter', '<li class="menu-item get-pro"><a href="'. esc_url( '//blazethemes.com/news-kit-elementor-addons' ) .'" target="_blank"><span></span><span></span><span></span><span></span>'. esc_html__( 'Get Pro', 'news-kit-elementor-addons' ) .'</a></li>' );?>
+							</ul>
+						</nav>
+					</div><!-- .nav-menu-wrapper -->
+					<div class="nekit-admin-actions">
+						<span class="free-or-pro"><?php echo apply_filters( 'nekit_free_pro_label_filter', esc_html__( 'Free', 'news-kit-elementor-addons' ) ); ?></span>
+						<span class="version"><?php echo apply_filters( 'nekit_version_filter', esc_html__( 'Version 1.3.0', 'news-kit-elementor-addons' ) ); ?></span>
+						<button class="action">
+							<a href="<?php echo esc_url( '//forum.blazethemes.com/news-kit-elementor-addons/theme-builder/' ); ?>" target="_blank">
+								<span class="icon dashicons dashicons-media-document"></span>
+								<span class="label"><?php echo esc_html__( 'Documentation', 'news-kit-elementor-addons' ); ?></span>
+							</a>
+						</button>
+						<button class="action">
+							<a href="<?php echo esc_url( '//blazethemes.com/support/' ); ?>" target="_blank">
+								<span class="icon dashicons dashicons-email"></span>
+								<span class="label"><?php echo esc_html__( 'Support', 'news-kit-elementor-addons' ); ?></span>
+							</a>
+						</button>
+						<?php 
+							echo apply_filters( 'nekit_header_rating_filter', '<button class="action"><a href="'. esc_url( '//wordpress.org/support/plugin/news-kit-elementor-addons/reviews/?filter=5' ) .'" target="_blank"><span class="icon dashicons dashicons-star-half"></span><span class="label">'. esc_html__( 'Rating', 'news-kit-elementor-addons' ) .'</span></a></button>' );
+						?>
+					</div><!-- .nekit-admin-actions -->
+				</header><!-- .nekit-section-header -->
+			<?php
+		endif;
 	}
 }

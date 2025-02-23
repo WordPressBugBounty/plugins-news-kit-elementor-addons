@@ -52,27 +52,31 @@ class Library {
 
     public function __construct() {
         require_once( NEKIT_PATH . 'admin/templates/render.php' );
-        add_action( 'elementor/editor/after_enqueue_scripts', [ $this, 'library_scripts' ], 988 );
-        add_action( 'elementor/frontend/before_enqueue_styles', [ $this, 'library_styles' ], 988 );
         add_action( 'elementor/editor/before_enqueue_styles', [ $this, 'editor_styles' ], 988 );
+        add_action( 'elementor/editor/after_enqueue_scripts', [ $this, 'library_scripts' ], 988 );
+        add_action( 'elementor/preview/enqueue_styles', [ $this, 'library_styles' ], 988 );
         add_action( 'wp_ajax_nekit_render_popup_modal', [ $this, 'render_popup_modal' ] );
         add_action( 'wp_ajax_nekit_import_widget_library_data', [ $this, 'import_widget_library_data' ] );
     }
 
     // library editor scripts
     function library_scripts() {
-        $this->widgets = \Nekit_Utilities\Utils::registered_widgets();
-        wp_register_script( 'nekit-library', plugins_url( 'assets/library.js', __FILE__ ), [ 'jquery', 'masonry' ], true );
-        wp_register_script( 'nekit-editor', plugins_url( 'includes/assets/js/editor.min.js', __DIR__ ), [ 'jquery' ] );
+        $this->widgets = \Nekit_Utilities\Utils::get_registered_widgets_with_demo();
         wp_enqueue_script('masonry');
+        wp_register_script( 'nekit-components', plugins_url( 'admin/components.js', __DIR__ ), [ 'jquery', 'masonry' ], '1.3.0', [ 'strategy' => 'defer' ] );
+		wp_enqueue_script( 'nekit-components' );
+        wp_register_script( 'nekit-editor', plugins_url( 'includes/assets/js/editor.js', __DIR__ ), [ 'jquery' ] );
+        wp_register_script( 'nekit-library', plugins_url( 'assets/library.js', __FILE__ ), [ 'jquery', 'masonry', 'nekit-components' ] );
+
+        wp_enqueue_script( 'nekit-editor' );
 		wp_enqueue_script( 'nekit-library' );
+
         wp_localize_script( 'nekit-library', 'libraryData', [
             '_wpnonce'	=> wp_create_nonce( 'nekit-library-nonce' ),
 			'ajaxUrl'	=> admin_url('admin-ajax.php'),
             'logoUrl'   => esc_url( plugins_url( '/assets/images/nekit-logo-menu.svg', __FILE__ ) ),
             'loadingText'   => esc_html__( 'Loading', 'news-kit-elementor-addons' )
         ]);
-        wp_enqueue_script( 'nekit-editor' );
         wp_localize_script( 'nekit-editor', 'editorObject', [
             '_wpnonce'	=> wp_create_nonce( 'nekit-editor-nonce' ),
 			'ajaxUrl'	=> admin_url('admin-ajax.php'),
@@ -98,145 +102,157 @@ class Library {
     // library popup html
     function render_popup_modal() {
         check_ajax_referer( 'nekit-library-nonce', 'security' );
-        $widget = isset($_POST['widget']) ? sanitize_text_field(wp_unslash($_POST['widget'])) : '';
+        $widget = isset( $_POST['widget'] ) ? sanitize_text_field( wp_unslash( $_POST[ 'widget' ] ) ) : '';
+
+        $this->widgets = \Nekit_Utilities\Utils::get_registered_widgets_with_demo();
+
+        $res[ 'nekitData' ] = [
+            'blocks' =>  [
+                'filterList'   =>  [],
+                'demos' =>  []
+            ],
+            'pages' =>  [
+                'filterList'   =>  [],
+                'demos' =>  []
+            ]
+        ];
+
         ob_start();
-        $this->widgets = \Nekit_Utilities\Utils::registered_widgets();
         $widgets_for_option = [];
+        $widgets_for_option[ 'all' ] = esc_html__( 'all', 'news-kit-elementor-addons' );
         if( $this->widgets ) :
             foreach( $this->widgets as $widget ) :
                 $widgets_for_option[$widget['category']] = esc_html( str_replace( '-', ' ', $widget['category'] ) );
             endforeach;
         endif;
-        ?>
-            <div class="nekit-library-popup library-popup-inner">
-                <div class="header">
-                    <div class="logo">
-                        <img src="<?php echo esc_url( plugins_url( '/assets/images/logo.png', __FILE__ ) ); ?>">
-                    </div>
-                    <div class="templates-tabs">
-                        <div class="tab-title isActive" data-tab="blocks"><?php esc_html_e( 'Blocks', 'news-kit-elementor-addons' ); ?></div>
-                        <div class="tab-title" data-tab="pages"><?php esc_html_e( 'Pages', 'news-kit-elementor-addons' ); ?></div>
-                    </div>
-                    <div class="popup-close-trigger">
-                        <i class="eicon-close" aria-hidden="true" title="<?php esc_html_e( 'Close', 'news-kit-elementor-addons' ); ?>"></i>
-                    </div>
-                </div>
-                <div class="templates-tab-content">
-                    <div class="inner-tab-content blocks-tab-content">
-                        <div class="filter-tab-search-wrap">   
-                            <div class="widgets-category-title-filter">
-                                <div class="active-filter"><span class="filter-text"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ) ?></span><span class="dashicons dashicons-arrow-down-alt2"></span></div>
-                                <ul class="filter-list">
-                                    <li class="filter-tab" data-value="all"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></li>
-                                    <?php
-                                        if( $widgets_for_option ) :
-                                            foreach( $widgets_for_option as $option_key => $option ) :
-                                                echo '<li class="filter-tab" data-value="' .esc_attr( $option_key ). '">' .esc_html( $option ). '</li>';
-                                            endforeach;
-                                        endif;
-                                    ?>
-                                </ul>
-                            </div>
-                            <input type="search" placeholder="<?php echo esc_html__( 'Type to search . .', 'news-kit-elementor-addons' ); ?>">
+
+        if( $widgets_for_option ) :
+            foreach( $widgets_for_option as $option_key => $option ) :
+                $blocklistClass = 'filter-tab';
+                if( $option_key === 'all' ) $blocklistClass .= ' active';
+                ?>
+                    <li class="<?php echo esc_attr( $blocklistClass ); ?>" data-value="<?php echo esc_attr( $option_key ); ?>">
+                        <span class="tab-label"><?php echo esc_html( $option ); ?></span>
+                        <div class="count-wrapper">
+                            <span class="count free-count"></span>
+                            <span class="count pro-count"></span>
                         </div>
-                        <div class="tab-blocks-list-wrap">
-                            <div class="tab-content-wrap tab-blocks-list widgets-blocks-library">
-                                <?php
-                                    $widgets_demos = Nekit_Utilities\Utils::library_widgets_data();
-                                    $widgets_demos = json_decode($widgets_demos);
-                                    if( $widgets_demos && is_array($widgets_demos) ) :
-                                        foreach( $widgets_demos as $widget_demo ) :
-                                            $filter_attr = 'all ' . $widget_demo->type;
-                                            $filter_attr .= ' ';
-                                            $filter_attr .= is_array( $widget_demo->category ) ? implode( " ", $widget_demo->category ) : $widget_demo->category;
-                                            ?>
-                                                <figure class="template-item <?php echo esc_attr( 'all ' . $filter_attr ); ?>">
-                                                    <a href="<?php echo esc_url($widget_demo->preview_url); ?>" target="_blank"><img src="<?php echo esc_url($widget_demo->preview_image); ?>"/></a>
-                                                    <div class="button-actions">
-                                                        <span class="widget-name"><?php echo esc_html( $widget_demo->name ); ?></span>
-                                                        <?php
-                                                            $import_status = true;
-                                                            if( $widget_demo->type == 'pro' ) {
-                                                                $pro_plugin_path = WP_PLUGIN_DIR . '/news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php';
-                                                                $pro_check_active = is_plugin_active( 'news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php' );
-                                                                $import_status = $pro_check_active ? true: false;
-                                                            }
-                                                            if( $import_status ) :
-                                                        ?>
-                                                                <button class="insert-data-button insert-data" data-route="<?php echo esc_attr('widgets/' . $widget_demo->data_route); ?>"><?php echo esc_html__( 'Insert', 'news-kit-elementor-addons' ); ?></button>
-                                                        <?php
-                                                            else:
-                                                        ?>
-                                                                <button class="insert-data-button upgrade"><a href="<?php echo esc_url( "https://blazethemes.com/news-kit-elementor-addons/" ) ?>" target="_blank"><?php echo esc_html__( 'Upgrade', 'news-kit-elementor-addons' ); ?></a></button>
-                                                        <?php
-                                                            endif;
-                                                        ?>
-                                                    </div>
-                                                </figure>
-                                            <?php
-                                        endforeach;
-                                    endif;
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="inner-tab-content pages-tab-content">
-                        <div class="filter-tab-search-wrap">
-                            <div class="widgets-category-title-filter">
-                                <div class="active-filter"><span class="filter-text"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ) ?></span><span class="dashicons dashicons-arrow-down-alt2"></span></div>
-                                <ul class="filter-list">
-                                    <li class="filter-tab" data-value="all"><?php echo esc_html__( 'All', 'news-kit-elementor-addons' ); ?></li>
-                                    <li class="filter-tab" data-value="free"><?php echo esc_html__( 'Free', 'news-kit-elementor-addons' ); ?></li>
-                                    <li class="filter-tab" data-value="pro"><?php echo esc_html__( 'Pro', 'news-kit-elementor-addons' ); ?></li>
-                                </ul>
-                            </div>
-                            <input type="search" placeholder="Type to Search . .">
-                        </div>
-                        <div class="tab-content-wrap tab-pages-list pages-library">
+                    </li>
+                <?php
+            endforeach;
+        endif;
+
+        $res[ 'nekitData' ][ 'blocks' ][ 'filterList' ] = ob_get_clean();
+
+        ob_start();
+        $widgets_demos = Nekit_Utilities\Utils::library_widgets_data();
+        $widgets_demos = json_decode($widgets_demos);
+        if( $widgets_demos && is_array($widgets_demos) ) :
+            foreach( $widgets_demos as $widget_demo ) :
+                $filter_attr = 'all ' . $widget_demo->type;
+                $filter_attr .= ' ';
+                $filter_attr .= is_array( $widget_demo->category ) ? implode( " ", $widget_demo->category ) : $widget_demo->category;
+                ?>
+                    <figure class="template-item <?php echo esc_attr( 'all ' . $filter_attr ); ?>">
+                        <a href="<?php echo esc_url($widget_demo->preview_url); ?>" target="_blank"><img src="<?php echo esc_url($widget_demo->preview_image); ?>" loading="lazy" /></a>
+                        <div class="button-actions">
+                            <span class="widget-name block-label"><?php echo esc_html( $widget_demo->name ); ?></span>
                             <?php
-                                $pages_demos = Nekit_Utilities\Utils::library_pages_data();
-                                $pages_demos = json_decode($pages_demos);
-                                if( $pages_demos ) :
-                                    foreach( $pages_demos as $page_demo ) :
-                                        foreach( $page_demo->pages as $pages ):
-                                            $filter_attr = 'all ' . $page_demo->type;
-                                            $filter_attr .= ' ';
-                                            $filter_attr .= is_array( $page_demo->category ) ? implode( " ", $page_demo->category ) : $page_demo->category;
-                                            ?>
-                                                <figure class="template-item <?php echo esc_attr( $filter_attr ); ?>">
-                                                    <a href="<?php echo esc_url( $pages->preview_url ); ?>" target="_blank"><img src="<?php echo esc_url( $pages->screenshot ); ?>"/></a>
-                                                    <div class="button-actions">
-                                                        <span class="widget-name"><?php echo esc_html( $pages->name ); ?></span>
-                                                        <?php
-                                                            $import_status = true;
-                                                            if( $page_demo->type == 'pro' ) {
-                                                                $pro_plugin_path = WP_PLUGIN_DIR . '/news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php';
-                                                                $pro_check_active = is_plugin_active( 'news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php' );
-                                                                $import_status = $pro_check_active ? true: false;
-                                                            }
-                                                            if( $import_status ) :
-                                                        ?>
-                                                                <button class="insert-data-button insert-data" data-route="<?php echo esc_attr($pages->data_route); ?>"><?php echo esc_html__( 'Insert', 'news-kit-elementor-addons' ); ?></button>
-                                                        <?php
-                                                            else:
-                                                        ?>
-                                                                <button class="insert-data-button upgrade"><a href="<?php echo esc_url( "https://blazethemes.com/news-kit-elementor-addons/" ) ?>" target="_blank"><?php echo esc_html__( 'Upgrade', 'news-kit-elementor-addons' ); ?></a></button>
-                                                        <?php
-                                                            endif;
-                                                        ?>
-                                                    </div>
-                                                </figure>
-                                            <?php
-                                        endforeach;
-                                    endforeach;
+                                $import_status = true;
+                                if( $widget_demo->type == 'pro' ) {
+                                    $pro_plugin_path = WP_PLUGIN_DIR . '/news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php';
+                                    $pro_check_active = is_plugin_active( 'news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php' );
+                                    $import_status = $pro_check_active ? true: false;
+                                }
+                                if( $import_status ) :
+                            ?>
+                                    <button class="insert-data-button insert-data" data-route="<?php echo esc_attr('widgets/' . $widget_demo->data_route); ?>">
+                                        <?php echo esc_html__( 'Insert', 'news-kit-elementor-addons' ); ?>
+                                        <span class="loader"></span>
+                                    </button>
+                            <?php
+                                else:
+                            ?>
+                                    <button class="insert-data-button upgrade"><a href="<?php echo esc_url( "https://blazethemes.com/news-kit-elementor-addons/" ) ?>" target="_blank"><?php echo esc_html__( 'Upgrade', 'news-kit-elementor-addons' ); ?></a></button>
+                            <?php
                                 endif;
                             ?>
                         </div>
-                    </div>
-                </div>
-            </div>
-        <?php
-        $res['html'] = ob_get_clean();
+                    </figure>
+                <?php
+            endforeach;
+        endif;
+        $res[ 'nekitData' ][ 'blocks' ][ 'demos' ] = ob_get_clean();
+
+        ob_start();
+        $filter_list = [
+            'all'	=>	esc_html__( 'All', 'news-kit-elementor-addons' ),
+            'news'	=>	esc_html__( 'News', 'news-kit-elementor-addons' ),
+            'sports'	=>	esc_html__( 'Sports', 'news-kit-elementor-addons' ),
+            'gaming'	=>	esc_html__( 'Gaming', 'news-kit-elementor-addons' ),
+            'politics'	=>	esc_html__( 'Politics', 'news-kit-elementor-addons' ),
+            'food'	=>	esc_html__( 'Food', 'news-kit-elementor-addons' )
+        ];
+        $count = 0;
+        if( ! empty( $filter_list ) && is_array( $filter_list ) ) :
+            foreach( $filter_list as $tab_key => $tab_value ) :
+                $listClass = 'filter-tab';
+                if( $count === 0 ) $listClass .= ' active';
+                ?>
+                    <li class="<?php echo esc_attr( $listClass ); ?>" data-value="<?php echo esc_attr( $tab_key ); ?>">
+                        <span class="tab-label"><?php echo esc_html( $tab_value ); ?></span>
+                        <div class="count-wrapper">
+                            <span class="count free-count"></span>
+                            <span class="count pro-count"></span>
+                        </div>
+                    </li>
+                <?php
+                $count++;
+            endforeach;
+        endif;
+        $res[ 'nekitData' ][ 'pages' ][ 'filterList' ] = ob_get_clean();
+        
+        ob_start();
+        $pages_demos = Nekit_Utilities\Utils::library_pages_data();
+        $pages_demos = json_decode($pages_demos);
+        if( $pages_demos ) :
+            foreach( $pages_demos as $page_demo ) :
+                foreach( $page_demo->pages as $pages ):
+                    $filter_attr = 'all ' . $page_demo->type;
+                    $filter_attr .= ' ';
+                    $filter_attr .= is_array( $page_demo->category ) ? implode( " ", $page_demo->category ) : $page_demo->category;
+                    ?>
+                        <figure class="template-item <?php echo esc_attr( $filter_attr ); ?>">
+                            <a href="<?php echo esc_url( $pages->preview_url ); ?>" target="_blank"><img src="<?php echo esc_url( $pages->screenshot ); ?>" loading="lazy"/></a>
+                            <div class="button-actions">
+                                <span class="demo-name block-label"><?php echo esc_html( $pages->name ); ?></span>
+                                <?php
+                                    $import_status = true;
+                                    if( $page_demo->type == 'pro' ) {
+                                        $pro_plugin_path = WP_PLUGIN_DIR . '/news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php';
+                                        $pro_check_active = is_plugin_active( 'news-kit-elementor-addons-pro/news-kit-elementor-addons-pro.php' );
+                                        $import_status = $pro_check_active ? true: false;
+                                    }
+                                    if( $import_status ) :
+                                ?>
+                                        <button class="insert-data-button insert-data" data-route="<?php echo esc_attr($pages->data_route); ?>">
+                                            <?php echo esc_html__( 'Insert', 'news-kit-elementor-addons' ); ?>
+                                            <span class="loader"></span>
+                                        </button>
+                                <?php
+                                    else:
+                                ?>
+                                        <button class="insert-data-button upgrade"><a href="<?php echo esc_url( "https://blazethemes.com/news-kit-elementor-addons/" ) ?>" target="_blank"><?php echo esc_html__( 'Upgrade', 'news-kit-elementor-addons' ); ?></a></button>
+                                <?php
+                                    endif;
+                                ?>
+                            </div>
+                        </figure>
+                    <?php
+                endforeach;
+            endforeach;
+        endif;
+        $res[ 'nekitData' ][ 'pages' ][ 'demos' ] = ob_get_clean();
         $res['loaded'] = true;
         wp_send_json_success( $res );
 		wp_die();

@@ -833,9 +833,9 @@
         ];
         if( $settings['text_style'] == 'animated' ) {
             if( $settings['animated'] == 'typing' ) {
-                $wrapper_attributes['data-animation-iteration'] = $settings['highlight_animation_iteration_count'];
-                $wrapper_attributes['data-animation-duration'] = $settings['highlight_animation_duration'];
-                $wrapper_attributes['data-animation-delay'] = $settings['highlight_animation_delay'];
+                $wrapper_attributes['data-animation-iteration'] = ( isset( $settings['highlight_animation_iteration_count'] ) ? $settings['highlight_animation_iteration_count'] : 'infinite' );
+                $wrapper_attributes['data-animation-duration'] = ( isset( $settings['highlight_animation_duration'] ) ? $settings['highlight_animation_duration'] : 4 );
+                $wrapper_attributes['data-animation-delay'] = ( isset( $settings['highlight_animation_delay'] ) ? $settings['highlight_animation_delay'] : 0.2 );
             }
         }
         $this->add_render_attribute( 'wrapper', $wrapper_attributes );
@@ -872,7 +872,7 @@
                             $text_hightlight_args = [
                                 'shape'  =>  $settings['shape'],
                                 'heading_text'  =>  $settings['heading_text'],
-                                'animation_iteration'   =>  $settings['highlight_animation_iteration_count']
+                                'animation_iteration'   =>  ( isset( $settings['highlight_animation_iteration_count'] ) ? $settings['highlight_animation_iteration_count'] : 'infinite' )
                             ];
                             $this->text_highlight( $text_hightlight_args );
                         elseif( $settings['text_style'] == 'animated' ) :

@@ -1,6 +1,11 @@
 jQuery(document).ready(function($) {
     "use strict"
+    const { ajaxUrl, _wpnonce, installingText, activatingText, disabledText, enabledText } = adminObject
+    const { filterTabHeader = undefined } = window
 
+    /**
+     * MARK: NEKIT ADMIN HANDLER
+     */
     const NekitAdminHandler = {
         init: function() {
             switch( adminObject.page ) {
@@ -18,6 +23,7 @@ jQuery(document).ready(function($) {
             }
             $(".nekit-admin-modal").on( "click", ".nekit-modal-close", function() {
                 $(this).parents(".nekit-admin-modal").fadeToggle( "fast", "linear" );
+                $( 'body' ).removeClass( 'nekit-modal-active' )
             })
         },
         urlParam: function(name) {
@@ -28,11 +34,22 @@ jQuery(document).ready(function($) {
             // console.log(this.urlParam('page'))
         },
         adminpageLoad: function() {
-            var admincontainer = $("#nekit-admin-page")
+            let admincontainer = $("#nekit-admin-page")
             // on template create
             admincontainer.on( "click", ".show-create-template-form", function() {
+                let _this = $( this )
                 $("#nekit-create-template-modal").fadeToggle( "fast", "linear" )
                 $("#nekit-create-template-modal").find( 'input[name="template-name"]' ).focus()
+                $( 'body' ).addClass( 'nekit-modal-active' )
+                NekitAdminHandler.onElementOutsideClick( _this, function( event ){
+                    let container = $( '#nekit-create-template-modal .nekit-template-modal-inner' ),
+                        target = $( event.target );
+
+                    if( target.closest( container ).length ) return
+                    _this.parents( ".page-content" ).siblings( '#nekit-create-template-modal' ).hide()
+                    $( 'body' ).removeClass( 'nekit-modal-active' )
+                    $( document ).off( 'click.outsideClick' )   /* Unbind the outside click event to prevent other outside click event from triggering. */
+                })
             })
             var adminFormContainer = $("#nekit-create-template-modal")
             adminFormContainer.on( "click", ".create-new-template", function() {
@@ -76,32 +93,92 @@ jQuery(document).ready(function($) {
                 }
             })
 
+            /**
+             * This script is executed when user first creates a template and never again
+             */
+            if( $( '.nekit-admin-modal.nekit-manage-condition-modal.isShow' ).length > 0 ) $( 'body' ).addClass( 'nekit-modal-active' )
+            $(document).on( 'click.outsideClick', '.nekit-admin-modal.nekit-manage-condition-modal.isShow', function ( event ) {
+                let _this = $( this ),
+                    container = _this.find( '.nekit-template-modal-inner' ),
+                    target = $( event.target );
+
+                if( target.closest( container ).length ) return
+                _this.hide()
+                $( 'body' ).removeClass( 'nekit-modal-active' )
+                $( document ).off( 'click.outsideClick' )   /* Unbind the outside click event to prevent other outside click event from triggering. */
+            })
+
+            /**
+             * MARK: Template Switch
+             */
+            admincontainer.on( "click", ".template-list-item .template-switch", function() {
+                let _this = $( this ),
+                    parentElm = _this.parents( '.template-list-item' ),
+                    templateID = parentElm.data( "template" ),
+                    isActive = false;
+                if( ! _this.hasClass( 'isactive' ) ) {
+                    _this.addClass( "isactive" )
+                    _this.find( ".template-switch-label" ).text( enabledText )
+                    isActive = true
+                    parentElm.addClass( 'builder-active' )
+                } else {
+                    _this.removeClass( "isactive" )
+                    _this.find( ".template-switch-label" ).text( disabledText )
+                    isActive = false
+                    parentElm.removeClass( 'builder-active' )
+                }
+
+                $.ajax({
+                    url: ajaxUrl,
+                    type: 'POST',
+                    data: {
+                        action: 'nekit_builder_active',
+                        template_id: templateID,
+                        template_active: isActive,
+                        _wpnonce: _wpnonce
+                    },
+                    beforeSend: function() {
+                        parentElm.addClass( "loading-process" )
+                    },
+                    success: function( result ) {
+                        console.log( result, 'Template Toggle' )
+                        parentElm.removeClass( "loading-process" )
+                    }
+                })
+            })
+
             // for 404 template
             admincontainer.on( "click", ".template-list-item .error-page-switch", function() {
-                var _thisActiveLabel = $(this), templateID = 0
-                if( ! _thisActiveLabel.hasClass('isactive') ) {
-                    var parentElm = _thisActiveLabel.parent()
-                    templateID = parentElm.data("template")
-                    _thisActiveLabel.addClass("isactive")
-                    _thisActiveLabel.find(".error-page-switch-label").text( adminObject.enabledText )
-                    parentElm.siblings().find(".error-page-switch").removeClass("isactive").find(".error-page-switch-label").text( adminObject.disabledText )
+                let _this = $( this ),
+                    parentElm = _this.parent(),
+                    templateID = parentElm.data( "template" );
+
+                if( ! parentElm.hasClass( 'builder-active' ) ) {
+                    parentElm.addClass( "builder-active" )
+                    _this.find( ".error-page-switch-label" ).text( enabledText )
+                    _this.addClass( 'isactive' )
+                    parentElm.siblings().removeClass( 'builder-active' )
+                    parentElm.siblings().find( '.error-page-switch' ).removeClass( 'isactive' )
+                    parentElm.siblings().find( ".error-page-switch-label" ).text( disabledText )
                 } else {
-                    _thisActiveLabel.removeClass("isactive")
-                    _thisActiveLabel.find(".error-page-switch-label").text( adminObject.disabledText )
+                    parentElm.removeClass( "builder-active" )
+                    _this.removeClass( 'isactive' )
+                    _this.find( ".error-page-switch-label" ).text( disabledText )
                 }
                 $.ajax({
-                    url: adminObject.ajaxUrl,
+                    url: ajaxUrl,
                     type: 'POST',
                     data: {
                         action: 'nekit_404_builder_active',
                         option: templateID,
-                        _wpnonce: adminObject._wpnonce
+                        _wpnonce: _wpnonce
                     },
                     beforeSend: function() {
-                        _thisActiveLabel.parent().addClass( "loading-process")
+                        parentElm.addClass( "loading-process" )
                     },
                     success: function( result ) {
-                        console.log( result )
+                        console.log( result, '404 template toggle' )
+                        parentElm.removeClass( "loading-process" )
                     }
                 })
             })
@@ -110,6 +187,16 @@ jQuery(document).ready(function($) {
             admincontainer.on( "click", ".show-delete-template-form", function() {
                 var deleteDialogTriggerButton = $(this), templateId = deleteDialogTriggerButton.data("template-id")
                 $("#nekit-delete-template-modal").attr("data-template-id",templateId).fadeToggle("fast")
+                $( 'body' ).addClass( 'nekit-modal-active' )
+                NekitAdminHandler.onElementOutsideClick( deleteDialogTriggerButton, function( event ){
+                    let container = $( '#nekit-delete-template-modal .nekit-template-modal-inner' ),
+                        target = $( event.target );
+
+                    if( target.closest( container ).length ) return
+                    deleteDialogTriggerButton.parents( ".page-content" ).siblings( '#nekit-delete-template-modal' ).hide()
+                    $( 'body' ).removeClass( 'nekit-modal-active' )
+                    $( document ).off( 'click.outsideClick' )   /* Unbind the outside click event to prevent other outside click event from triggering. */
+                })
             })
             var deleteDialogContainer = $("#nekit-delete-template-modal")
             deleteDialogContainer.on( "click", ".delete-old-template", function() {
@@ -164,16 +251,35 @@ jQuery(document).ready(function($) {
             
             // on condition delete row
             $(document).on( "click", ".nekit-manage-condition-modal .delete-field-group .delete-row", function() {
-                var _deleteThis = $(this), conditionRow = _deleteThis.parents(".condition-field-group")
+                var _deleteThis = $(this), conditionRow = _deleteThis.parents(".condition-field-group"), siblings = conditionRow.siblings()
+
                 conditionRow.slideUp(400, function() {
                     $(this).remove()
+                    if( siblings.length <= 1 ) siblings.find( '.delete-row' ).hide()
                 })
             })
 
             // popup manage condition modal
             admincontainer.on( "click", ".manage-template-conditions", function() {
-                var _this = $(this), parentContainer = _this.parents(".template-list-item")
+                let _this = $(this),
+                    parentContainer = _this.parents(".template-list-item"),
+                    templateId = parentContainer.data( 'template' ),
+                    modalContainer = parentContainer.siblings( '.nekit-admin-modal.nekit-manage-condition-modal[data-template-id="'+ templateId +'"]' ).find( '.nekit-template-modal-inner' ),
+                    conditions = modalContainer.find( '.inner-fields-group-wrap .condition-field-group' ),
+                    conditionsCount = conditions.length;
+
+                if( conditionsCount > 1 ) conditions.find( '.delete-row' ).show()
                 parentContainer.next(".nekit-manage-condition-modal").fadeToggle( "fast", "linear" );
+                $( 'body' ).addClass( 'nekit-modal-active' )
+
+                NekitAdminHandler.onElementOutsideClick( _this, function( event ){
+                        let target = $( event.target );
+
+                    if( target.closest( modalContainer ).length ) return
+                    _this.parents( ".template-list-item" ).siblings( '.nekit-admin-modal.nekit-manage-condition-modal' ).hide()
+                    $( 'body' ).removeClass( 'nekit-modal-active' )
+                    $( document ).off( 'click.outsideClick' )   /* Unbind the outside click event to prevent other outside click event from triggering. */
+                })
             })
 
             // save conditions
@@ -239,9 +345,10 @@ jQuery(document).ready(function($) {
                             _this.text( adminObject.savingText ).attr( "disabled", true )
                         },
                         success : function(res) {
-                            var parsedRes = JSON.parse(res)
-                            if( parsedRes.updated ) {
+                            var parsedRes = res.data
+                            if( res.success && parsedRes.updated ) {
                                 _this.text(_thisText).attr( "disabled", false )
+                                _this.parents(".nekit-manage-condition-modal").find(".nekit-modal-close").trigger("click")
                                 console.log(parsedRes)
                             }
                         }
@@ -252,7 +359,9 @@ jQuery(document).ready(function($) {
             // add conditions
             admincontainer.on( "click", ".add-condition", function() {
                 var _this = $(this), parentElement = _this.parent(), conditionHtml = parentElement.prev(".condition-identical-group").html(), moveToHtml = parentElement.siblings(".inner-fields-group-wrap")
+
                 moveToHtml.append(conditionHtml)
+                moveToHtml.find( '.delete-row' ).show()
             })
 
             // on demo import 
@@ -293,6 +402,7 @@ jQuery(document).ready(function($) {
                     var menuItemContainer = $(this)
                     menuItemContainer.on( "click", ".nekit-menu-button.mega-menu-tigger", function() {
                         var megaMenuTrigger = $(this), menuItemId = megaMenuTrigger.parents(".menu-item").attr("id"), menuItemName = megaMenuTrigger.parents(".menu-item").find(".menu-item-title").text()
+                        $( 'body' ).addClass( 'nekit-modal-active' )
                         $.ajax({
                             method: 'POST',
                             url: adminObject.ajaxUrl,
@@ -320,6 +430,15 @@ jQuery(document).ready(function($) {
                                         handleResponsiveField(modalElm)
                                         embedColorPickerField(modalElm)
                                         handleEditWithElementor(modalElm)
+                                        NekitAdminHandler.onElementOutsideClick( _this, function( event ){
+                                            let container = $( 'body .nekit-mega-menu-modal .mega-menu-modal-inner-container' ),
+                                                target = $( event.target );
+                        
+                                            if( target.closest( container ).length ) return
+                                            container.find( '.popup-close-trigger' ).trigger( 'click' )
+                                            $( 'body' ).removeClass( 'nekit-modal-active' )
+                                            $( document ).off( 'click.outsideClick' )   /* Unbind the outside click event to prevent other outside click event from triggering. */
+                                        })
                                     })
                                 }
                             }
@@ -329,9 +448,9 @@ jQuery(document).ready(function($) {
             })
         },
         onElementOutsideClick: function(currentElement, callback) {
-            $(document).mouseup(function (e) {
+            $(document).on( 'click.outsideClick', function (e) {
                 var container = $(currentElement);
-                if (!container.is(e.target) && container.has(e.target).length === 0) callback();
+                if (!container.is(e.target) && container.has(e.target).length === 0) callback( e );
             })
         }
     }
@@ -552,129 +671,92 @@ jQuery(document).ready(function($) {
         })
     }
 
-    // template list -- pages demo listing page
-    var sapSectionContainer = $(this).find(".nekit-templates-list")
-    if( sapSectionContainer.length > 0 ) {
-        var demoListItems = sapSectionContainer.find(".pages-library .template-item")
-        var blockDemoListItems = sapSectionContainer.find(".widgets-blocks-library .template-item")
-        var widgetsLibraryContainer = $( ".pre-built-block-wrap .tab-blocks-list.widgets-blocks-library" )
-        let $masonry = widgetsLibraryContainer.masonry({
-            itemSelector: ".template-item",
-            horizontalOrder: true,
-            gutter: 30,
-        });
-        $masonry.imagesLoaded().progress(function () {
-            $masonry.masonry("layout");
-        });
+    /**
+     * MARK: PRE-MADE BLOCKS
+     */
+    const PreMadeBlocks = {
+        mainParent: $( '#nekit-sub-admin-page .pre-built-block-wrap' ),
+        preMadeBlocksInstance: filterTabHeader,
+        init: function() {
+            if( this.mainParent.length > 0 ) {
 
-        // filter page demos
-        sapSectionContainer.on( "click", ".main-demo-list-tabs .list-item", function() {
-            var _this = $(this), tabLabel = _this.text().toLowerCase()
-            _this.addClass("isActive").siblings().removeClass("isActive")
-            var mainParentSibling = _this.parents('.page-header').siblings()
-            var classToFind = mainParentSibling.find( '.template-item.' + tabLabel )
-            mainParentSibling.find( '.template-item' ).hide()
-            classToFind.show()
-        })
+                this.preMadeBlocksInstance.container = $( '#nekit-sub-admin-page .widgets-category-title-filter' )
+                this.preMadeBlocksInstance.searchField = this.preMadeBlocksInstance.container.siblings( '.search-wrapper' ).find( 'input[type="search"]' );
+                this.preMadeBlocksInstance.preMadeBlocks = this.preMadeBlocksInstance.container.parent().siblings().find( '.template-item' ).parent();
+                this.preMadeBlocksInstance.freeProButtons = this.preMadeBlocksInstance.container.siblings( '.free-pro-filter-tabs' );
 
-        // filter page demos type
-        sapSectionContainer.on( "change", ".demo-type-filter", function() {
-            var _this = $(this), type = _this.val()
-            var mainParentSibling = _this.parents('.page-header').siblings()
-            var classToFind = mainParentSibling.find( '.template-item.' + type )
-            mainParentSibling.find( '.template-item' ).hide()
-            classToFind.show()
-        })
+                this.preMadeBlocksInstance.activeFilterHandle();
+                this.preMadeBlocksInstance.handleFilterClick();
+                this.preMadeBlocksInstance.handleFreeProClick();
+                this.preMadeBlocksInstance.addFilterCount();
+                this.preMadeBlocksInstance.searchHandle();
+                this.preMadeBlocksInstance.addMasonry();
+                this.preMadeBlocksInstance.filterTabHeaderSticky()
+            }
+        }
+    }   /* End of PreMadeBlocks */
 
-        // on pages demo search
-        sapSectionContainer.on( 'change keyup', '.filter-search-wrap input[type="search"]', function() {
-            var searchField = $(this), searchVal = searchField.val()
-            if( searchVal ) {
-                demoListItems.each(function() {
-                    var demoItem = $(this)
-                    if( demoItem[0].classList.value.indexOf(searchVal) > 0 ) {
-                        demoItem.show()
-                    } else {
-                        demoItem.hide()
+    /**
+     * MARK: STARTER SITES
+     */
+    const StarterSites = {
+        mainParent: $( '#nekit-sub-admin-page.nekit-templates-list.main-demo-list' ),
+        innerParent: $( '#nekit-sub-admin-page.nekit-templates-list.main-demo-inner-list' ),
+        preMadeBlocksInstance: filterTabHeader,
+        init: function(){
+            if( this.mainParent.length > 0 ) {
+                this.preMadeBlocksInstance.container = $( '#nekit-sub-admin-page .templates-category-title-filter' )
+                this.preMadeBlocksInstance.searchField = this.preMadeBlocksInstance.container.siblings( '.search-wrapper' ).find( 'input[type="search"]' );
+                this.preMadeBlocksInstance.preMadeBlocks = this.preMadeBlocksInstance.container.parent().siblings();
+                this.preMadeBlocksInstance.freeProButtons = this.preMadeBlocksInstance.container.siblings( '.free-pro-filter-tabs' );
+
+                this.preMadeBlocksInstance.activeFilterHandle()
+                this.preMadeBlocksInstance.handleFilterClick()
+                this.preMadeBlocksInstance.handleFreeProClick()
+                this.preMadeBlocksInstance.addFilterCount()
+                this.preMadeBlocksInstance.searchHandle();
+                this.preMadeBlocksInstance.filterTabHeaderSticky()
+
+            }
+            if( this.innerParent.length > 0 ) {
+                this.handlePluginInstallation();
+            }
+        },
+        /* Handle Plugin Installation and Activation Ajax Call */
+        handlePluginInstallation: function(){
+            this.innerParent.on( "click", ".importer-action", function() {
+                let _thisInstallButton = $( this )
+                $.ajax({
+                    method: 'POST',
+                    url: ajaxUrl,
+                    data: {
+                        action: 'nekit_install_importer',
+                        option: _thisInstallButton.hasClass( "install" ) ? 'install' : 'activate',
+                        _wpnonce: _wpnonce
+                    },
+                    beforeSend: function() {
+                        _thisInstallButton.attr( "disabled", true )
+                        _thisInstallButton.addClass( 'installing-importer' )
+                        if( _thisInstallButton.hasClass( "install" ) ) _thisInstallButton.hide().html( '' ).fadeIn().html( installingText );
+                        if( _thisInstallButton.hasClass( "activate" ) ) _thisInstallButton.hide().html( '' ).fadeIn().html( activatingText );
+                    },
+                    success: function( result ) {
+                        let info = result.data
+                        if( ! info.status ) {
+                            _thisInstallButton.hide().html( '' ).fadeIn().html( info.message );
+                        }
+                    },
+                    complete: function() {
+                        _thisInstallButton.attr( "disbaled", false )
+                        _thisInstallButton.removeClass( 'installing-importer' )
+                        location.reload()
                     }
                 })
-            } else {
-                demoListItems.show()
-            }
-        })
-
-        // on blocks demo search
-        sapSectionContainer.on( 'change keyup', '.filter-tab-search-wrap input[type="search"]', function() {
-            var searchField = $(this), searchVal = searchField.val()
-            if( searchVal ) {
-                blockDemoListItems.each(function() {
-                    var demoItem = $(this)
-                    if( demoItem[0].classList.value.indexOf(searchVal) > 0 ) {
-                        demoItem.show()
-                    } else {
-                        demoItem.hide()
-                    }
-                })
-            } else {
-                blockDemoListItems.show()
-            }
-            // $masonry.destroy()
-            widgetsLibraryContainer.masonry({
-                itemSelector: ".template-item",
-                horizontalOrder: true,
-                gutter: 30,
-            });
-        })
-
-        // handle plugin install button
-        sapSectionContainer.on( "click", ".importer-action", function() {
-            var _thisInstallButton = $(this)
-            $.ajax({
-                method: 'POST',
-                url: adminObject.ajaxUrl,
-                data: {
-                    action: 'nekit_install_importer',
-                    option: _thisInstallButton.hasClass( "install" ) ? 'install' : 'activate',
-                    _wpnonce: adminObject._wpnonce
-                },
-                beforeSend: function() {
-                    _thisInstallButton.attr( "disabled", true )
-                    _thisInstallButton.addClass('installing-importer')
-                    if( _thisInstallButton.hasClass( "install" ) ) _thisInstallButton.hide().html('').fadeIn().html( adminObject.installingText );
-                    if( _thisInstallButton.hasClass( "activate" ) ) _thisInstallButton.hide().html('').fadeIn().html( adminObject.activatingText );
-                },
-                success: function( result ) {
-                    var info = result.data
-                    if( ! info.status ) {
-                        _thisInstallButton.hide().html('').fadeIn().html(info.message);
-                    }
-                },
-                complete: function() {
-                    _thisInstallButton.attr( "disbaled", false )
-                    _thisInstallButton.removeClass('installing-importer')
-                    location.reload()
-                }
             })
-        })
-    }
+        }
+    }   /* End of StarterSites */
 
-    //Pre-Made Blocks Filter
-    var titleFilterSectionContailer = $(this).find('.widgets-category-title-filter')
-    titleFilterSectionContailer.find( '.filter-list' ).hide()
-    titleFilterSectionContailer.find( '.active-filter' ).click(function(){
-        $(this).siblings().toggle()
-    })
-    if( titleFilterSectionContailer.length > 0 ) {
-        var filterBy = titleFilterSectionContailer.find( '.filter-tab' )
-        filterBy.click(function(){
-            var _this = $(this)
-            var filterValue = _this.data('value')
-            var findingSelectedPreviews = titleFilterSectionContailer.parent().siblings().find( '.' + filterValue )
-            findingSelectedPreviews.show().siblings().hide()
-            titleFilterSectionContailer.find( '.filter-list' ).hide()
-            if( filterValue == 'all' ) findingSelectedPreviews.show()
-        })
-    }
-
-    NekitAdminHandler.init()
+    PreMadeBlocks.init();
+    StarterSites.init();
+    NekitAdminHandler.init();
 })

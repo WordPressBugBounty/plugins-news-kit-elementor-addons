@@ -355,7 +355,7 @@
     },
     "pro-ten": {
         "name": "Ten",
-        "category": [ "news", "sports" ],
+        "category": [ "news", "gaming" ],
         "type": "pro",
         "pages": {
             "home" : {

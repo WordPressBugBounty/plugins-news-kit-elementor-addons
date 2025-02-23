@@ -169,11 +169,12 @@
 	
 	// get popup content
 	function openPedefinedStyles(panel, previewContainer, value) {
-		panel.on( 'click', '.elementor-control-widget_actions .preview-library-button', function(e) {
+		panel.on( 'click.viewDemo', '.elementor-control-widget_actions .preview-library-button', function(e) {
 			e.preventDefault()
 			previewContainer.closest("body").find("#nekit-library-btn").attr( "data-demo", "blocks" )
 			previewContainer.closest("body").find("#nekit-library-btn").attr( "data-filter", value.category )
 			previewContainer.closest("body").find("#nekit-library-btn").trigger("click")
+			panel.off( 'click.viewDemo' )
 		});
 	}
 

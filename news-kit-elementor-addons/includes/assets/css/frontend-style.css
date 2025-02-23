@@ -943,7 +943,7 @@
 	    right: 50px;
 	    color: #fff;
 	    font-size: 25px;
-	    z-index: 1;
+	    z-index: 10;
 	    cursor: pointer;
 	    display: block;
 	}
@@ -1158,6 +1158,7 @@
 			width: 100%;
 			top: 0;
 			left: 0;
+			z-index: 9;
 		}
 
 		.popup-type--modal-box .nekit-search-form-wrap {
@@ -1209,7 +1210,7 @@
 */
 	/* BACK TO TOP */
 		.nekit-back-to-top-wrap {
-			position: intial;
+			position: initial;
 			cursor: pointer;
 			display: inline-block;
 			z-index: var(--z-index-two);
@@ -1251,6 +1252,7 @@
 
 		.nekit-live-now-button-wrap .live-now-button-wrap {
 			display: flex;
+			align-items: center;
 		}
 
 		.nekit-live-now-button-wrap.widget-orientation--vertical .live-now-button-wrap {
@@ -1687,6 +1689,10 @@
 		18.2 VIDEO PLAYLIST LAYOUT TWO
 	=========================================
 	*/
+
+		.elementor-widget-nekit-video-playlist {
+			overflow: hidden;
+		}
 
 		.nekit-video-playlist-wrap.widget-layout--two .active-player {
 			position: relative;

@@ -24,7 +24,7 @@
 				'label' =>  esc_html__( 'Widget Actions', 'news-kit-elementor-addons' ),
 				'show_label'    =>  false,
 				'type'  =>   \Elementor\Controls_Manager::RAW_HTML,
-				'raw'   =>  '<div class="nekit-action-buttons-wrap"><a target="_blank" href="https://prev.blazethemes.com/news-elementor/site-nav-mega-menu" class="button-item preview-button">' .esc_html__( "Preview", "news-kit-elementor-addons" ). '</a><a href="#" class="button-item preview-library-button">' .esc_html__( "Widget Library", "news-kit-elementor-addons" ). '</a></div>',
+				'raw'   =>  '<div class="nekit-action-buttons-wrap"><a target="_blank" href="https://prev.blazethemes.com/news-elementor/site-nav-mega-menu" class="button-item preview-button">' .esc_html__( "Preview", "news-kit-elementor-addons" ). '</a></div>',
 				'content_classes'   =>  'nekit-button-actions'
 			]
 		);
@@ -1328,7 +1328,6 @@
 					'selectors' =>  [
 						'{{WRAPPER}} .nav-mega-menu-wrap:not(.isResponsiveMenu) .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > .menu-item > .nekit-sub-menu' =>  'margin-left: {{SIZE}}{{UNIT}};',
 						'{{WRAPPER}} .nav-mega-menu-wrap:not(.isResponsiveMenu) .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap .nekit-has-mega-menu .nekit-mega-menu-container.relative' =>  'margin-left: {{SIZE}}{{UNIT}};',
-
 						'{{WRAPPER}} .nav-mega-menu-wrap:not(.isResponsiveMenu) .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > .menu-item:first-child > .nekit-sub-menu' =>  'margin-left: 0;',
 						'{{WRAPPER}} .nav-mega-menu-wrap:not(.isResponsiveMenu) .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap .nekit-has-mega-menu:first-child .nekit-mega-menu-container.relative' =>  'margin-left: 0;'
 					]
