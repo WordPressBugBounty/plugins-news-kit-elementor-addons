@@ -22,7 +22,10 @@ if( $is_preview_mode && get_post_meta( get_the_ID(), 'builder_type', true ) === 
 	<?php if ( ! current_theme_supports( 'title-tag' ) ) : ?>
 		<title><?php echo esc_html(wp_get_document_title()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></title>
 	<?php endif; ?>
-	<?php wp_head(); ?>
+	<?php 
+		wp_head();
+		remove_all_actions( 'wp_head' ); // Avoid running wp_head hooks again.
+	?>
 	<?php
 
 	// Keep the following line after `wp_head()` call, to ensure it's not overridden by another templates.

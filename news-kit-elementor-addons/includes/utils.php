@@ -12,246 +12,348 @@ class Utils {
         return apply_filters( 'nekit_registered_widgets_filter', array(
              "advanced-heading-icon" => [
                 'name'  => esc_html__( 'Advanced Heading Icon', 'news-kit-elementor-addons' ),
-                'category'  => 'advanced-heading'
+                'category'  => 'advanced-heading',
+                'icon'	=>	'icon-nekit-advanced-heading'
             ],
             "archive-posts" => [
                 'name'  => esc_html__( 'Archive Posts', 'news-kit-elementor-addons' ),
-                'category'  => 'archive'
+                'category'  => 'archive',
+                'icon'	=> 'icon-nekit-archive-posts'
             ],
             "archive-title" => [
                 'name'  => esc_html__( 'Archive Title', 'news-kit-elementor-addons' ),
-                'category'  => 'archive'
+                'category'  => 'archive',
+                'icon'	=> 'icon-nekit-single-title'
             ],
-            "back-top-top" => [
+            "back-to-top" => [
                 'name'  => esc_html__( 'Back To Top', 'news-kit-elementor-addons' ),
-                'category'  => 'back-to-top'
+                'category'  => 'back-to-top',
+                'icon'	=> 'icon-nekit-back-to-top'
             ],
             "breadcrumb" => [
                 'name'  => esc_html__( 'Breadcrumb', 'news-kit-elementor-addons' ),
-                'category'  => 'breadcrumb'
+                'category'  => 'breadcrumb',
+                'icon'	=>	'icon-nekit-breadcrumb'
             ],
             "categories-collection" => [
                 'name'  => esc_html__( 'Categories Collection', 'news-kit-elementor-addons' ),
-                'category'  => 'categories-collection'
+                'category'  => 'categories-collection',
+                'icon'	=>	'icon-nekit-categories-collection'
             ],
             "date-and-time" => [
                 'name'  => esc_html__( 'Date and Time', 'news-kit-elementor-addons' ),
-                'category'  => 'date-and-time'
+                'category'  => 'date-and-time',
+                'icon'	=> 'icon-nekit-date-time'
             ],
             "full-width-banner" => [
                 'name'  => esc_html__( 'Full Width Banner', 'news-kit-elementor-addons' ),
-                'category'  => 'full-width-banner'
+                'category'  => 'full-width-banner',
+                'icon'	=>	'icon-nekit-full-width-banner'
             ],
             "live-now-button" => [
                 'name'  => esc_html__( 'live Now Button', 'news-kit-elementor-addons' ),
-                'category'  => 'live-now-button'
+                'category'  => 'live-now-button',
+                'icon'	=>	'icon-nekit-live-now-button'
             ],
             "live-search" => [
                 'name'  => esc_html__( 'Live Search', 'news-kit-elementor-addons' ),
-                'category'  => 'live-search'
+                'category'  => 'live-search',
+                'icon'	=>	'icon-nekit-live-search'
             ],
             "mailbox" => [
                 'name'  => esc_html__( 'Mailbox', 'news-kit-elementor-addons' ),
-                'category'  => 'mailbox'
+                'category'  => 'mailbox',
+                'icon'	=>	'icon-nekit-mailbox'
             ],
             "main-banner-one" => [
                 'name'  => esc_html__( 'Main Banner One', 'news-kit-elementor-addons' ),
-                'category'  => 'banner'
+                'category'  => 'banner',
+                'icon'	=> 'icon-nekit-main-banner-one'
             ],
             "main-banner-two" => [
                 'name'  => esc_html__( 'Main Banner Two', 'news-kit-elementor-addons' ),
-                'category'  => 'banner'
+                'category'  => 'banner',
+                'icon'	=> 'icon-nekit-main-banner-two'
             ],
             "main-banner-three" => [
                 'name'  => esc_html__( 'Main Banner Three', 'news-kit-elementor-addons' ),
-                'category'  => 'banner'
+                'category'  => 'banner',
+                'icon'	=> 'icon-nekit-main-banner-three'
             ],
             "main-banner-four" => [
                 'name'  => esc_html__( 'Main Banner Four', 'news-kit-elementor-addons' ),
-                'category'  => 'banner'
+                'category'  => 'banner',
+                'icon'	=> 'icon-nekit-main-banner-four'
             ],
             "main-banner-five" => [
                 'name'  => esc_html__( 'Main Banner Five', 'news-kit-elementor-addons' ),
-                'category'  => 'banner'
+                'category'  => 'banner',
+                'icon'	=>	'icon-nekit-main-banner-five'
             ],
             "news-block-one" => [
                 'name'  => esc_html__( 'News Block 1', 'news-kit-elementor-addons' ),
-                'category'  => 'block'
+                'category'  => 'block',
+                'icon'	=>	'icon-nekit-news-block-one'
             ],
             "news-block-two" => [
                 'name'  => esc_html__( 'News Block 2', 'news-kit-elementor-addons' ),
-                'category'  => 'block'
+                'category'  => 'block',
+                'icon'	=>	'icon-nekit-news-block-two'
             ],
             "news-block-three" => [
                 'name'  => esc_html__( 'News Block 3', 'news-kit-elementor-addons' ),
-                'category'  => 'block'
+                'category'  => 'block',
+                'icon'	=>	'icon-nekit-news-block-three'
             ],
             "news-block-four" => [
                 'name'  => esc_html__( 'News Block 4', 'news-kit-elementor-addons' ),
-                'category'  => 'block'
+                'category'  => 'block',
+                'icon'	=>	'icon-nekit-news-block-four'
             ],
             "news-carousel-one" => [
                 'name'  => esc_html__( 'News Carousel One', 'news-kit-elementor-addons' ),
-                'category'  => 'carousel'
+                'category'  => 'carousel',
+                'icon'	=>	'icon-nekit-carousel-one'
             ],
             "news-carousel-two" => [
                 'name'  => esc_html__( 'News Carousel Two', 'news-kit-elementor-addons' ),
-                'category'  => 'carousel'
+                'category'  => 'carousel',
+                'icon'	=>	'icon-nekit-carousel-two'
             ],
             "news-carousel-three" => [
                 'name'  => esc_html__( 'News Carousel Three', 'news-kit-elementor-addons' ),
-                'category'  => 'carousel'
+                'category'  => 'carousel',
+                'icon'	=>	'icon-nekit-carousel-three'
             ],
             "news-filter-one" => [
                 'name'  => esc_html__( 'News Filter One', 'news-kit-elementor-addons' ),
-                'category'  => 'filter'
+                'category'  => 'filter',
+                'icon'	=>	'icon-nekit-news-filter-one'
             ],
             "news-filter-two" => [
                 'name'  => esc_html__( 'News Filter Two', 'news-kit-elementor-addons' ),
-                'category'  => 'filter'
+                'category'  => 'filter',
+                'icon'	=>	'icon-nekit-news-filter-two'
             ],
             "news-filter-three" => [
                 'name'  => esc_html__( 'News Filter Three', 'news-kit-elementor-addons' ),
-                'category'  => 'filter'
+                'category'  => 'filter',
+                'icon'	=>	'icon-nekit-news-filter-three'
             ],
             "news-filter-four" => [
                 'name'  => esc_html__( 'News Filter Four', 'news-kit-elementor-addons' ),
-                'category'  => 'filter'
+                'category'  => 'filter',
+                'icon'	=>	'icon-nekit-news-filter-four'
             ],
             "news-grid-one" => [
                 'name'  => esc_html__( 'News Grid One', 'news-kit-elementor-addons' ),
-                'category'  => 'grid'
+                'category'  => 'grid',
+                'icon'	=>	'icon-nekit-grid-one'
             ],
             "news-grid-two" => [
                 'name'  => esc_html__( 'News Grid Two', 'news-kit-elementor-addons' ),
-                'category'  => 'grid'
+                'category'  => 'grid',
+                'icon'	=>	'icon-nekit-grid-two'
             ],
             "news-grid-three" => [
                 'name'  => esc_html__( 'News Grid Three', 'news-kit-elementor-addons' ),
-                'category'  => 'grid'
+                'category'  => 'grid',
+                'icon'	=>	'icon-nekit-grid-three'
             ],
             "news-timeline" => [
                 'name'  => esc_html__( 'News Timeline', 'news-kit-elementor-addons' ),
-                'category'  => 'news-timeline'
+                'category'  => 'news-timeline',
+                'icon'	=>	'icon-nekit-news-timeline'
             ],
             "phone-call" => [
                 'name'  => esc_html__( 'Phone Call', 'news-kit-elementor-addons' ),
-                'category'  => 'phone-call'
+                'category'  => 'phone-call',
+                'icon'	=>	'icon-nekit-phone-call'
             ],
             "popular-opinions" => [
                 'name'  => esc_html__( 'Popular Opinions', 'news-kit-elementor-addons' ),
-                'category'  => 'popular-opinion'
+                'category'  => 'popular-opinion',
+                'icon'	=>	'icon-nekit-popular-opinions'
             ],
             "random-news" => [
                 'name'  => esc_html__( 'Random News', 'news-kit-elementor-addons' ),
-                'category'  => 'random-news'
+                'category'  => 'random-news',
+                'icon'	=>	'icon-nekit-random-news'
             ],
             "single-author-box" => [
                 'name'  => esc_html__( 'Single Author Box', 'news-kit-elementor-addons' ),
-                'category'  => 'single-author-box'
+                'category'  => 'single-author-box',
+                'icon'	=> 'icon-nekit-single-author-box'
             ],
             "single-author" => [
                 'name'  => esc_html__( 'Single Author', 'news-kit-elementor-addons' ),
-                'category'  => 'single-author'
+                'category'  => 'single-author',
+                'icon'	=> 'icon-nekit-single-author'
+            ],
+            'single-content'	=>	[
+                'name'	=>	esc_html__( 'Single Content', 'news-kit-elementor-addons' ),
+                'category'  => 'single-content',
+                'icon'	=>	'icon-nekit-single-content'
             ],
             "single-categories" => [
                 'name'  => esc_html__( 'Single Categories', 'news-kit-elementor-addons' ),
-                'category'  => 'single-categories'
+                'category'  => 'single-categories',
+                'icon'	=>	'icon-nekit-tags-cloud'
             ],
             "single-comment-box" => [
                 'name'  => esc_html__( 'Single Comment Box', 'news-kit-elementor-addons' ),
-                'category'  => 'single-comment-box'
+                'category'  => 'single-comment-box',
+                'icon'	=> 'icon-nekit-single-comment-box'
             ],
             "single-comment" => [
                 'name'  => esc_html__( 'Single Comment', 'news-kit-elementor-addons' ),
-                'category'  => 'single-comment'
+                'category'  => 'single-comment',
+                'icon'	=> 'icon-nekit-single-comment'
             ],
             "single-date" => [
                 'name'  => esc_html__( 'Single Date', 'news-kit-elementor-addons' ),
-                'category'  => 'single-date'
+                'category'  => 'single-date',
+                'icon'	=> 'icon-nekit-single-date'
             ],
             "single-featured-image" => [
                 'name'  => esc_html__( 'Single Featured Image', 'news-kit-elementor-addons' ),
-                'category'  => 'single-featured-image'
+                'category'  => 'single-featured-image',
+                'icon'	=>	'icon-nekit-featured-image'
             ],
             "single-post-navigation" => [
                 'name'  => esc_html__( 'Single Post Navigation', 'news-kit-elementor-addons' ),
-                'category'  => 'single-post-navigation'
+                'category'  => 'single-post-navigation',
+                'icon'	=>	'icon-nekit-single-post-navigation'
             ],
             "single-related-post" => [
                 'name'  => esc_html__( 'Single Related post', 'news-kit-elementor-addons' ),
-                'category'  => 'single-related-post'
+                'category'  => 'single-related-post',
+                'icon'	=>	'icon-nekit-grid-one'
             ],
             "single-table-of-content" => [
                 'name'  => esc_html__( 'Single Table Of Content', 'news-kit-elementor-addons' ),
-                'category'  => 'single-table-of-content'
+                'category'  => 'single-table-of-content',
+                'icon'	=>	'icon-nekit-table-of-content'
             ],
             "single-tags" => [
                 'name'  => esc_html__( 'Single Tags', 'news-kit-elementor-addons' ),
-                'category'  => 'single-tags'
+                'category'  => 'single-tags',
+                'icon'	=>	'icon-nekit-tags-cloud'
             ],
             "single-title" => [
                 'name'  => esc_html__( 'Single Title', 'news-kit-elementor-addons' ),
-                'category'  => 'single-title'
+                'category'  => 'single-title',
+                'icon'	=> 'icon-nekit-single-title'
             ],
             "site-logo-title" => [
                 'name'  => esc_html__( 'Site Logo Title', 'news-kit-elementor-addons' ),
-                'category'  => 'site-logo-title'
+                'category'  => 'site-logo-title',
+                'icon'	=>	'icon-nekit-site-logo'
             ],
             "site-nav-mega-menu" => [
                 'name'  => esc_html__( 'Site Nav Mega Menu', 'news-kit-elementor-addons' ),
-                'category'  => 'site-nav-mega-menu'
+                'category'  => 'site-nav-mega-menu',
+                'icon'	=> 'icon-nekit-site-mega-menu'
             ],
             "theme-mode" => [
                 'name'  => esc_html__( 'Theme Mode', 'news-kit-elementor-addons' ),
-                'category'  => 'theme-mode'
+                'category'  => 'theme-mode',
+                'icon'	=>	'icon-nekit-theme-mode'
             ],
             "ticker-news-one" => [
                 'name'  => esc_html__( 'Ticker News One', 'news-kit-elementor-addons' ),
-                'category'  => 'ticker'
+                'category'  => 'ticker',
+                'icon'	=> 'icon-nekit-ticker-news-one'
             ],
             "ticker-news-two" => [
                 'name'  => esc_html__( 'Ticker News Two', 'news-kit-elementor-addons' ),
-                'category'  => 'ticker'
+                'category'  => 'ticker',
+                'icon'	=>	'icon-nekit-ticker-news-slider'
             ],
             "video-playlist" => [
                 'name'  => esc_html__( 'Video Playlist', 'news-kit-elementor-addons' ),
-                'category'  => 'video-playlist'
+                'category'  => 'video-playlist',
+                'icon'	=> 'icon-nekit-video-playlist'
             ],
             "news-list-one"   => [
                 'name'  => esc_html__( 'News List 1', 'news-kit-elementor-addons' ),
-                'category'  => 'list'
+                'category'  => 'list',
+                'icon'	=>	'icon-nekit-list-one'
             ],
             "news-list-two"   => [
                 'name'  => esc_html__( 'News List 2', 'news-kit-elementor-addons' ),
-                'category'  => 'list'
+                'category'  => 'list',
+                'icon'	=>	'icon-nekit-list-two'
             ],
             "news-list-three"   => [
                 'name'  => esc_html__( 'News List 3', 'news-kit-elementor-addons' ),
-                'category'  => 'list'
+                'category'  => 'list',
+                'icon'	=>	'icon-nekit-list-three'
             ],
             "news-list-two"   => [
                 'name'  => esc_html__( 'News List 2', 'news-kit-elementor-addons' ),
-                'category'  => 'list'
+                'category'  => 'list',
+                'icon'	=>	'icon-nekit-list-two'
             ],
             "tags-cloud"   => [
                 'name'  => esc_html__( 'Tag Cloud', 'news-kit-elementor-addons' ),
-                'category'  => 'tags-cloud'
+                'category'  => 'tags-cloud',
+                'icon'	=>	'icon-nekit-tags-cloud'
             ],
             "tags-cloud-animation"   => [
                 'name'  => esc_html__( 'Tags Cloud Animation', 'news-kit-elementor-addons' ),
-                'category'  => 'tags-cloud-animation'
+                'category'  => 'tags-cloud-animation',
+                'icon'	=>	'icon-nekit-tags-cloud-animation'
             ]
         ));
     }
 
     public static function get_registered_widgets_with_demo() {
         $widgets = array_filter( self::registered_widgets(), function( $widget_key ){
-            $widgets_with_no_demo = [ 'back-top-top', 'archive-title', 'archive-posts', 'breadcrumb', 'date-and-time', 'mailbox', 'phone-call', 'random-news', 'single-author-box', 'single-author', 'single-categories', 'single-comment-box', 'single-comment', 'single-date', 'single-featured-image', 'single-post-navigation', 'single-related-post', 'single-table-of-content', 'single-tags', 'single-title', 'site-logo-title', 'site-nav-mega-menu', 'theme-mode', 'ticker-news-one', 'ticker-news-two' ];
+            $widgets_with_no_demo = [ 'back-to-top', 'archive-title', 'archive-posts', 'breadcrumb', 'date-and-time', 'mailbox', 'phone-call', 'random-news', 'single-author-box', 'single-author', 'single-categories', 'single-comment-box', 'single-comment', 'single-date', 'single-featured-image', 'single-post-navigation', 'single-related-post', 'single-table-of-content', 'single-tags', 'single-title', 'site-logo-title', 'site-nav-mega-menu', 'theme-mode', 'ticker-news-one', 'ticker-news-two' ];
     
             if( ! in_array( $widget_key, $widgets_with_no_demo ) ) return $widget_key;
         } , ARRAY_FILTER_USE_KEY );
         return $widgets;
+    }
+
+    /**
+     * Get nekit widget categories
+     * 
+     * @since 1.3.1
+     */
+    public static function get_nekit_widget_categories() {
+        return apply_filters( 'nekit_widget_categories_filter', [
+            'nekit-widgets-group'   =>  [
+                'label' =>  esc_html__( 'News Elementor Widgets', 'news-kit-elementor-addons' ),
+                'widgets'   =>  [ 'advanced-heading-icon', 'back-to-top', 'date-and-time', 'live-now-button', 'live-search', 'mailbox', 'phone-call', 'random-news', 'site-logo-title', 'site-nav-mega-menu', 'theme-mode', 'video-playlist', 'tags-cloud', 'tags-cloud-animation' ],
+                'category'  =>  'general'
+            ],
+            'nekit-post-layouts-widgets-group'  =>  [
+                'label' =>  esc_html__( 'News Elementor Posts Layouts', 'news-kit-elementor-addons' ),
+                'widgets'   =>  [ 'categories-collection', 'full-width-banner', 'main-banner-one', 'main-banner-two', 'main-banner-three', 'main-banner-four', 'main-banner-five', 'news-block-one', 'news-block-two', 'news-block-three', 'news-block-four', 'news-carousel-one', 'news-carousel-two', 'news-carousel-three', 'news-filter-one', 'news-filter-two', 'news-filter-three', 'news-filter-four', 'news-grid-one', 'news-grid-two', 'news-grid-three', 'news-timeline', 'popular-opinions', 'ticker-news-one', 'ticker-news-two', 'news-list-one', 'news-list-two', 'news-list-three' ],
+                'category'  =>  'general'
+            ],
+            'nekit-archive-templates-widgets-group' =>  [
+                'label' =>  esc_html__( 'News Elementor Archive', 'news-kit-elementor-addons' ),
+                'widgets'   =>  [ 'archive-posts', 'archive-title' ],
+                'category'  =>  'theme-builder'
+            ],
+            'nekit-single-templates-widgets-group'  =>  [
+                'label' =>  esc_html__( 'News Elementor Single', 'news-kit-elementor-addons' ),
+                'widgets'   =>  [ 'breadcrumb', 'single-author-box', 'single-author', 'single-categories', 'single-comment-box', 'single-comment', 'single-date', 'single-featured-image', 'single-post-navigation', 'single-related-post', 'single-table-of-content', 'single-tags', 'single-title', 'single-content' ],
+                'category'  =>  'theme-builder'
+            ]
+        ]);
+    }
+
+    /**
+     * Nekit Pro Widgets 
+     * 
+     * @since 1.3.1
+     */
+    public static function get_nekit_pro_widgets() {
+        return apply_filters( 'nekit_pro_widgets_filter', [ 'breadcrumb', 'video-playlist', 'single-related-post', 'tags-cloud-animation' ] );
     }
     
     // Theme Builder Template Check

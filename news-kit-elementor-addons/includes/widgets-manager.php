@@ -167,6 +167,14 @@ if( ! function_exists( 'nekit_register_custom_widgets' ) ) :
         $widgets_manager->register( new \Nekit_Widgets\Single\Table_Of_Content() );
         $widgets_manager->register( new \Nekit_Widgets\Archive\Title() );
         $widgets_manager->register( new \Nekit_Widgets\Archive\Posts() );
+
+        /* Unregister nekit widgets. */
+        $nekit_disabled_widgets = nekit_get_settings([ 'key' => 'nekit_disabled_widgets' ]);
+        if( ! empty( $nekit_disabled_widgets ) && is_array( $nekit_disabled_widgets ) ) :
+            foreach( $nekit_disabled_widgets as $widget ) :
+                $widgets_manager->unregister( 'nekit-' . $widget );
+            endforeach;
+        endif;
     }
     add_action( 'elementor/widgets/register', 'nekit_register_custom_widgets', 99 );
 endif;

@@ -47,6 +47,54 @@
         "home_slug":  "nekit-free-one-home",
         "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/free-one.zip"
     },
+    "newsus-one": {
+        "name": "Newsus One",
+        "category": [ "news", "blog" ],
+        "type": "free",
+        "pages": {
+            "home" : {
+                "name": "Home",
+                "preview_url": "https://prev.blazethemes.com/newsus-elementor/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one/home.jpg",
+                "data_route": "sites/newsus-one/home.json"
+            },
+            "archive" : {
+                "name": "Archive",
+                "preview_url": "https://prev.blazethemes.com/newsus-elementor/category/lifestyle/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one/archive.jpg",
+                "data_route": "sites/newsus-one/archive.json"
+            },
+            "contact" : {
+                "name": "Contact",
+                "preview_url": "https://prev.blazethemes.com/newsus-elementor/contact/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one/contact.jpg",
+                "data_route": "sites/newsus-one/contact.json"
+            },
+            "error" : {
+                "name": "404",
+                "preview_url": "https://prev.blazethemes.com/newsus-elementor/show-me-error/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one/error.jpg",
+                "data_route": "sites/newsus-one/error.json"
+            },
+            "single" : {
+                "name": "Single",
+                "preview_url": "https://prev.blazethemes.com/newsus-elementor/sustainable-fashion-brands-to-watch/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one/single.jpg",
+                "data_route": "sites/newsus-one/single.json"
+            },
+            "mega-menu" : {
+                "name": "Single",
+                "preview_url": "https://prev.blazethemes.com/newsus-elementor/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one/mega-menu.jpg",
+                "data_route": "sites/newsus-one/mega-menu.json"
+            }
+        },
+        "navs": {
+            "menu-1": ""
+        },
+        "home_slug":  "nekit-newsus-one-home",
+        "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/newsus-one.zip"
+    },
     "newsroom-one": {
         "name": "Newsroom One",
         "category": [ "news", "blog" ],

@@ -151,12 +151,13 @@ jQuery(document).ready(function($) {
             admincontainer.on( "click", ".template-list-item .error-page-switch", function() {
                 let _this = $( this ),
                     parentElm = _this.parent(),
-                    templateID = parentElm.data( "template" );
+                    templateID = 0;
 
                 if( ! parentElm.hasClass( 'builder-active' ) ) {
                     parentElm.addClass( "builder-active" )
                     _this.find( ".error-page-switch-label" ).text( enabledText )
                     _this.addClass( 'isactive' )
+                    templateID = parentElm.data( "template" );
                     parentElm.siblings().removeClass( 'builder-active' )
                     parentElm.siblings().find( '.error-page-switch' ).removeClass( 'isactive' )
                     parentElm.siblings().find( ".error-page-switch-label" ).text( disabledText )
@@ -756,6 +757,195 @@ jQuery(document).ready(function($) {
         }
     }   /* End of StarterSites */
 
+    /**
+     * MARK: DASHBOARD
+     * 
+     * @since 1.3.1
+     */
+    const Dashboard = {
+        container: $( '.nekit-admin-dashboard' ),
+        widgetsContainer: '',
+        disabledWidgetCount: 0,
+        init: function(){
+            if( this.container.length > 0 ) {
+                this.widgetsContainer = this.container.find( '.widgets-wrapper' )
+                this.disabledWidgetCount = this.widgetsContainer.find( '.widget' ).not( '.widget-active' ).length
+                this.search();
+                this.widgets();
+                this.toggleAllWidgets();
+                this.filterButtons();
+                this.hideWarning();
+            }
+        },
+        /* Handle Search */
+        search: function() {
+            let self = this
+            this.container.on( 'change keyup', '.widgets-wrapper input[name="widgets_search"]', function(){
+                let _this = $( this ),
+                    search = _this.val(),
+                    categoriesToDisplay = [];
+
+                if( search !== '' ) {
+                    self.widgetsContainer.find( '.widget-category' ).show()
+                    self.widgetsContainer.find( '.widget' ).each(function(){
+                        let _widget = $( this ),
+                            widgetCategory = _widget.parents( '.widget-category' ).data( 'category' ),
+                            label = _widget.find( '.label' ).text().toLowerCase();
+                        
+                        if( label.includes( search.toLowerCase() ) ) {
+                            _widget.show()
+                            if( ! categoriesToDisplay.includes( widgetCategory ) ) categoriesToDisplay = [ ...categoriesToDisplay, widgetCategory ]
+                        } else {
+                            _widget.hide()
+                        }
+                    })
+                    /* Hide .widget-category if there are 0 matched widgets */
+                    if( categoriesToDisplay.length > 0 ) {
+                        self.widgetsContainer.find( '.widget-category' ).each(function(){
+                            let _categoryContainer = $( this ),
+                                category = _categoryContainer.data( 'category' );
+
+                            if( ! categoriesToDisplay.includes( category ) ) _categoryContainer.hide()
+                        })
+                        self.widgetsContainer.find( '.no-widgets-found' ).hide()
+                    } else {
+                        self.widgetsContainer.find( '.no-widgets-found' ).show()
+                        self.widgetsContainer.find( '.widget-category' ).hide()
+                    }
+                } else {
+                    self.widgetsContainer.find( '.widget-category' ).show()
+                    self.widgetsContainer.find( '.widget' ).show()
+                    self.widgetsContainer.find( '.no-widgets-found' ).hide()
+                }
+            })
+        },
+        /* Handle Widgets toggle */
+        widgets: function(){
+            let self = this
+            this.widgetsContainer.on( 'click', '.widget:not(.pro) .template-switch', function(){
+                let _this = $( this ),
+                    _thisContainer = _this.parent(),
+                    widgetName = _thisContainer.data( 'name' );
+                    
+                _this.parents( '.widget' ).toggleClass( 'widget-active' )
+                self.disabledWidgetCount = self.widgetsContainer.find( '.widget' ).not( '.widget-active' ).length
+                if( self.disabledWidgetCount > 0 ) {
+                    self.container.find( '.toggle-widgets' ).removeClass( 'widget-active' )
+                } else {
+                    self.container.find( '.toggle-widgets' ).addClass( 'widget-active' )
+                }
+                self.ajaxCall({
+                    dataInfo: {
+                        disableSingle: false,
+                        widgetName
+                    },
+                    before: function(){
+                        _this.parent().addClass( 'loading-process' )
+                        /* Disable toggle buttons in other widgets */
+                        _this.parent().siblings().find( '.template-switch' ).attr( 'disabled', 'disabled' )
+                        _this.parents( '.widget-category' ).siblings().find( '.widget .template-switch' ).attr( 'disabled', 'disabled' )
+                    },
+                    success: function(){
+                        _this.parent().removeClass( 'loading-process' )
+                        /* Enable toggle buttons in other widgets */
+                        _this.parent().siblings().find( '.template-switch' ).removeAttr( 'disabled' )
+                        _this.parents( '.widget-category' ).siblings().find( '.widget .template-switch' ).removeAttr( 'disabled' )
+                    }
+                });
+            })
+        },
+        /* Handle All Widgets Toggle */
+        toggleAllWidgets: function(){
+            let self = this
+            this.container.on( 'click', '.toggle-widgets .template-switch', function(){
+                let _this = $( this ),
+                    parent = _this.parent(),
+                    widgets = [];
+                    
+                parent.toggleClass( 'widget-active' )
+                let isEnable = parent.hasClass( 'widget-active' );
+                self.widgetsContainer.find( '.widget:not(.pro)' ).each(function(){
+                    let widget = $( this ),
+                        widgetName = widget.data( 'name' );
+
+                    if( ! isEnable ) widgets = [ ...widgets, widgetName ]
+                })
+                self.ajaxCall({
+                    dataInfo: {
+                        disableSingle: true,
+                        widgets
+                    },
+                    before: function(){
+                        self.widgetsContainer.find( '.widget:not(.pro)' ).addClass( 'loading-process' )
+                    },
+                    success: function( res ){
+                        console.log( res )
+                        self.widgetsContainer.find( '.widget:not(.pro)' ).removeClass( 'loading-process' )
+                        if( isEnable ) {
+                            self.widgetsContainer.find( '.widget:not(.pro)' ).not( '.widget-active' ).addClass( 'widget-active' )
+                        } else {
+                            self.widgetsContainer.find( '.widget.widget-active:not(.pro)' ).removeClass( 'widget-active' )
+                        }
+                        _this.addClass( 'blocked' )
+                    }
+                });
+            })
+        },
+        /* Filter Buttons */
+        filterButtons: function(){
+            let self = this
+            this.widgetsContainer.on( 'click', '.filter-button', function(){
+                let _this = $( this ),
+                    isAll = _this.hasClass( 'all' ),
+                    isGeneral = _this.hasClass( 'general' ),
+                    isThemeBuilder = _this.hasClass( 'theme-builder' );
+                    _this.addClass( 'active' ).siblings().removeClass( 'active' )
+
+                if( isGeneral ) {
+                    self.widgetsContainer.find( '.widget-category' ).not( '.widget-category.general' ).hide().find( '.widget' ).hide()
+                    self.widgetsContainer.find( '.widget-category.general' ).show().find( '.widget' ).show()
+                }
+                if( isThemeBuilder ) {
+                    self.widgetsContainer.find( '.widget-category' ).not( '.widget-category.theme-builder' ).hide().find( '.widget' ).hide()
+                    self.widgetsContainer.find( '.widget-category.theme-builder' ).show().find( '.widget' ).show()
+                }
+                if( isAll ) {
+                    self.widgetsContainer.find( '.widget-category' ).show().find( '.widget' ).show()
+                }
+                
+            })
+        },
+        /* Hide Warning */
+        hideWarning: function(){
+            this.container.on( 'click', '.warning-wrapper .hide-warning', function(){
+                let _this = $( this )
+                _this.parent().fadeOut()
+            })
+        },
+        /* Ajax call */
+        ajaxCall: function( obj ) {
+            let { dataInfo } = obj
+            $.ajax({
+                method: 'POST',
+                url: ajaxUrl,
+                data: {
+                    action: 'nekit_widgets_enable_disable_ajax_call',
+                    _wpnonce: _wpnonce,
+                    ...dataInfo
+                },
+                beforeSend: function() {
+                    obj.before()
+                },
+                success: function( res ) {
+                    obj.success( res )
+                },
+                complete: function() {
+                }
+            })
+        }
+    }
+
+    Dashboard.init();
     PreMadeBlocks.init();
     StarterSites.init();
     NekitAdminHandler.init();

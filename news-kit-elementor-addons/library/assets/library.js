@@ -149,7 +149,6 @@
 				let popContainer = window.elementor.$previewContents.find("#nekit-library-btn"), 
 					demo = popContainer[0].attributes['data-demo'].value, 	/* blocks || pages */
 					filter = popContainer[0].attributes['data-filter'].value;	/* widget categories */
-
 				Library.mainParent.find( `.templates-tabs .tab-title[data-tab="${ demo }"]` ).addClass( 'isActive' ).siblings().removeClass( 'isActive' )
 
 				if( iBody.hasClass( 'nekit-library-added' ) ) {
@@ -208,7 +207,6 @@
 								} else {
 									pagesElement.find( `.widgets-category-title-filter .filter-list .filter-tab[data-value="${ filter }"]` ).trigger( 'click' )
 								}
-
 								if( NekitLibraryTemplateHandler.importIntialize == 0 ) import_data( previewIframe )
 							}
 						},

@@ -63,7 +63,7 @@ class Library {
     function library_scripts() {
         $this->widgets = \Nekit_Utilities\Utils::get_registered_widgets_with_demo();
         wp_enqueue_script('masonry');
-        wp_register_script( 'nekit-components', plugins_url( 'admin/components.js', __DIR__ ), [ 'jquery', 'masonry' ], '1.3.0', [ 'strategy' => 'defer' ] );
+        wp_register_script( 'nekit-components', plugins_url( 'admin/components.js', __DIR__ ), [ 'jquery', 'masonry' ], '1.3.1', [ 'strategy' => 'defer' ] );
 		wp_enqueue_script( 'nekit-components' );
         wp_register_script( 'nekit-editor', plugins_url( 'includes/assets/js/editor.js', __DIR__ ), [ 'jquery' ] );
         wp_register_script( 'nekit-library', plugins_url( 'assets/library.js', __FILE__ ), [ 'jquery', 'masonry', 'nekit-components' ] );

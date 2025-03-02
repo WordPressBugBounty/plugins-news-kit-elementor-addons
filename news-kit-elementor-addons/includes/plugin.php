@@ -246,7 +246,7 @@ final class Plugin {
 	}
 
 	public function preview_scripts() {
-		wp_register_script( 'nekit-preview', plugins_url( 'assets/js/frontend-preview.js', __FILE__ ), [ 'jquery', 'masonry' ], '1.3.0', [ 'strategy' => 'defer', 'in_footer' => true ] );
+		wp_register_script( 'nekit-preview', plugins_url( 'assets/js/frontend-preview.js', __FILE__ ), [ 'jquery', 'masonry' ], '1.3.1', [ 'strategy' => 'defer', 'in_footer' => true ] );
 		wp_enqueue_script('masonry');
 		wp_enqueue_script( 'nekit-preview' );
 		wp_localize_script( 'nekit-preview', 'frontendPreviewData', [
@@ -969,7 +969,7 @@ final class Plugin {
 													if( $options['show_post_thumbnail'] == 'yes' ) :
 													?>
 														<figure class="post-thumb-wrap">
-															<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" <?php echo wp_kses_post($options['imageclass']); ?>>
+															<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" <?php echo wp_kses_post($options['imageClass']); ?>>
 																<div class="post-thumb-parent<?php if( $options['image_overlay_option'] == 'yes' ) echo ' has-image-overlay'; ?>">
 																	<?php 
 																		if( has_post_thumbnail() ) {
@@ -2439,12 +2439,11 @@ final class Plugin {
 	 * Admin thank you footer text
 	 * MARK: ADMIN FOOTER
 	 * 
-	 * 
 	 * @since 1.2.4
 	 */
 	public function nekit_admin_footer_text( $footer_text ) {
 		global $plugin_page;
-		$is_nekit_page = in_array( $plugin_page, ['news-kit-elementor-addons', 'news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit-elementor-addons-popup-builder' ] );
+		$is_nekit_page = in_array( $plugin_page, ['news-kit-elementor-addons', 'news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit-elementor-addons-popup-builder','news-kit-elementor-addons-pre-made-blocks' ] );
 		if( $is_nekit_page ) $footer_text = apply_filters( 'nekit_admin_footer_text_filter',  sprintf( esc_html__( 'Thank you for using News Kit Elementor Addons. Please leave us a %1$s', 'news-kit-elementor-addons' ), '<a href="'. esc_url( '//wordpress.org/support/plugin/news-kit-elementor-addons/reviews/?filter=5' ) .'" target="_blank">'. esc_html__( 'Rating', 'news-kit-elementor-addons' ) .'</a>' ) );
 		return $footer_text;
 	}

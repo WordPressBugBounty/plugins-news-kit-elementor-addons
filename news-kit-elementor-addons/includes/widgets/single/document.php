@@ -554,7 +554,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			]
 		);
 
-		apply_filters( 'nekit_popup_layout_settings_tab_controls', $this );
+		apply_filters( 'nekit_popup_layout_settings_tab', $this );
 
 		$this->end_controls_section();
 
@@ -789,7 +789,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 			\Elementor\Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'nekit_popup_box_shadow',
-				'selector' => '{{WRAPPER}} .nekit-popup'
+				'selector' => '{{WRAPPER}} .nekit-popup-wrap'
 			]
 		);
 
@@ -997,7 +997,7 @@ class Nekit_Document extends Elementor\Core\Base\Document {
 					'left' => 2,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .nekit-popup-close' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'{{WRAPPER}} .nekit-popup-container .nekit-popup-inner-container .nekit-popup-close' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 				'separator' => 'before',
 			]

@@ -92,6 +92,7 @@ class Admin {
 		add_action( 'wp_ajax_nekit_install_importer', [ $this, 'install_importer' ] );
 		add_action( 'wp_ajax_nekit_404_builder_active', [ $this, 'nekit_404_builder_active' ] );
 		add_action( 'wp_ajax_nekit_builder_active', [ $this, 'nekit_builder_active' ] );
+		add_action( 'wp_ajax_nekit_widgets_enable_disable_ajax_call', [ $this, 'nekit_widgets_enable_disable_ajax_call' ] );
 		add_action( 'in_admin_header', [ $this, 'nekit_admin_header' ] );
 	}
 
@@ -137,6 +138,14 @@ class Admin {
             [$this,'admin_page_callback'],
             plugins_url( '/assets/images/nekit-logo-new.png', __FILE__ ),
             6
+        );
+        add_submenu_page(
+			'news-kit-elementor-addons',
+            __( 'Pre-made Blocks', 'news-kit-elementor-addons' ),
+            __( 'Pre-made Blocks', 'news-kit-elementor-addons' ),
+            'manage_options',
+            'news-kit-elementor-addons-pre-made-blocks',
+            [$this,'admin_pre_made_blocks_callback'],
         );
 		add_submenu_page(
 			'news-kit-elementor-addons',
@@ -328,7 +337,7 @@ class Admin {
 	 * 
 	 * MARK: PRE-MADE BLOCKS
 	 */
-	function admin_page_callback() {
+	function admin_pre_made_blocks_callback() {
 		?>
 			<div id="nekit-sub-admin-page" class="nekit-templates-list">
 				<div class="page-header">
@@ -715,7 +724,12 @@ class Admin {
 	 * MARK: HANDLE SCRIPTS
 	 */
 	function handle_scripts($hook) {
-		if( ! $hook == 'nav-menus.php' && ! in_array( $hook, ['toplevel_page_news-kit-elementor-addons', 'news-kit_page_news-kit-elementor-addons-theme-builder', 'news-kit_page_news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit_page_news-kit-elementor-addons-popup-builder' ] ) ) return;
+		if( $hook === 'toplevel_page_news-kit-elementor-addons' ) :
+			wp_register_style( 'nekit-editor-widget-icons', plugins_url( 'includes/assets/external/nekit-widget-icons/style.css', __DIR__ ));
+			wp_enqueue_style( 'nekit-editor-widget-icons' );
+		endif;
+
+		if( ! $hook == 'nav-menus.php' && ! in_array( $hook, ['toplevel_page_news-kit-elementor-addons', 'news-kit_page_news-kit-elementor-addons-pre-made-blocks', 'news-kit_page_news-kit-elementor-addons-theme-builder', 'news-kit_page_news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit_page_news-kit-elementor-addons-popup-builder' ] ) ) return;
 		require_once NEKIT_PATH . 'admin/assets/wptt-webfont-loader.php';
 		wp_register_style( 'nekit-admin-fonts', wptt_get_webfont_url( $this->get_fonts_url() ), [], null );
 		wp_register_style( 'fontawesome', NEKIT_URL . 'includes/assets/external/fontawesome/css/all.min.css', [], '5.15.3' );
@@ -725,9 +739,9 @@ class Admin {
 		wp_enqueue_style( 'nekit-admin-main' );
 		// Add the color picker css file  
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_register_script( 'nekit-components', plugins_url( 'components.js', __FILE__ ), [ 'jquery' ], '1.3.0', [ 'strategy' => 'defer', 'in_footer' => true ] );
+		wp_register_script( 'nekit-components', plugins_url( 'components.js', __FILE__ ), [ 'jquery' ], '1.3.1', [ 'strategy' => 'defer', 'in_footer' => true ] );
 		wp_enqueue_script( 'nekit-components' );
-		wp_register_script( 'nekit-admin-main', plugins_url( 'assets/admin.js', __FILE__ ), [ 'jquery','wp-color-picker', 'masonry', 'nekit-components' ], '1.3.0', [ 'strategy' => 'defer', 'in_footer' => true ] );
+		wp_register_script( 'nekit-admin-main', plugins_url( 'assets/admin.js', __FILE__ ), [ 'jquery','wp-color-picker', 'masonry', 'nekit-components' ], '1.3.1', [ 'strategy' => 'defer', 'in_footer' => true ] );
 
 		wp_enqueue_script( 'nekit-admin-main' );
 		wp_enqueue_script( 'masonry' );
@@ -1455,6 +1469,7 @@ class Admin {
 	 */
 	function print_identical_condition_group($tab = 'header') {
 		$parent_pages = $this->get_parent_pages_options_array($tab);
+		$disable_field = apply_filters( 'nekit_pro_admin_field_filter', true );
 		?>
 		<div class="condition-identical-group" style="display:none;">
 			<div class="condition-field-group">
@@ -1500,7 +1515,7 @@ class Admin {
 
 						if( in_array( $tab, ['single','archive'] ) ) :
 					?>
-							<input class="template-display-post_type-ids" type="text" value="all" placeholder="<?php echo esc_html__( 'Enter comma separated IDs', 'news-kit-elementor-addons' ); ?>">
+							<input class="template-display-post_type-ids" type="text" value="all" placeholder="<?php echo esc_html__( 'Enter comma separated IDs', 'news-kit-elementor-addons' ); ?>" <?php disabled( $disable_field, true ); ?>>
 					<?php
 						endif;
 					?>
@@ -1776,7 +1791,7 @@ class Admin {
 	}
 
 	public function remove_admin_notices() {
-		if( isset( $_GET['page'] ) && in_array( $_GET['page'], ['news-kit-elementor-addons','news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-popup-builder','news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings'] ) ) remove_all_actions( 'admin_notices' );
+		if( isset( $_GET['page'] ) && in_array( $_GET['page'], ['news-kit-elementor-addons', 'news-kit-elementor-addons-pre-made-blocks', 'news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-popup-builder','news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings'] ) ) remove_all_actions( 'admin_notices' );
 	}
 
 	public function nekit_404_builder_active() {
@@ -1815,7 +1830,7 @@ class Admin {
 
 		global $submenu, $menu, $plugin_page;
 		$nekit_main_menu_slug = 'news-kit-elementor-addons';
-		$nekit_menus = $submenu[ $nekit_main_menu_slug ];	/* Contains menu label, capability, etc */
+		$nekit_menus = array_key_exists( $nekit_main_menu_slug, $submenu ) ? $submenu[ $nekit_main_menu_slug ] : [];	/* Contains menu label, capability, etc */
 		$nekit_menu_slugs = [];	/* Contains only slugs */
 		$menuItemClass = 'menu-item';
 
@@ -1875,7 +1890,7 @@ class Admin {
 					</div><!-- .nav-menu-wrapper -->
 					<div class="nekit-admin-actions">
 						<span class="free-or-pro"><?php echo apply_filters( 'nekit_free_pro_label_filter', esc_html__( 'Free', 'news-kit-elementor-addons' ) ); ?></span>
-						<span class="version"><?php echo apply_filters( 'nekit_version_filter', esc_html__( 'Version 1.3.0', 'news-kit-elementor-addons' ) ); ?></span>
+						<span class="version"><?php echo apply_filters( 'nekit_version_filter', esc_html__( 'Version 1.3.1', 'news-kit-elementor-addons' ) ); ?></span>
 						<button class="action">
 							<a href="<?php echo esc_url( '//forum.blazethemes.com/news-kit-elementor-addons/theme-builder/' ); ?>" target="_blank">
 								<span class="icon dashicons dashicons-media-document"></span>
@@ -1895,5 +1910,43 @@ class Admin {
 				</header><!-- .nekit-section-header -->
 			<?php
 		endif;
+	}
+
+	/**
+	 * MARK: DASHBOARD
+	 * 
+	 * @since 1.3.1
+	 */
+	public function admin_page_callback() {
+		require_once( 'dashboard.php' );
+		new Dashboard();
+	}
+
+	/**
+	 * Nekit enable/disalbe widgets
+	 * MARK: AJAX CALL
+	 * 
+	 * @since 1.3.1
+	 */
+	public function nekit_widgets_enable_disable_ajax_call() {
+		check_ajax_referer( 'nekit-admin-nonce', '_wpnounce' );
+		$disable_single = isset( $_POST[ 'disableSingle' ] ) ? rest_sanitize_boolean( $_POST[ 'disableSingle' ] ) : false;
+		$disabled_widgets = nekit_get_settings([ 'key' => 'nekit_disabled_widgets' ]);
+		if( $disable_single ) :
+			$widget = isset( $_POST[ 'widgets' ] ) ? rest_sanitize_array( $_POST[ 'widgets' ] ) : [];
+			$disabled_widgets = $widget;
+		else:
+			$widget_name = isset( $_POST[ 'widgetName' ] ) ? sanitize_text_field( $_POST[ 'widgetName' ] ) : '';
+			$is_updated = false;
+			if( ! empty( $disabled_widgets ) && is_array( $disabled_widgets ) && in_array( $widget_name, $disabled_widgets ) ) :
+				$disabled_widgets = array_diff( $disabled_widgets, [ $widget_name ] );
+			else:
+				$disabled_widgets[] = $widget_name;
+			endif;
+		endif;
+		$is_updated = nekit_update_settings([
+			'key'	=>	'nekit_disabled_widgets',
+			'value'	=>	$disabled_widgets
+		]);
 	}
 }

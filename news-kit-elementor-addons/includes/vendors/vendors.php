@@ -568,9 +568,9 @@ if( !function_exists( 'nekit_get_conditions_settings_builder_id' ) ) :
                 'post_type' => 'nekit-mm-cpt',
                 'meta_query'	=>	[
                     [
-                        'key'	=>	'builder_type',
-                        'value'	=>	$setting['parent'],
-                        'compare'	=>	'='
+                        'key'	=>	'nekit_builder_in_use',
+                        // 'value'	=>	$setting['parent'],
+                        'compare'	=>	'NOT EXISTS'
                     ]
                 ]
             ];
