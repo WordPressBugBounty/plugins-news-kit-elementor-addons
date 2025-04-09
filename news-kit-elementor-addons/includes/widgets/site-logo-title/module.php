@@ -34,22 +34,23 @@
 			[
 				'label'	=>	esc_html__( 'Layouts', 'news-kit-elementor-addons' ),
 				'label_block'	=>	true,
-				'type'	=>	'nekit-radio-image-control',
+				'type'	=>	( version_compare( ELEMENTOR_VERSION, '3.28.0', '>=' ) ? \Elementor\Controls_Manager::VISUAL_CHOICE : 'nekit-radio-image-control' ),
 				'default'	=>	'one',
-				'options'	=>	array(
+				'options'	=>	apply_filters( 'nekit_radio_image_control_options_filter', array(
 					'one'	=>	array(
 						'label'	=>	esc_html__( 'Layout One', 'news-kit-elementor-addons' ),
-						'url'	=>	NEKIT_URL . 'admin/assets/images/layouts/site-title/one.jpg'
+						'image'	=>	NEKIT_URL . 'admin/assets/images/layouts/site-title/one.jpg'
 					),
 					'two'	=>	array(
 						'label'	=>	esc_html__( 'Layout Two', 'news-kit-elementor-addons' ),
-						'url'	=>	NEKIT_URL . 'admin/assets/images/layouts/site-title/two.jpg'
+						'image'	=>	NEKIT_URL . 'admin/assets/images/layouts/site-title/two.jpg'
 					),
 					'three'	=>	array(
 						'label'	=>	esc_html__( 'Layout Three', 'news-kit-elementor-addons' ),
-						'url'	=>	NEKIT_URL . 'admin/assets/images/layouts/site-title/three.jpg'
+						'image'	=>	NEKIT_URL . 'admin/assets/images/layouts/site-title/three.jpg'
 					)
-				)
+				)),
+				'columns'   =>  2
 			]
 		);
 

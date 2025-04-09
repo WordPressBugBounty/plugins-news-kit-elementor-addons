@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
     // date and time widget
     var datSectionContainer = $(".date-and-time-wrap")
     if( datSectionContainer.length > 0 ) {
-        setInterval(function() {
+        setTimeout(function() {
             datSectionContainer.find(".time-count").html(new Date().toLocaleTimeString())
         },1000);
     }
@@ -885,9 +885,12 @@ jQuery(document).ready(function($) {
                 var onBurgerIconClick = $scope.find(".tab-title-wrap")
                 var preloadedActiveTabTitle = onBurgerIconClick.find('.isActive').text()
                 $scope.find( '.active-tab' ).text( preloadedActiveTabTitle )
-                $scope.on('click', '.burger-icon', function() {
+                $scope.on('click', '.filter-tab-wrapper', function() {
                     var _this = $(this)
-                    _this.next().toggle()
+                    _this.find( '.tab-title-wrap' ).toggle()
+                    scriptHandlers.onElementOutsideClick( _this, function() {
+                        _this.find( '.tab-title-wrap' ).hide()
+                    })
                 })
             }
             $scope.on("click", ".filter-tab-wrapper .tab-title", function() {
@@ -1198,6 +1201,7 @@ jQuery(document).ready(function($) {
         },
         /* Close Automatically After */
         closeAutomaticallyAfter: function(){
+            let self = this
             this.nekitPopupSelector.each(function(){
                 let _this = $(this), 
                     settings = _this.data( 'settings' ),    /* Popup Settings */
@@ -1367,7 +1371,7 @@ jQuery(document).ready(function($) {
         /* Set timer */
         setTimer: function(){
             let self = this
-            setInterval(function(){
+            setTimeout(function(){
                 Object.entries( self.getLocalStorageVariables() ).map(([ templateId, templateValues ]) => {
                     let templateTimestamp = templateValues[ 'nekit_show_popup_again_timestamp' ],
                         popupIdAttribute = $( '#' + self.nekitTemplateIdPrefix + templateId ),    /* Popup Element */
@@ -1456,4 +1460,245 @@ jQuery(document).ready(function($) {
         }
     }
     NekitPopupBuilder.init()
+
+    /* Sticky Post Handle */
+    let stickyPostContainer = $( '.nekit-sticky-posts' )
+    if( stickyPostContainer.length > 0 ) {
+        stickyPostContainer.on( 'click', '.indicator.active', function(){
+            let _this = $( this ),
+                hiddenPosts = _this.parent().siblings( '.post.hide' ),
+                postsToShow = _this.parent().siblings( '.post.show' );
+
+            _this.removeClass( 'active' ).siblings().addClass( 'active' )
+            hiddenPosts.removeClass( 'hide' ).addClass( 'show' )
+            postsToShow.removeClass( 'show' ).addClass( 'hide' )
+        })
+
+        /* Adding z-index */
+        let initialZindex = stickyPostContainer.find( '.post' ).length
+        stickyPostContainer.find( '.post' ).each(function(){
+            let _this = $( this )
+            _this.css({
+                'z-index': initialZindex--
+            })
+        })
+    }
+
+    /* Nekit Stories */
+    const NekitStories = {
+        container: $( '.nekit-stories' ),
+        storyModalContainer: $( '.stories-modal' ),
+        mainSwiperInstance: null,
+        allInnerSwipers: {},
+        nextSlideTimeout: null,
+        modalCloseTimeout: null,
+        widgetId: null,
+        widgetSettings: null,
+        init: function(){
+            if( this.container.length > 0 ) {
+                this.widgetId = this.container.parents( '.elementor-widget[data-element_type="widget"]' ).data( "id" )
+                this.widgetSettings = nekitWidgetData[ this.widgetId ]
+                this.openModal()
+                this.pauseStoryModal()
+                this.handleCrossButton()
+            }
+        },
+        /* Open Story Modal */
+        openModal: function(){
+            let self = this
+            this.container.find( '.stories' ).on( 'click', '.story', function(){
+                let _this = $( this )
+                self.storyModalContainer.addClass( 'show' )
+                self.mainSwiper();
+                self.initializeInnerSwiper( _this.index() );
+                self.mainSwiperInstance.slideTo( _this.index(), 0, false );
+                $( 'body' ).addClass( 'story-modal--on' )
+            })
+        },
+        /* Handle cross button click in story modal */
+        handleCrossButton: function(){
+            let self = this
+            this.storyModalContainer.on( 'click', '.close-modal', function(){
+                self.closeModal()
+            })
+        },
+        /* Close Story Modal */
+        closeModal: function(){
+            this.storyModalContainer.removeClass( 'show' )
+            Object.values( this.allInnerSwipers ).forEach( swiper => swiper.destroy( true, true ) )
+            this.allInnerSwipers = {}
+            this.mainSwiperInstance.destroy( true, true )
+            this.storyModalContainer.find( '.pause-story' ).removeClass( 'paused' ).addClass( 'playing' )
+            clearTimeout( this.nextSlideTimeout );
+            clearTimeout( this.modalCloseTimeout );
+            $( 'body' ).removeClass( 'story-modal--on' )
+        },
+        /* Pause Story Modal */
+        pauseStoryModal: function(){
+            let self = this,
+                playIcon = this.widgetSettings[ 'play_icon' ],
+                pauseIcon = this.widgetSettings[ 'pause_icon' ];
+            this.storyModalContainer.on( 'click', '.pause-story', function(){
+                let _this = $( this ),
+                    index = _this.parents( '.swiper-slide' ).index();
+                
+                _this.toggleClass( 'playing paused' )
+                if( _this.hasClass( 'paused' ) ) {
+                    _this.find( 'i' ).removeClass().addClass( playIcon.value )
+                    self.allInnerSwipers[ index ].autoplay.pause()
+                } else {
+                    _this.find( 'i' ).removeClass().addClass( pauseIcon.value )
+                    self.allInnerSwipers[ index ].autoplay.resume()
+                }
+            })
+        },
+        /* Initialize Swiper JS in .main-swiper */
+        mainSwiper: function(){
+            let self = this,
+                { effect, speed } = this.widgetSettings[ 'main_swiper_settings' ];
+            this.mainSwiperInstance = new Swiper( ".main-swiper", {
+                effect,
+                speed,
+                grabCursor: false,
+                loop: false,
+                allowTouchMove: true,
+                cubeEffect: {
+                    shadow: false,
+                    slideShadows: false
+                },
+                navigation: {
+                    nextEl: ".swiper-arrow.next",
+                    prevEl: ".swiper-arrow.prev"
+                },
+                on: {
+                    slideChange: function( swiper ) {
+                        let { activeIndex, params } = swiper
+                        clearTimeout( self.nextSlideTimeout );
+                        self.initializeInnerSwiper( activeIndex );
+                        setTimeout(() => {
+                            self.destroyInnerSwipersExceptActive( activeIndex );
+                        }, 500);
+                    }
+                }
+            });
+        },
+        /* Initialize Swiper JS in .inner-swiper */
+        initializeInnerSwiper: function( innerSwiperIndex ){
+            if( this.allInnerSwipers[ innerSwiperIndex ] ) return   /* Prevent re-initialization */
+            let self = this,
+                innerSwiper = null,
+                { effect, speed, direction, autoplay_speed: autoplaySpeed } = this.widgetSettings[ 'inner_swiper_settings' ];
+
+            innerSwiper = new Swiper( this.storyModalContainer.find( '.inner-swiper' )[ innerSwiperIndex ], {
+                direction,
+                speed,
+                effect,
+                loop: false,
+                allowTouchMove: false,
+                autoplay: {
+                    delay: autoplaySpeed,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: false
+                },
+                pagination: {
+                    el: ".inner-swiper .swiper-pagination" ,
+                    clickable: true,
+                    renderBullet: function(index, className) {
+                        return `<span class="${ className }"><span class="progress-bar"></span></span>`;
+                    }
+                },
+                navigation: {
+                    nextEl: ".inner-swiper-arrow.next",
+                    prevEl: ".inner-swiper-arrow.prev"
+                },
+                on: {
+                    init: function( swiper ) {
+                        self.disableNavigationButtons( swiper );
+                        self.addAmbient( swiper )
+                    },
+                    autoplayTimeLeft: self.storyProgress,
+                    reachEnd: function( swiper ) {
+                        if ( self.mainSwiperInstance.activeIndex === self.mainSwiperInstance.slides.length - 1 ) {
+                            /* Close Story modal if last story is showing */
+                            self.modalCloseTimeout = setTimeout(() => {
+                                if( swiper.autoplay ) swiper.autoplay.stop();
+                                self.closeModal();
+                            }, 2300 );
+                        } else {
+                            /* Show next story */
+                            self.nextSlideTimeout = setTimeout(() => {
+                                self.mainSwiperInstance.slideNext();
+                            }, 2300 );
+                        }
+                    },
+                    slideChange: function( swiper ){
+                        let { activeIndex, slides } = swiper
+                        self.disableNavigationButtons( swiper )
+                        if( self.modalCloseTimeout !== null && ( activeIndex !== slides.length - 1 ) ) {
+                            clearTimeout( self.modalCloseTimeout )
+                        }
+                        if( activeIndex !== slides.length - 1 ) {
+                            clearTimeout( self.nextSlideTimeout )
+                        }
+                        if( activeIndex !== 0 ) self.addAmbient( swiper )
+                    }
+                }
+            });
+            this.allInnerSwipers[ innerSwiperIndex ] = innerSwiper
+        },
+        /* Disable .main-swiper navigation buttons */
+        disableNavigationButtons: function( swiperInstance ){
+            let { activeIndex, slides } = swiperInstance
+            // if last slide
+            if( activeIndex - slides.length - 1 ) {
+                this.storyModalContainer.find( '.main-swiper .swiper-arrow.next' ).removeClass( 'disabled' )
+            } else {
+                this.storyModalContainer.find( '.main-swiper .swiper-arrow.next' ).addClass( 'disabled' )
+            }
+
+            // if first slide
+            if( activeIndex === 0 ) {
+                this.storyModalContainer.find( '.main-swiper .swiper-arrow.prev' ).removeClass( 'disabled' )
+            } else {
+                this.storyModalContainer.find( '.main-swiper .swiper-arrow.prev' ).addClass( 'disabled' )
+            }
+        },
+        /* Destroy all instances of .inner-swiper except active one */
+        destroyInnerSwipersExceptActive: function( activeIndex ){
+            let self = this
+            Object.keys( this.allInnerSwipers ).forEach(( index ) => {
+                let parsedIndex = parseInt( index )
+                if( activeIndex !== parsedIndex ) {
+                    self.allInnerSwipers[ parsedIndex ].destroy( true, true )
+                    delete self.allInnerSwipers[ parsedIndex ];
+                }
+            })
+        },
+        /* Story Progress */
+        storyProgress: function( swiper, time, progress ){
+            let { pagination } = swiper,
+                activeBullet = $( pagination.el ).find( '.swiper-pagination-bullet-active' );
+            let widthPercent = Math.floor( ( 1 - progress ) * 100 )
+            activeBullet.find( '.progress-bar' ).css({
+                width: widthPercent + '%'
+            })
+            activeBullet.prevAll( '.swiper-pagination-bullet' ).find( '.progress-bar' ).css({
+                'width': '100%'
+            })
+            activeBullet.nextAll( '.swiper-pagination-bullet' ).find( '.progress-bar' ).css({
+                'width': '0%'
+            })
+        },
+        /* Add ambient */
+        addAmbient: function( swiper ) {
+            let { activeIndex, slides } = swiper,
+                currentSlide = $( slides[ activeIndex ] ),
+                storyImage = currentSlide.find( '.story-image' ).attr( 'src' );
+
+            this.container.find( '.ambient-wrapper' ).css({
+                'background-image': 'url('+ storyImage +')'
+            })
+        }
+    }
+    NekitStories.init()
 })

@@ -164,6 +164,7 @@ final class Plugin {
 		require_once NEKIT_PATH . 'admin/assets/wptt-webfont-loader.php';
 		wp_register_style( 'nekit-fonts', wptt_get_webfont_url( $this->get_fonts_url() ), array(), null );
 		wp_register_style( 'slick', plugins_url( 'assets/external/slick/slick.min.css', __FILE__ ), '1.8.0' );
+		wp_register_style( 'nekit-swiper', plugins_url( 'assets/external/swiper/swiper-bundle.min.css', __FILE__ ), '11.2.5' );
 		wp_register_style( 'nekit-main-one', plugins_url( 'assets/css/frontend-style-one.css', __FILE__ ) );
 		wp_register_style( 'fontawesome', plugins_url( 'assets/external/fontawesome/css/all.min.css', __FILE__ ) );
 
@@ -192,6 +193,7 @@ final class Plugin {
 		wp_register_style( 'nekit-preloader-animation', plugins_url( 'assets/css/preloader-animation.css', __FILE__ ) );
 
 		wp_enqueue_style( 'nekit-fonts' );
+		wp_enqueue_style( 'nekit-swiper' );
 		wp_enqueue_style( 'slick' );
 		wp_enqueue_style( 'nekit-main-one' );
 		wp_enqueue_style( 'nekit-main' );
@@ -217,6 +219,7 @@ final class Plugin {
 	}
 
 	public function frontend_scripts() {
+		wp_register_script( 'nekit-swiper', plugins_url( 'assets/external/swiper/swiper-bundle.min.js', __FILE__ ), [ 'jquery' ], '11.2.5', true );
 		wp_register_script( 'slick', plugins_url( 'assets/external/slick/slick.min.js', __FILE__ ), [ 'jquery' ], '1.8.0', true );
 		wp_register_script( 'js-marquee', plugins_url( 'assets/external/js-marquee/jquery.marquee.min.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
 		wp_register_script( 'typed-js', plugins_url( 'assets/external/typed-main/typed.umd.js', __FILE__ ), [], '3', true );
@@ -224,6 +227,7 @@ final class Plugin {
 		wp_register_script( 'nekit-main-frontend-data-source', plugins_url( 'assets/js/frontend-script-data.js', __FILE__ ), [ 'jquery' ], '1.0.0', false );
 		wp_register_script( 'nekit-main', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), [ 'jquery' ], '1.0.0', true );
 
+		wp_enqueue_script( 'nekit-swiper' );
 		wp_enqueue_script( 'slick' );
 		wp_enqueue_script( 'js-marquee' );
 		wp_enqueue_script( 'typed-js' );
@@ -823,7 +827,7 @@ final class Plugin {
 		$widget_count = isset( $_POST['widgetCount'] ) ? json_decode( sanitize_text_field( wp_unslash( $_POST['widgetCount'] ) ), true ) : '';
 		$widgetId = isset( $_POST['widgetId'] ) ? sanitize_text_field( wp_unslash( $_POST['widgetId'] ) ) : '';
 		$post_order = explode( "-", $options['post_order'] );
-		$filter_by = '';
+		$filter_by = is_null( $options['filter_by'] ) ? 'categories' : $options['filter_by'];
 		$filter_args = [
 			'post_type'	=>	'post',
 			'posts_per_page'	=>	$options['post_count'],
@@ -832,9 +836,9 @@ final class Plugin {
 			'orderby'	=>	$post_order[0]
 		];
 		if( $options['post_offset'] > 0 ) $filter_args['offset'] = $options['post_offset'];
-		if( $options['filter_by'] == 'categories' ) $filter_args['cat'] = $category_id;
-		if( $options['filter_by'] == 'tags' ) $filter_args['tag__in'] = $category_id;
-		if( $options['filter_by'] == 'authors' ) $filter_args['author'] = $category_id;
+		if( $filter_by == 'categories' ) $filter_args['cat'] = $category_id;
+		if( $filter_by == 'tags' ) $filter_args['tag__in'] = $category_id;
+		if( $filter_by == 'authors' ) $filter_args['author'] = $category_id;
 		if( $category_id == 'news-elementor-filter-all' ) :
 			$filter_args['cat'] = $options['post_categories'];
 			$filter_args['tag__in'] = $options['post_tags'];

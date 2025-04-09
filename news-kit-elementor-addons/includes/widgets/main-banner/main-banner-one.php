@@ -1292,6 +1292,14 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 				[
 					'name'  =>  'slider_post_categories_background_color',
 					'selector'  =>  '{{WRAPPER}} .main-banner-slider .post-categories a',
+					'fields_options'    =>  [
+                        'background'    =>  [
+                            'default'   => 'classic'
+                        ],
+                        'color' =>  [
+                            'default'   =>  '#333'
+                        ]
+					],
 					'exclude'   =>  ['image']
 				]
 			);

@@ -47,27 +47,28 @@ class Posts extends \Nekit_Widget_Base\Base {
             'widget_layouts',
             [
                 'label' =>  esc_html__( 'Widget Layouts', 'news-kit-elementor-addons' ),
-                'type'  =>  'nekit-radio-image-control',
+                'type'  =>  ( version_compare( ELEMENTOR_VERSION, '3.28.0', '>=' ) ? \Elementor\Controls_Manager::VISUAL_CHOICE : 'nekit-radio-image-control' ),
                 'label_block'   =>  true,
                 'default'   =>  'one',
-                'options'   =>  [
+                'options'   =>  apply_filters( 'nekit_radio_image_control_options_filter', [
                     'one'   =>  [
                         'title' =>  esc_html__( 'Layout One', 'news-kit-elementor-addons' ),
-                        'url'   =>  NEKIT_URL . 'includes/assets/images/controls/grid-one-layout-one.jpg'
+                        'image'   =>  NEKIT_URL . 'includes/assets/images/controls/grid-one-layout-one.jpg'
                     ],
                     'two'   =>  [
                         'title' =>  esc_html__( 'Layout Two', 'news-kit-elementor-addons' ),
-                        'url'   =>  NEKIT_URL . 'includes/assets/images/controls/list-one-layout-one.jpg'
+                        'image'   =>  NEKIT_URL . 'includes/assets/images/controls/list-one-layout-one.jpg'
                     ],
                     'three' =>  [
                         'title' =>  esc_html__( 'Layout Three', 'news-kit-elementor-addons' ),
-                        'url'   =>  NEKIT_URL . 'includes/assets/images/controls/grid-two-layout-two.jpg'
+                        'image'   =>  NEKIT_URL . 'includes/assets/images/controls/grid-two-layout-two.jpg'
                     ],
                     'four'  =>  [
                         'title' =>  esc_html__( 'Layout Four', 'news-kit-elementor-addons' ),
-                        'url'   =>  NEKIT_URL . 'includes/assets/images/controls/list-two-layout-two.jpg'
+                        'image'   =>  NEKIT_URL . 'includes/assets/images/controls/list-two-layout-two.jpg'
                     ]
-                ]
+                ]),
+                'columns'   =>  2
             ]
         );
         $this->add_layouts_skin_control();

@@ -33,10 +33,11 @@
             'widget_layouts',
             [
                 'label' =>  esc_html__( 'Widget Layouts', 'news-kit-elementor-addons' ),
-                'type'  =>  'nekit-radio-image-control',
+                'type'  =>  ( version_compare( ELEMENTOR_VERSION, '3.28.0', '>=' ) ? \Elementor\Controls_Manager::VISUAL_CHOICE : 'nekit-radio-image-control' ),
                 'default'   =>  'one',
                 'label_block'   =>  true,
-                'options'   =>  nekit_get_advanced_heading_layouts_array()
+                'options'   =>  apply_filters( 'nekit_radio_image_control_options_filter', nekit_get_advanced_heading_layouts_array() ),
+                'columns'   =>  2
             ]
         );
         $this->insert_divider();

@@ -36,10 +36,10 @@
 
 	.nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-container,
 	.nekit-nav-menu-container .nekit-nav-menu-list-wrap > li.nekit-has-menu .nekit-menu-container {
-		visibility: hidden;
+		/* visibility: hidden;
+		opacity: 0; */
 		position: absolute;
 		z-index: var(--z-index-three);
-		opacity: 0;
 		background-color: #fff;
 		left: 0;
 	}
@@ -171,7 +171,6 @@
 			top: 0;
 			opacity: 0;
 			visibility: hidden;
-
 		}
 
 		.elementor-widget-container .nekit-nav-mega-menu-container > .nekit-nav-mega-menu-list-wrap.orientation--vertical > ul.nekit-sub-menu.isShow,
@@ -994,7 +993,6 @@ elementor-widget-nekit-site-logo-title
 	.nekit_dark_mode .nekit-news-grid-two-posts-wrap .post-element,
 	.nekit_dark_mode i,
 	.nekit_dark_mode nav {
-
 		background-color: transparent!important;
 		background-image: linear-gradient(45deg, transparent, transparent)!important;
 	}
@@ -1037,7 +1035,9 @@ elementor-widget-nekit-site-logo-title
 	.nekit_dark_mode .nekit-live-search-widget form .search-submit,
 	.nekit_dark_mode button,
 	.nekit_dark_mode input,
-	.nekit_dark_mode .news-elementor-phone-call {
+	.nekit_dark_mode .news-elementor-phone-call,
+	.nekit_dark_mode .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-container,
+	body.nekit_dark_mode .nekit-popup-wrap {
 		background-color: #202020!important;
 	}
 

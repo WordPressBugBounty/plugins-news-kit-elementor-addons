@@ -250,6 +250,11 @@ class Utils {
                 'category'  => 'site-logo-title',
                 'icon'	=>	'icon-nekit-site-logo'
             ],
+            "site-nav-menu" => [
+                'name'  => esc_html__( 'Site Nav Menu', 'news-kit-elementor-addons' ),
+                'category'  => 'site-nav-menu',
+                'icon'	=> 'icon-nekit-site-nav-menu'
+            ],
             "site-nav-mega-menu" => [
                 'name'  => esc_html__( 'Site Nav Mega Menu', 'news-kit-elementor-addons' ),
                 'category'  => 'site-nav-mega-menu',
@@ -304,6 +309,31 @@ class Utils {
                 'name'  => esc_html__( 'Tags Cloud Animation', 'news-kit-elementor-addons' ),
                 'category'  => 'tags-cloud-animation',
                 'icon'	=>	'icon-nekit-tags-cloud-animation'
+            ],
+            "canvas-menu"   => [
+                'name'  => esc_html__( 'Canvas Menu', 'news-kit-elementor-addons' ),
+                'category'  => 'canvas-menu',
+                'icon'	=>	'icon-nekit-canvas-menu'
+            ],
+            "social-share"   => [
+                'name'  => esc_html__( 'Social Share', 'news-kit-elementor-addons' ),
+                'category'  => 'social-share',
+                'icon'	=>	'icon-nekit-social-share'
+            ],
+            'sticky-posts'   =>  [
+                'name'  => esc_html__( 'Sticky Posts', 'news-kit-elementor-addons' ),
+                'category'  => 'tags-cloud-animation',
+                'icon'	=>	'icon-nekit-tags-cloud-animation'
+            ],
+            'insta-gallery'   =>  [
+                'name'  => esc_html__( 'Insta Gallery', 'news-kit-elementor-addons' ),
+                'category'  => 'insta-gallery',
+                'icon'	=>	'icon-nekit-tags-cloud-animation'
+            ],
+            'divider'   =>  [
+                'name'  => esc_html__( 'Divider', 'news-kit-elementor-addons' ),
+                'category'  => 'insta-gallery',
+                'icon'	=>	'icon-nekit-tags-cloud-animation'
             ]
         ));
     }
@@ -326,12 +356,12 @@ class Utils {
         return apply_filters( 'nekit_widget_categories_filter', [
             'nekit-widgets-group'   =>  [
                 'label' =>  esc_html__( 'News Elementor Widgets', 'news-kit-elementor-addons' ),
-                'widgets'   =>  [ 'advanced-heading-icon', 'back-to-top', 'date-and-time', 'live-now-button', 'live-search', 'mailbox', 'phone-call', 'random-news', 'site-logo-title', 'site-nav-mega-menu', 'theme-mode', 'video-playlist', 'tags-cloud', 'tags-cloud-animation' ],
+                'widgets'   =>  [ 'advanced-heading-icon', 'back-to-top', 'date-and-time', 'live-now-button', 'live-search', 'mailbox', 'phone-call', 'random-news', 'site-logo-title', 'site-nav-mega-menu', 'theme-mode', 'video-playlist', 'tags-cloud', 'tags-cloud-animation', 'site-nav-menu', 'canvas-menu', 'social-share', 'insta-gallery', 'divider' ],
                 'category'  =>  'general'
             ],
             'nekit-post-layouts-widgets-group'  =>  [
                 'label' =>  esc_html__( 'News Elementor Posts Layouts', 'news-kit-elementor-addons' ),
-                'widgets'   =>  [ 'categories-collection', 'full-width-banner', 'main-banner-one', 'main-banner-two', 'main-banner-three', 'main-banner-four', 'main-banner-five', 'news-block-one', 'news-block-two', 'news-block-three', 'news-block-four', 'news-carousel-one', 'news-carousel-two', 'news-carousel-three', 'news-filter-one', 'news-filter-two', 'news-filter-three', 'news-filter-four', 'news-grid-one', 'news-grid-two', 'news-grid-three', 'news-timeline', 'popular-opinions', 'ticker-news-one', 'ticker-news-two', 'news-list-one', 'news-list-two', 'news-list-three' ],
+                'widgets'   =>  [ 'categories-collection', 'full-width-banner', 'main-banner-one', 'main-banner-two', 'main-banner-three', 'main-banner-four', 'main-banner-five', 'news-block-one', 'news-block-two', 'news-block-three', 'news-block-four', 'news-carousel-one', 'news-carousel-two', 'news-carousel-three', 'news-filter-one', 'news-filter-two', 'news-filter-three', 'news-filter-four', 'news-grid-one', 'news-grid-two', 'news-grid-three', 'news-timeline', 'popular-opinions', 'ticker-news-one', 'ticker-news-two', 'news-list-one', 'news-list-two', 'news-list-three', 'sticky-posts' ],
                 'category'  =>  'general'
             ],
             'nekit-archive-templates-widgets-group' =>  [

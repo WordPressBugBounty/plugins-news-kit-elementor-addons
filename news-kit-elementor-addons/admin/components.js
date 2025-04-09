@@ -152,10 +152,11 @@
                     let _this = $(this),
                         tab = _this.data( 'value' ),
                         freeCount = preMadeBlocksWrapper.find( '.' + tab + '.free' ).length,
-                        proCount = preMadeBlocksWrapper.find( '.' + tab + '.pro' ).length;
+                        proCount = preMadeBlocksWrapper.find( '.' + tab + '.pro' ).length,
+                        upgradeCount = preMadeBlocksWrapper.find( '.' + tab + '.upgrade' ).length;
 
                     _this.find( '.free-count' ).html( freeCount )
-                    _this.find( '.pro-count' ).html( proCount )
+                    _this.find( '.pro-count' ).html( proCount > 0 ? proCount : upgradeCount  )
                 })
             }
         },

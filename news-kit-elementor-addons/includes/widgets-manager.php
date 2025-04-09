@@ -52,6 +52,10 @@ if( ! function_exists( 'nekit_register_custom_widgets' ) ) :
         require_once( __DIR__ . '/widgets/categories-collection/module.php' );
         require_once( __DIR__ . '/widgets/tags-cloud/module.php' );
         require_once( __DIR__ . '/widgets/canvas-menu/module.php' );
+        require_once( __DIR__ . '/widgets/sticky-posts/module.php' );
+        require_once( __DIR__ . '/widgets/insta-gallery/module.php' );
+        require_once( __DIR__ . '/widgets/divider/module.php' );
+
         require_once( __DIR__ . '/widgets/ticker-news/ticker-news-one.php' );
         require_once( __DIR__ . '/widgets/news-list/news-list-one.php' );
         require_once( __DIR__ . '/widgets/news-list/news-list-two.php' );
@@ -109,6 +113,9 @@ if( ! function_exists( 'nekit_register_custom_widgets' ) ) :
         require_once( __DIR__ . '/widgets/social-share/social-share.php' );
         require_once( __DIR__ . '/widgets/tags-cloud/tags-cloud.php' );
         require_once( __DIR__ . '/widgets/canvas-menu/canvas-menu.php' );
+        require_once( __DIR__ . '/widgets/sticky-posts/sticky-posts.php' );
+        require_once( __DIR__ . '/widgets/insta-gallery/insta-gallery.php' );
+        require_once( __DIR__ . '/widgets/divider/divider.php' );
 
         $widgets_manager->register( new \Nekit_Widgets\Ticker_News_Widget() );
         $widgets_manager->register( new \Nekit_Widgets\Ticker_News_Two_Widget() );
@@ -167,6 +174,9 @@ if( ! function_exists( 'nekit_register_custom_widgets' ) ) :
         $widgets_manager->register( new \Nekit_Widgets\Single\Table_Of_Content() );
         $widgets_manager->register( new \Nekit_Widgets\Archive\Title() );
         $widgets_manager->register( new \Nekit_Widgets\Archive\Posts() );
+        $widgets_manager->register( new \Nekit_Widgets\Sticky_Posts() );
+        $widgets_manager->register( new \Nekit_Widgets\Insta_Gallery() );
+        $widgets_manager->register( new \Nekit_Widgets\Nekit_Divider_Widget() );
 
         /* Unregister nekit widgets. */
         $nekit_disabled_widgets = nekit_get_settings([ 'key' => 'nekit_disabled_widgets' ]);
@@ -216,8 +226,8 @@ if( ! function_exists( 'nekit_register_new_controls' ) ) :
      * @since 1.0.0
      */
     function nekit_register_new_controls( $controls_manager ) {
-        require_once( __DIR__ . '/controls/select2-extend/select2-control.php' );
         require_once( __DIR__ . '/controls/radio-image/radio-image-control.php' );
+        require_once( __DIR__ . '/controls/select2-extend/select2-control.php' );
         require_once( __DIR__ . '/controls/sortable/sortable-control.php' );
         require_once( __DIR__ . '/controls/number-select/number-select-control.php' );
 

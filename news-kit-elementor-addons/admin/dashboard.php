@@ -93,10 +93,6 @@
                 <div class="welcome-wrapper block">
                     <h2 class="title"><?php echo esc_html__( 'Welcome to News Kit Elementor Addons.', 'news-kit-elementor-addons' ); ?></h2>
                     <p class="description"><?php echo esc_html__( 'All News focused elementor widgets that you are looking for in Elementor Page Builder. Currently, with 57 feature rich widgets and theme builder you can develop a complete news or blog website easily.', 'news-kit-elementor-addons' ); ?></p>
-                    <div class="quick-links">
-                        <button class=""><?php echo esc_html__( 'A', 'news-kit-elementor-addons' ); ?></button>
-                        <button class=""><?php echo esc_html__( 'B', 'news-kit-elementor-addons' ); ?></button>
-                    </div>
                 </div>
             <?php
         }

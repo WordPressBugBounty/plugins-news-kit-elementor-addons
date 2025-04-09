@@ -84,7 +84,6 @@
 				}
 			}
 
-
 		.nekit-grid-widget .nekit-item-box-wrap {
 			overflow: hidden;
 			transition: all .3s ease;
@@ -161,6 +160,31 @@
 				font-weight: 500;
 				margin: 10px 0 8px;
 			}
+
+		/* Border */
+		/* .post-item {
+			position: relative;
+		}
+
+		.post-item:after {
+			content: '';
+			position: absolute;
+			right: calc(20px / 2* -1);
+			top: 0;
+			width: 1px;
+			height: 100%;
+			background: #000;
+		}
+
+		.post-item:before {
+			content: '';
+			position: absolute;
+			right: 0;
+			bottom: calc(20px / 2* -1);
+			width: 100%;
+			height: 1px;
+			background: #000;
+		} */
 
 
 	 	/*

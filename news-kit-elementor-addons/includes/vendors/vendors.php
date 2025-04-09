@@ -187,23 +187,23 @@ if( ! function_exists( 'nekit_get_advanced_heading_layouts_array' ) ) :
         $args = [
             'one'   =>  [
                 'title' =>  esc_html__( 'Layout One','news-kit-elementor-addons' ),
-                'url'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/six.jpg'
+                'image'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/six.jpg'
             ],
             'two'   =>  [
                 'title' =>  esc_html__( 'Layout Two','news-kit-elementor-addons' ),
-                'url'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/five.jpg'
+                'image'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/five.jpg'
             ],
             'three'   =>  [
                 'title' =>  esc_html__( 'Layout Three','news-kit-elementor-addons' ),
-                'url'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/seven.jpg'
+                'image'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/seven.jpg'
             ],
             'four'   =>  [
                 'title' =>  esc_html__( 'Layout Four','news-kit-elementor-addons' ),
-                'url'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/three.jpg'
+                'image'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/three.jpg'
             ],
             'five'   =>  [
                 'title' =>  esc_html__( 'Layout Five','news-kit-elementor-addons' ),
-                'url'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/two.jpg'
+                'image'   =>  NEKIT_URL . 'admin/assets/images/layouts/advanced-heading/two.jpg'
             ]
         ];
         return apply_filters( 'nekit_pro_get_advanced_heading_layouts_array_filter', $args );

@@ -72,7 +72,7 @@ class Filter_Widget_One extends \Nekit_Modules\Filter_Module {
 									<?php
 										echo '<span class="tab-title active-tab isActive"></span>';
 										echo '<div class="burger-tab-title-wrap">';
-											echo '<span class="burger-icon"><i class="fas fa-ellipsis-v"></i></span>';
+											echo '<span class="burger-icon"><i class="fas fa-sort-down"></i></span>';
 											echo '<div class="tab-title-wrap">';
 												echo '<ul class="title-list-wrap">';
 													foreach( $filters as $postCat => $postCatVal ) :

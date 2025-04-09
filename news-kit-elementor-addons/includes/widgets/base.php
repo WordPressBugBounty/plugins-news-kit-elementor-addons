@@ -6,6 +6,7 @@
  * @since 1.0.0
  */
 namespace Nekit_Widget_Base;
+use Nekit_Utilities\Utils as Nekit_Utils;
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 class Base extends \Elementor\Widget_Base {
@@ -15,11 +16,11 @@ class Base extends \Elementor\Widget_Base {
 	}
 
     public function get_title() {
-		return nekit_get_widgets_info($this->widget_name)['title'];
+		return nekit_get_widgets_info( $this->widget_name )[ 'name' ];
 	}
-	
+
 	public function get_icon() {
-		return esc_attr( 'nekit-icon ' . nekit_get_widgets_info($this->widget_name)['icon'] );
+		return esc_attr( 'nekit-icon ' . nekit_get_widgets_info( $this->widget_name )[ 'icon' ] );
 	}
 
 	public function get_categories() {
@@ -794,255 +795,9 @@ class Base extends \Elementor\Widget_Base {
 	}
 }
 
-function nekit_get_widgets_info($widget_name = '') {
-	$widgets = [
-		'nekit-ticker-news-one'	=> [
-			'title'	=> esc_html__( 'Ticker News - Marquee', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-ticker-news-one'
-		],
-		'nekit-ticker-news-two'	=>	[
-			'title'	=>	esc_html__( 'Ticker News - Slider', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-ticker-news-slider'
-		],
-		'nekit-main-banner-one'	=> [
-			'title'	=> esc_html__( 'Main Banner 1', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-main-banner-one'
-		],
-		'nekit-main-banner-two'	=> [
-			'title'	=> esc_html__( 'Main Banner 2', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-main-banner-two'
-		],
-		'nekit-main-banner-three'	=> [
-			'title'	=> esc_html__( 'Main Banner 3', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-main-banner-three'
-		],
-		'nekit-main-banner-four'	=> [
-			'title'	=> esc_html__( 'Main Banner 4', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-main-banner-four'
-		],
-		'nekit-main-banner-five'	=>	[
-			'title'	=>	esc_html__( 'Main Banner 5', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-main-banner-five'
-		],
-		'nekit-site-nav-mega-menu'	=> [
-			'title'	=> esc_html__( 'Site Nav Mega Menu', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-site-mega-menu'
-		],
-		'nekit-site-nav-menu'	=> [
-			'title'	=> esc_html__( 'Site Nav Menu', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-site-nav-menu'
-		],
-		'nekit-archive-title'	=> [
-			'title'	=> esc_html__( 'Archive Title', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-title'
-		],
-		'nekit-archive-posts'	=> [
-			'title'	=> esc_html__( 'Archive Posts', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-archive-posts'
-		],
-		'nekit-single-title'	=> [
-			'title'	=> esc_html__( 'Single Title', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-title'
-		],
-		'nekit-back-to-top'	=> [
-			'title'	=> esc_html__( 'Back To Top', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-back-to-top'
-		],
-		'nekit-date-and-time'	=> [
-			'title'	=> esc_html( 'Date and Time', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-date-time'
-		],
-		'nekit-video-playlist'	=> [
-			'title'	=> esc_html( 'Video Playlist', 'news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-video-playlist'
-		],
-		'nekit-full-width-banner'	=>	[
-			'title'	=>	esc_html__( 'Full Width Banner', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-full-width-banner'
-		],
-		'nekit-categories-collection'	=>	[
-			'title'	=>	esc_html__( 'Categories Collection', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-categories-collection'
-		],
-		'nekit-news-timeline'	=>	[
-			'title'	=>	esc_html__( 'News Timeline', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-timeline'
-		],
-		'nekit-advanced-heading-icon'	=>	[
-			'title'	=>	esc_html__( 'Advanced Heading', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-advanced-heading'
-		],
-		'nekit-single-featured-image'	=>	[
-			'title'	=>	esc_html__( 'Single Featured Image', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-featured-image'
-		],
-		'nekit-single-content'	=>	[
-			'title'	=>	esc_html__( 'Single Content', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-single-content'
-		],
-		'nekit-single-tags'	=>	[
-			'title'	=>	esc_html__( 'Single Tags', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-tags-cloud'
-		],
-		'nekit-news-carousel-one'	=>	[
-			'title'	=>	esc_html__( 'News Carousel 1', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-carousel-one'
-		],
-		'nekit-news-carousel-two'	=>	[
-			'title'	=>	esc_html__( 'News Carousel 2', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-carousel-two'
-		],
-		'nekit-news-carousel-three'	=>	[
-			'title'	=>	esc_html__( 'News Carousel 3', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-carousel-three'
-		],
-		'nekit-news-grid-one'	=>	[
-			'title'	=>	esc_html__( 'News Grid 1', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-grid-one'
-		],
-		'nekit-news-grid-two'	=>	[
-			'title'	=>	esc_html__( 'News Grid 2', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-grid-two'
-		],
-		'nekit-news-grid-three'	=>	[
-			'title'	=>	esc_html__( 'News Grid 3', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-grid-three'
-		],
-		'nekit-news-list-one'	=>	[
-			'title'	=>	esc_html__( 'News List 1', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-list-one'
-		],
-		'nekit-news-list-two'	=>	[
-			'title'	=>	esc_html__( 'News List 2', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-list-two'
-		],
-		'nekit-news-list-three'	=>	[
-			'title'	=>	esc_html__( 'News List 3', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-list-three'
-		],
-		'nekit-single-categories'	=>	[
-			'title'	=>	esc_html__( 'Single Category','news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-tags-cloud'
-		],
-		'nekit-single-date'	=>	[
-			'title'	=>	esc_html__( 'Single Date','news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-date'
-		],
-		'nekit-single-author'	=>	[
-			'title'	=>	esc_html__( 'Single Author','news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-author'
-		],
-		'nekit-single-author-box'	=>	[
-			'title'	=>	esc_html__( 'Single Author Box','news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-author-box'
-		],
-		'nekit-single-comment'	=>	[
-			'title'	=>	esc_html__( 'Single Comment','news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-comment'
-		],
-		'nekit-single-comment-box'	=>	[
-			'title'	=>	esc_html__( 'Single Comment Box','news-kit-elementor-addons' ),
-			'icon'	=> 'icon-nekit-single-comment-box'
-		],
-		'nekit-single-related-post'	=>	[
-			'title'	=>	esc_html__( 'Single Related Post', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-grid-one'
-		],
-		'nekit-single-post-navigation'	=>	[
-			'title'	=>	esc_html__( 'Single Post Navigation', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-single-post-navigation'
-			
-		],
-		'nekit-single-table-of-content'	=>	[
-			'title'	=>	esc_html__( 'Single Table of Content', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-table-of-content'
-			
-		],
-		'nekit-news-block-one'	=>	[
-			'title'	=>	esc_html__( 'News Block 1', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-block-one'
-			
-		],
-		'nekit-news-block-two'	=>	[
-			'title'	=>	esc_html__( 'News Block 2', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-block-two'
-		],
-		'nekit-news-block-three'	=>	[
-			'title'	=>	esc_html__( 'News Block 3', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-block-three'
-		],
-		'nekit-news-block-four'	=>	[
-			'title'	=>	esc_html__( 'News Block 4', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-block-four'
-		],
-		'nekit-news-filter-one'	=>	[
-			'title'	=>	esc_html__( 'News Filter 1', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-filter-one'
-		],
-		'nekit-news-filter-two'	=>	[
-			'title'	=>	esc_html__( 'News Filter 2', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-filter-two'
-		],
-		'nekit-news-filter-three'	=>	[
-			'title'	=>	esc_html__( 'News Filter 3', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-filter-three'
-		],
-		'nekit-news-filter-four'	=>	[
-			'title'	=>	esc_html__( 'News Filter 4', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-news-filter-four'
-		],
-		'nekit-live-now-button'	=>	[
-			'title'	=>	esc_html__( 'Live Now Button', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-live-now-button'
-		],
-		'nekit-live-search'	=>	[
-			'title'	=>	esc_html__( 'Live Search', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-live-search'
-		],
-		'nekit-mailbox'	=>	[
-			'title'	=>	esc_html__( 'Mailbox', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-mailbox'
-		],
-		'nekit-phone-call'	=>	[
-			'title'	=>	esc_html__( 'Phone Call', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-phone-call'
-		],
-		'nekit-popular-opinions'	=>	[
-			'title'	=>	esc_html__( 'Popular Opinions', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-popular-opinions'
-		],
-		'nekit-random-news'	=>	[
-			'title'	=>	esc_html__( 'Random News', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-random-news'
-		],
-		'nekit-theme-mode'	=>	[
-			'title'	=>	esc_html__( 'Theme Mode', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-theme-mode'
-		],
-		'nekit-site-logo-title'	=>	[
-			'title'	=>	esc_html__( 'Site Logo & Title', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-site-logo'
-		],
-		'nekit-breadcrumb'	=>	[
-			'title'	=>	esc_html__( 'Breadcrumb', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-breadcrumb'
-		],
-		'nekit-social-share'	=>	[
-			'title'	=>	esc_html__( 'Social Share', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-social-share'
-		],
-		'nekit-tags-cloud'	=>	[
-			'title'	=>	esc_html__( 'Tags Cloud', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-tags-cloud'
-		],
-		'nekit-tags-cloud-animation'	=>	[
-			'title'	=>	esc_html__( 'Tags Cloud Animation', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-tags-cloud-animation'
-		],
-		'nekit-canvas-menu'	=>	[
-			'title'	=>	esc_html__( 'Canvas Menu', 'news-kit-elementor-addons' ),
-			'icon'	=>	'icon-nekit-canvas-menu'
-		]
-	];
-	return $widgets[$widget_name];
+function nekit_get_widgets_info( $widget_name = '' ) {
+	$widgets = Nekit_Utils::registered_widgets();
+	$new_widget_name = str_replace( 'nekit-', '', $widget_name );
+	if( $widget_name === '' ) return $widgets;
+	return $widgets[ $new_widget_name ];
 }

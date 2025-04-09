@@ -442,7 +442,7 @@
                 \Elementor\Group_Control_Background::get_type(),
                 [
                     'name'  =>  'initial_background_color',
-                    'selector' =>   '{{WRAPPER}} {{CURRENT_ITEM}}.social-share',
+                    'selector' =>   '{{WRAPPER}} .nekit-social-share:not(.official-color--on) {{CURRENT_ITEM}}.social-share a',
                     'exclude'   =>  [ 'image' ]
                 ]
             );
@@ -498,7 +498,7 @@
                 \Elementor\Group_Control_Background::get_type(),
                 [
                     'name'  =>  'hover_background_color',
-                    'selector' =>   '{{WRAPPER}} {{CURRENT_ITEM}}.social-share:hover',
+                    'selector' =>   '{{WRAPPER}} .nekit-social-share:not(.official-color--on) {{CURRENT_ITEM}}.social-share a:hover',
                     'exclude'   =>  [ 'image' ]
                 ]
             );

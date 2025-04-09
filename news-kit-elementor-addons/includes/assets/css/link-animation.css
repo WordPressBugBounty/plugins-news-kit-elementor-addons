@@ -491,8 +491,9 @@
 			position: absolute;
 			background-color: #fff;
 			width: 100%;
-			visibility: hidden;
-			opacity: 0;
+			/* visibility: hidden;
+			opacity: 0; */
+			display: none;
 		    -webkit-animation-duration: 1s;
 	        animation-duration: 1s;
 	        -webkit-animation-fill-mode: both;
@@ -504,16 +505,16 @@
 		
 		.nav-mega-menu-wrap .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-container.isShow,
 		.nav-mega-menu-wrap:not(.isResponsiveMenu) .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu.appear-event--hover.menu-item:hover .nekit-mega-menu-container{
-			visibility: visible;
+			/* visibility: visible; */
+			display: block;
 		}
 
 		.nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-appear-animation--none.nekit-mega-menu-container.isShow,
 		.nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu .nekit-mega-menu-appear-from--none.nekit-mega-menu-container.isShow {
-			opacity: 1;
+			/* opacity: 1; */
 		}
 
 		/* animation */
-
 		.nav-mega-menu-wrap:not(.isResponsiveMenu) .nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu.appear-event--hover.menu-item:hover .nekit-mega-menu-appear-from--top.nekit-mega-menu-appear-animation--fade.nekit-animate-submenu,
 		.nekit-nav-mega-menu-container .nekit-nav-mega-menu-list-wrap > li.nekit-has-mega-menu.appear-event--click.menu-item .nekit-mega-menu-appear-from--top.nekit-mega-menu-appear-animation--fade.nekit-animate-submenu.isShow {
 			-webkit-animation-name: nekit_fadeInTop;

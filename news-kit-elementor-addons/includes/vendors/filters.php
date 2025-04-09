@@ -50,3 +50,20 @@ add_filter( 'body_class', function( $classes ){
     $classes[] = 'nekit';
     return $classes;
 });
+
+add_filter( 'nekit_radio_image_control_options_filter', function( $options ){
+    $meets_elementor_version = version_compare( ELEMENTOR_VERSION, '3.28.0', '>=' );
+    if( ! empty( $options ) && is_array( $options ) ){
+        $new_options = [];
+        foreach( $options as $option_key => $option ) {
+            if( ! $meets_elementor_version ) {
+                $option[ 'url' ] = $option[ 'image' ];
+                unset( $option[ 'image' ] );
+            }
+            $new_options[ $option_key ] = $option;
+        }
+        return $new_options;
+    } else {
+        return $options;
+    }
+});

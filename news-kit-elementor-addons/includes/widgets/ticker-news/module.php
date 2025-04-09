@@ -35,18 +35,19 @@
                 [
                     'label' =>  esc_html__( 'Widget Layouts', 'news-kit-elementor-addons' ),
                     'label_block'   =>  true,
-                    'type'  =>   'nekit-radio-image-control',
+                    'type'  =>   ( version_compare( ELEMENTOR_VERSION, '3.28.0', '>=' ) ? \Elementor\Controls_Manager::VISUAL_CHOICE : 'nekit-radio-image-control' ),
                     'default'	=>  'one',
-                    'options'	=>  array(
+                    'options'	=>  apply_filters( 'nekit_radio_image_control_options_filter', array(
                         'one'	=>  array(
                             'label' =>  esc_html__( 'Layout One', 'news-kit-elementor-addons' ),
-                            'url'	=>  NEKIT_URL . 'admin/assets/images/layouts/ticker-marquee/one.jpg'
+                            'image'	=>  NEKIT_URL . 'admin/assets/images/layouts/ticker-marquee/one.jpg'
                         ),
                         'two'	=>  array(
                             'label' =>  esc_html__( 'Layout Two', 'news-kit-elementor-addons' ),
-                            'url'	=>  NEKIT_URL . 'admin/assets/images/layouts/ticker-marquee/two.jpg'
+                            'image'	=>  NEKIT_URL . 'admin/assets/images/layouts/ticker-marquee/two.jpg'
                         )
-                    )
+                    )),
+                    'columns'   =>  2
                 ]
             );
         endif;
