@@ -67,33 +67,30 @@
                                 <div class="filter-tab-wrapper">
 									<?php
                                         echo '<span class="tab-title active-tab isActive"></span>';
-                                        echo '<div class="burger-tab-title-wrap">';
-                                            echo '<span class="burger-icon"><i class="fas fa-sort-down"></i></span>';
-                                            echo '<div class="tab-title-wrap">';
-                                                echo '<ul class="title-list-wrap">';
-                                                    foreach( $filters as $postCat => $postCatVal ) :
-                                                        $user_name = '';
-                                                        if( $settings['show_all_tab'] == 'yes' ){
-                                                            $tab_title = ( $postCat > 0 ) ? esc_attr( $postCatVal ) : 'nekit-filter-all';
-                                                            if( $postCat > 0 && $filter_by == 'authors' ) $user_name =  get_user_by( 'ID', $postCatVal )->data->display_name;
-                                                        }else{
-                                                            $tab_title = $postCatVal;
-                                                            if( $filter_by == 'authors' ) $user_name =  get_user_by( 'ID', $postCatVal )->data->display_name;
-                                                        }
-                                                ?>
-                                                        <li class="tab-title<?php if( $postCat < 1 ) echo esc_attr( ' isActive' ); ?>" data-tab="<?php echo esc_attr($tab_title); ?>">
-                                                            <?php
-                                                                if( $postCat == 0 && $settings['show_all_tab'] == 'yes' ) echo esc_html( $postCatVal );
-                                                                if( $postCat >= 0 && ( $filter_by == 'categories' ) ) echo esc_html( get_cat_name( $postCatVal ) );
-                                                                if( $postCat >= 0 && ( $filter_by == 'tags' ) ) echo esc_html( get_tag( $postCatVal, ARRAY_N ) );
-                                                                if( $postCat >= 0 && ( $filter_by == 'authors' ) ) echo esc_html( $user_name );
-                                                            ?>
-                                                        </li>
-                                                <?php
-                                                    endforeach;
-                                                echo '</ul><!-- .title-list-wrap -->';
-                                            echo '</div><!-- .tab-title-wrap -->';
-									    echo '</div><!-- .burger-tab-title-wrap -->';
+                                        echo '<div class="tab-title-wrap">';
+                                            echo '<ul class="title-list-wrap">';
+                                                foreach( $filters as $postCat => $postCatVal ) :
+                                                    $user_name = '';
+                                                    if( $settings['show_all_tab'] == 'yes' ){
+                                                        $tab_title = ( $postCat > 0 ) ? esc_attr( $postCatVal ) : 'nekit-filter-all';
+                                                        if( $postCat > 0 && $filter_by == 'authors' ) $user_name =  get_user_by( 'ID', $postCatVal )->data->display_name;
+                                                    }else{
+                                                        $tab_title = $postCatVal;
+                                                        if( $filter_by == 'authors' ) $user_name =  get_user_by( 'ID', $postCatVal )->data->display_name;
+                                                    }
+                                            ?>
+                                                    <li class="tab-title<?php if( $postCat < 1 ) echo esc_attr( ' isActive' ); ?>" data-tab="<?php echo esc_attr($tab_title); ?>">
+                                                        <?php
+                                                            if( $postCat == 0 && $settings['show_all_tab'] == 'yes' ) echo esc_html( $postCatVal );
+                                                            if( $postCat >= 0 && ( $filter_by == 'categories' ) ) echo esc_html( get_cat_name( $postCatVal ) );
+                                                            if( $postCat >= 0 && ( $filter_by == 'tags' ) ) echo esc_html( get_tag( $postCatVal, ARRAY_N ) );
+                                                            if( $postCat >= 0 && ( $filter_by == 'authors' ) ) echo esc_html( $user_name );
+                                                        ?>
+                                                    </li>
+                                            <?php
+                                                endforeach;
+                                            echo '</ul><!-- .title-list-wrap -->';
+                                        echo '</div><!-- .tab-title-wrap -->';
 									?>
 								</div>
                     <?php endif; ?>

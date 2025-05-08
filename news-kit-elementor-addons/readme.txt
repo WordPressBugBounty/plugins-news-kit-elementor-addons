@@ -2,8 +2,8 @@
 Contributors: BlazeThemes
 Tags: elementor addons, news addon, theme builder
 Requires at least: 5.0
-Tested up to: 6.7
-Stable tag: 1.3.2
+Tested up to: 6.8
+Stable tag: 1.3.3
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -106,6 +106,9 @@ The easy way to install the plugin is via WordPress.org plugin directory.
     News Kit Elementor Addons theme builder supports only the themes that are developed by BlazeThemes
 
 == Changelog ==
+= 1.3.3 - May 8th, 2025 =
+    * Added - new demo added
+
 = 1.3.2 - April 9th, 2025 =
     * Added - new demo added
     * Replaced - radio image control replaced with elementor built in control

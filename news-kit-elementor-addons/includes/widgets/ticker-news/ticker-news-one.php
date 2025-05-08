@@ -75,25 +75,22 @@ class Ticker_News_Widget extends \Nekit_Modules\Ticker_News_Module {
 											foreach($settings['posts_structure_sorting'] as $posts_structure) :
 												switch($posts_structure) {
 													case 'post-thumbnail': ?>
-																			<figure class="feature_image">
-																				<?php
-																					if( has_post_thumbnail() && $settings['show_post_thumbnail'] == 'yes' ) : ?>
-																						<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
-																						<div class="post-thumb-parent<?php if( $settings['image_overlay_option'] == 'yes' ) echo ' has-image-overlay'; ?>">
-																								<?php
-																									the_post_thumbnail($settings['image_size'], array(
-																												'title' => the_title_attribute(array(
-																													'echo'  => false
-																												)),
-																												'class'	=> esc_attr( $imageClass )
-																											));
-																								?>
-																							</div>
-																						</a>
-																				<?php
-																					endif;
-																				?>
-																			</figure>
+																			<?php if( has_post_thumbnail() && $settings['show_post_thumbnail'] == 'yes' ) : ?>
+																				<figure class="feature_image">
+																					<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+																					<div class="post-thumb-parent<?php if( $settings['image_overlay_option'] == 'yes' ) echo ' has-image-overlay'; ?>">
+																							<?php
+																								the_post_thumbnail($settings['image_size'], array(
+																											'title' => the_title_attribute(array(
+																												'echo'  => false
+																											)),
+																											'class'	=> esc_attr( $imageClass )
+																										));
+																							?>
+																						</div>
+																					</a>
+																				</figure>
+																			<?php endif; ?>
 																	<?php
 																		break;
 													case 'post-meta': 

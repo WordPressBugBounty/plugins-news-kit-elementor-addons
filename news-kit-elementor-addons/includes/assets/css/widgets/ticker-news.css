@@ -42,7 +42,7 @@
 			background-color: #333;
 			text-align: center;
 			padding: 8px 15px;
-			height: 75px;
+			max-height: 75px;
 			display: flex;
 			align-items: center;
 			-webkit-align-items: center;
@@ -63,7 +63,7 @@
 		.nekit-ticker-news-wrap.layout--one .nekit-ticker-box {
 			flex: 1;
 			overflow: hidden;
-			height: 75px;
+			max-height: 75px;
 			padding: 5px 0;
 		}
 
@@ -85,7 +85,7 @@
 		}
 
 		.nekit-ticker-news-wrap .feature_image {
-			width: 70px;
+			max-width: 70px;
 			overflow: hidden;
 		}
 
@@ -136,7 +136,7 @@
 			cursor: pointer;
 			border: none;
 			font-size: 16px;
-			height: 75px;
+			height: 100%;
 			border-radius: 0;
 			background-color: #333;
 			color: #fff;

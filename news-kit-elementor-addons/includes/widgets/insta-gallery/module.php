@@ -447,7 +447,7 @@
 					'size' => .7,
 				],
 				'selectors' => [
-					'{{WRAPPER}} .post-thumb' => 'padding-bottom: calc( {{SIZE}} * 100% );',
+					'{{WRAPPER}} .story-thumb:before' => 'padding-bottom: calc( {{SIZE}} * 100% );',
 				]
 			]
 		);
@@ -462,17 +462,42 @@
                     ]
                 ],
                 'exclude'   =>  [ 'image' ],
-				'selector' => '{{WRAPPER}} .stories .story-thumb img'
+				'selector' => '{{WRAPPER}} .nekit-stories figure.story-thumb:after'
 			]
 		);
 		
 		$this->add_group_control(
-            \Elementor\Group_Control_Border::get_type(),
-            [
-                'name'  =>  'image_border',
-                'selector'  =>  '{{WRAPPER}} .stories .story img'
-            ]
-        );
+			\Elementor\Group_Control_Border::get_type(),
+			[
+				'name' => 'story_border',
+				'selector' => '{{WRAPPER}} .stories .story-thumb img',
+                'exclude'   =>  [ 'color' ],
+				'fields_options'	=>	[
+					'width'	=>	[
+						'selectors' => [
+							'{{SELECTOR}}' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+						]
+					]
+				]
+			]
+		);
+
+        $this->add_group_control(
+			\Elementor\Group_Control_Background::get_type(),
+			[
+				'name' => 'story_border_color',
+                'fields_options'    =>  [
+                    'background'    =>  [
+                        'label' =>  esc_html__( 'Border Color', 'news-kit-elementor-addons' )
+                    ]
+                ],
+                'exclude'   =>  [ 'image' ],
+				'selector' => '{{WRAPPER}} .stories .story-thumb img',
+                'condition' => [
+					'story_border_border!' => [ '', 'none' ]
+				]
+			]
+		);
 
 		$this->add_responsive_control(
             'image_border_radius',
@@ -482,7 +507,7 @@
                 'size_units'    =>  [ 'px' ],
                 'label_block'   =>  true,
                 'selectors' =>  [
-                    '{{WRAPPER}} .stories .story img'  =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}'
+                    '{{WRAPPER}} .nekit-stories figure.story-thumb, {{WRAPPER}} .nekit-stories figure.story-thumb img'  =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}'
                 ]
             ]
         );
@@ -491,33 +516,7 @@
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
                 'name'  => 'image_box_shadow',
-                'selector'=> '{{WRAPPER}} .stories .story img'
-            ]
-        );
-
-		$this->add_responsive_control(
-            'image_padding',
-            [
-                'label' =>  esc_html__( 'Padding', 'news-kit-elementor-addons' ),
-                'type'  =>  \Elementor\Controls_Manager::DIMENSIONS,
-                'size_units'    =>  [ 'px', '%', 'em', 'custom' ],
-                'label_block'   =>  true,
-                'selectors' =>  [
-                    '{{WRAPPER}} .stories .story img'  =>  'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
-                ]
-            ]
-        );
-
-		$this->add_responsive_control(
-            'image_margin',
-            [
-                'label' =>  esc_html__( 'Margin', 'news-kit-elementor-addons' ),
-                'type'  =>  \Elementor\Controls_Manager::DIMENSIONS,
-                'size_units'    =>  [ 'px', '%', 'em', 'custom' ],
-                'label_block'   =>  true,
-                'selectors' =>  [
-                    '{{WRAPPER}} .stories .story img'  =>  'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
-                ]
+                'selector'=> '{{WRAPPER}} .nekit-stories figure.story-thumb'
             ]
         );
 
@@ -574,55 +573,6 @@
 				],
 				'selectors' => [
 					'{{WRAPPER}} .stories' => 'column-gap: {{SIZE}}{{UNIT}};'
-				]
-			]
-		);
-
-        $this->add_group_control(
-			\Elementor\Group_Control_Border::get_type(),
-			[
-				'name' => 'story_border',
-				'selector' => '{{WRAPPER}} .stories .story-thumb img',
-                'exclude'   =>  [ 'color' ]
-			]
-		);
-
-        $this->add_group_control(
-			\Elementor\Group_Control_Background::get_type(),
-			[
-				'name' => 'story_border_color',
-                'fields_options'    =>  [
-                    'background'    =>  [
-                        'label' =>  esc_html__( 'Border Color', 'news-kit-elementor-addons' )
-                    ]
-                ],
-                'exclude'   =>  [ 'image' ],
-				'selector' => '{{WRAPPER}} .stories .story-thumb img',
-                'condition' => [
-					'story_border_border!' => [ '', 'none' ]
-				]
-			]
-		);
-
-        $this->add_control(
-			'story_thumb_border_radius',
-			[
-				'label' => esc_html__( 'Border Radius', 'news-kit-elementor-addons' ),
-				'type' => \Elementor\Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range' => [
-					'px' => [
-						'min' => 0,
-						'max' => 200,
-						'step' => 1,
-					],
-				],
-				'default'	=>	[
-					'unit'	=>	'px',
-					'size'	=>	0
-				],
-				'selectors' => [
-					'{{WRAPPER}} .story-thumb img' => 'border-radius: {{SIZE}}{{UNIT}};'
 				]
 			]
 		);
@@ -781,15 +731,15 @@
 					],
 					'font_size'	=>	[
 						'default'	=>	[
-							'size'	=>	18,
+							'size'	=>	16,
 							'unit'	=>	'px'
 						],
 						'tablet_default'	=>	[
-							'size'	=>	15,
+							'size'	=>	16,
 							'unit'	=>	'px'
 						],
 						'mobile_default'	=>	[
-							'size'	=>	12,
+							'size'	=>	16,
 							'unit'	=>	'px'
 						]
 					],
@@ -852,7 +802,7 @@
 						'label' => esc_html__( 'Hover Color', 'news-kit-elementor-addons' ),
 						'type' => \Elementor\Controls_Manager::COLOR,
 						'selectors' => [
-							'{{WRAPPER}} .image-caption:hover' => 'color: {{VALUE}}'
+							'{{WRAPPER}} .image-caption-wrapper .image-caption:hover' => 'color: {{VALUE}}'
 						]
 					]
 				);
@@ -866,7 +816,7 @@
 			\Elementor\Group_Control_Background::get_type(),
 			[
 				'name' => 'caption_background_color',
-				'selector' => '{{WRAPPER}} .image-caption',
+				'selector' => '{{WRAPPER}} .image-caption-wrapper .image-caption',
 				'exclude'	=>	[ 'image' ]
 			]
 		);
@@ -879,7 +829,7 @@
                 'size_units'    =>  [ 'px', '%', 'em', 'custom' ],
                 'label_block'   =>  true,
                 'selectors' =>  [
-                    '{{WRAPPER}} .image-caption'  =>  'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+                    '{{WRAPPER}} .image-caption-wrapper .image-caption'  =>  'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
                 ]
             ]
         );
@@ -892,7 +842,7 @@
                 'size_units'    =>  [ 'px', '%', 'em', 'custom' ],
                 'label_block'   =>  true,
                 'selectors' =>  [
-                    '{{WRAPPER}} .image-caption'  =>  'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
+                    '{{WRAPPER}} .image-caption-wrapper .image-caption'  =>  'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};'
                 ]
             ]
         );
@@ -1258,11 +1208,16 @@
                                 $story_title = $story[ 'story_title' ];
                                 $has_story_thumb = empty( $story[ 'story_thumb' ][ 'url' ] );
                                 $is_gallery_empty = empty( $story[ 'story_gallery' ][ 0 ][ 'url' ] );
-                                echo '<div class="story">';
+								$story_gallery = array_key_exists( 'story_gallery', $story ) ? $story[ 'story_gallery' ] : [];
+								$storyClass = 'story';
+								if( empty( $story_gallery ) ) $storyClass .= ' no-gallery';
+                                echo '<div class="', esc_attr( $storyClass ), '">';
                                     if( ! $has_story_thumb || ! $is_gallery_empty ) :
                                         echo '<figure class="story-thumb">';
-                                            if( ! $has_story_thumb ) echo '<img src="'.  esc_url( $story[ 'story_thumb' ][ 'url' ] ) . '" loading="lazy">';
-                                            if( ! $is_gallery_empty && $has_story_thumb ) echo '<img src="'.  esc_url( $story[ 'story_gallery' ][ 0 ][ 'url' ] ) . '" loading="lazy">';
+											echo '<div class="story-thumbnail">';
+												if( ! $has_story_thumb ) echo '<img src="'.  esc_url( $story[ 'story_thumb' ][ 'url' ] ) . '" loading="lazy">';
+												if( ! $is_gallery_empty && $has_story_thumb ) echo '<img src="'.  esc_url( $story[ 'story_gallery' ][ 0 ][ 'url' ] ) . '" loading="lazy">';
+											echo '</div>';
                                         echo '</figure>';
                                     endif;
                                     if( $settings[ 'show_title' ] ) echo '<h2 class="story-title">'. esc_html( $story_title ) .'</h2>';
@@ -1278,8 +1233,8 @@
                                 <div class="swiper-wrapper">
                                     <?php
                                         if( ! empty( $stories ) && is_array( $stories ) ) :
-                                            foreach( $stories as $story ) :
-                                                $gallery = array_key_exists( 'story_gallery', $story ) ? $story[ 'story_gallery' ] : [];
+                                            foreach( $stories as $inner_story ) :
+                                                $gallery = array_key_exists( 'story_gallery', $inner_story ) ? $inner_story[ 'story_gallery' ] : [];
                                                 if( ! empty( $gallery ) && is_array( $gallery ) ) :
                                                     ?>
                                                         <div class="swiper-slide">
@@ -1296,8 +1251,10 @@
                                                                             ?>
                                                                                 <figure class="swiper-slide">
                                                                                     <img src="<?php echo esc_attr( $media['url'] ); ?>" class="story-image" loading="lazy">
-                                                                                    <span class="image-caption">
-                                                                                        <?php if( wp_get_attachment_caption( $media['id'] ) ) echo wp_get_attachment_caption( $media['id'] ); ?>
+                                                                                    <span class="image-caption-wrapper">
+																						<span class="image-caption">
+																							<?php if( wp_get_attachment_caption( $media['id'] ) ) echo wp_get_attachment_caption( $media['id'] ); ?>
+																						</span>
                                                                                     </span>
                                                                                 </figure>
                                                                             <?php

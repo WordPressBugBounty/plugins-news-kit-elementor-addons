@@ -47,6 +47,42 @@
         "home_slug":  "nekit-free-one-home",
         "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/free-one.zip"
     },
+    "news-mag-elementor-one": {
+        "name": "News Mag Elementor One",
+        "category": [ "news", "mag" ],
+        "type": "free",
+        "pages": {
+            "home" : {
+                "name": "Home",
+                "preview_url": "https://prev.blazethemes.com/news-mag-elementor/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-mag-elementor-one/home.jpg",
+                "data_route": "sites/news-mag-elementor-one/home.json"
+            },
+            "contact" : {
+                "name": "Contact",
+                "preview_url": "https://prev.blazethemes.com/news-mag-elementor/contact/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-mag-elementor-one/contact.jpg",
+                "data_route": "sites/news-mag-elementor-one/contact.json"
+            },
+            "single" : {
+                "name": "Single",
+                "preview_url": "https://prev.blazethemes.com/news-mag-elementor/2025/04/08/the-rise-and-fall-of-global-markets-whats-next/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-mag-elementor-one/single.jpg",
+                "data_route": "sites/news-mag-elementor-one/single.json"
+            },
+            "archive" : {
+                "name": "Archive",
+                "preview_url": "https://prev.blazethemes.com/news-mag-elementor/category/celebrity/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-mag-elementor-one/archive.jpg",
+                "data_route": "sites/news-mag-elementor-one/archive.json"
+            }
+        },
+        "navs": {
+            "menu-1": ""
+        },
+        "home_slug":  "nekit-home",
+        "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-mag-elementor-one.zip"
+    },
     "news-builder-one": {
         "name": "Newsbuilder One",
         "category": [ "news", "blog" ],

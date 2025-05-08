@@ -887,7 +887,7 @@ jQuery(document).ready(function($) {
                 $scope.find( '.active-tab' ).text( preloadedActiveTabTitle )
                 $scope.on('click', '.filter-tab-wrapper', function() {
                     var _this = $(this)
-                    _this.find( '.tab-title-wrap' ).toggle()
+                    if( adjustLayout == 'on' ) _this.find( '.tab-title-wrap' ).toggle()
                     scriptHandlers.onElementOutsideClick( _this, function() {
                         _this.find( '.tab-title-wrap' ).hide()
                     })
@@ -1486,8 +1486,9 @@ jQuery(document).ready(function($) {
 
     /* Nekit Stories */
     const NekitStories = {
-        container: $( '.nekit-stories' ),
-        storyModalContainer: $( '.stories-modal' ),
+        container: null,
+        containerIndex: null,
+        storyModalContainer: null,
         mainSwiperInstance: null,
         allInnerSwipers: {},
         nextSlideTimeout: null,
@@ -1495,24 +1496,27 @@ jQuery(document).ready(function($) {
         widgetId: null,
         widgetSettings: null,
         init: function(){
-            if( this.container.length > 0 ) {
-                this.widgetId = this.container.parents( '.elementor-widget[data-element_type="widget"]' ).data( "id" )
-                this.widgetSettings = nekitWidgetData[ this.widgetId ]
-                this.openModal()
-                this.pauseStoryModal()
-                this.handleCrossButton()
-            }
+            this.openModal()
         },
         /* Open Story Modal */
         openModal: function(){
             let self = this
-            this.container.find( '.stories' ).on( 'click', '.story', function(){
-                let _this = $( this )
+            $( '.nekit-stories .stories' ).on( 'click', '.story:not(".no-gallery")', function(){
+                let _this = $( this ),
+                    _thisIndex = _this.parent().children( '.story:not(".no-gallery")' ).index( _this );
+                self.container = _this.parents( '.nekit-stories' )
+                self.storyModalContainer = self.container.find( '.stories-modal' )
+                self.widgetId = self.container.parents( '.elementor-widget[data-element_type="widget"]' ).data( "id" )
+                self.widgetSettings = nekitWidgetData[ self.widgetId ]
+
+                console.log( _thisIndex )
                 self.storyModalContainer.addClass( 'show' )
                 self.mainSwiper();
-                self.initializeInnerSwiper( _this.index() );
-                self.mainSwiperInstance.slideTo( _this.index(), 0, false );
+                self.initializeInnerSwiper( _thisIndex );
+                self.mainSwiperInstance.slideTo( _thisIndex, 0, false );
                 $( 'body' ).addClass( 'story-modal--on' )
+                self.pauseStoryModal()
+                self.handleCrossButton()
             })
         },
         /* Handle cross button click in story modal */
@@ -1556,7 +1560,7 @@ jQuery(document).ready(function($) {
         mainSwiper: function(){
             let self = this,
                 { effect, speed } = this.widgetSettings[ 'main_swiper_settings' ];
-            this.mainSwiperInstance = new Swiper( ".main-swiper", {
+            this.mainSwiperInstance = new Swiper( this.container.find( ".main-swiper" )[0], {
                 effect,
                 speed,
                 grabCursor: false,
@@ -1567,8 +1571,8 @@ jQuery(document).ready(function($) {
                     slideShadows: false
                 },
                 navigation: {
-                    nextEl: ".swiper-arrow.next",
-                    prevEl: ".swiper-arrow.prev"
+                    nextEl: this.container.find( ".swiper-arrow.next" )[ 0 ],
+                    prevEl: this.container.find( ".swiper-arrow.prev" )[ 0 ]
                 },
                 on: {
                     slideChange: function( swiper ) {
@@ -1601,7 +1605,7 @@ jQuery(document).ready(function($) {
                     pauseOnMouseEnter: false
                 },
                 pagination: {
-                    el: ".inner-swiper .swiper-pagination" ,
+                    el: ".inner-swiper .swiper-pagination",
                     clickable: true,
                     renderBullet: function(index, className) {
                         return `<span class="${ className }"><span class="progress-bar"></span></span>`;
@@ -1700,5 +1704,6 @@ jQuery(document).ready(function($) {
             })
         }
     }
+    
     NekitStories.init()
 })

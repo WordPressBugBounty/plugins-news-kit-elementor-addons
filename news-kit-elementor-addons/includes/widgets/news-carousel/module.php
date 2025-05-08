@@ -512,7 +512,7 @@ class Carousel_Module extends \Nekit_Widget_Base\Base {
             \Elementor\Group_Control_Box_Shadow::get_type(),
             [
                 'name'  => 'image_box_shadow',
-                'selector'=> '{{WRAPPER}} .post-thumb'
+                'selector'=> '{{WRAPPER}} .post-thumb-wrap'
             ]
         );
 		$this->end_controls_section();

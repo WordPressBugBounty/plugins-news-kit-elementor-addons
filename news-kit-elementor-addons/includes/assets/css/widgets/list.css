@@ -23,8 +23,8 @@
 				flex-direction: column;
 			}
 	
-			.nekit-list-widget.adjust-layout--on article .nekit-item-box-wrap .post-thumb-wrap,
-			.nekit-news-list-three-posts-wrap.adjust-layout--on article .blog_inner_wrapper .post-thumb-wrap {
+			body .nekit-list-widget.adjust-layout--on article .nekit-item-box-wrap .post-thumb-wrap,
+			body .nekit-news-list-three-posts-wrap.adjust-layout--on article .blog_inner_wrapper .post-thumb-wrap {
 				width: 100%;
 			}
 

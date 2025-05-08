@@ -591,7 +591,7 @@ class Filter_Module extends \Nekit_Widget_Base\Base {
 				'toggle'	=>	false,
 				'frontend_available' => true,
 				'selectors'	=>	[
-					'{{WRAPPER}} .filter-tab-wrapper, {{WRAPPER}} .adjust-layout--on .filter-tab-wrapper'	=>	'text-align: {{VALUE}};'
+					'{{WRAPPER}} .post_title_filter_wrap'	=>	'text-align: {{VALUE}};'
 				]
 			]
 		);

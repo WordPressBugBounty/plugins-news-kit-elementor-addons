@@ -2,14 +2,14 @@
 /**
  * Plugin Name: News Kit Elementor Addons
  * Description: Elementor addons for your website.
- * Version:     1.3.2
+ * Version:     1.3.3
  * Author:      BlazeThemes
  * Author URI:  http://blazethemes.com/
  * Text Domain: news-kit-elementor-addons
  * Domain Path: /languages
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Elementor tested up to: 3.26.1
+ * Elementor tested up to: 3.28.4
  * Elementor Pro tested up to: 3.26.1
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
