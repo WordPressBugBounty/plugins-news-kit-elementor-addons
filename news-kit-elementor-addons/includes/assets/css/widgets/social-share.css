@@ -156,6 +156,7 @@
 		-webkit-align-items: center;
 		display: flex;
 		gap: 10px;
+		/* border: 1px solid; */
 	}
 
 	.nekit-social-share .social-share-title {

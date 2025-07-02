@@ -1620,10 +1620,15 @@ class Admin {
 	// delete template action
 	function delete_template_action() {
         check_ajax_referer( 'nekit-admin-nonce', 'security' );
+		$template_id = isset($_POST['template_id']) ? absint(wp_unslash($_POST['template_id'])) : '';
+		if( ! current_user_can( 'delete_posts', $template_id ) ) :
+			$res['deleted'] = false;
+			wp_send_json_error( [ 'message' => 'Unauthorized Request' ], 401 );
+			wp_die();
+		endif;
         $template = isset($_POST['template']) ? sanitize_text_field(wp_unslash($_POST['template'])) : '';
 		ob_start();
 			if( $template ) {
-				$template_id = isset($_POST['template_id']) ? absint(wp_unslash($_POST['template_id'])) : '';
 				$template_status = get_post_status($template_id); // delete post
 				if( $template_status ) {
 					wp_delete_post( $template_id, true );

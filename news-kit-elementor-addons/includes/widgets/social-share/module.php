@@ -429,6 +429,7 @@
                     'label' =>  esc_html__( 'Title Color', 'news-kit-elementor-addons' ),
                     'type'  =>  \Elementor\Controls_Manager::COLOR,
                     'default'   =>  '#fff',
+                    'separator' =>  'after',
                     'selectors' =>  [
                         '{{WRAPPER}} {{CURRENT_ITEM}} .social-share-title'  =>  'color: {{VALUE}}'
                     ],
@@ -453,7 +454,7 @@
                     'label' =>  esc_html__( 'Border Color', 'news-kit-elementor-addons' ),
                     'type'  =>  \Elementor\Controls_Manager::COLOR,
                     'selectors' =>  [
-                        '{{WRAPPER}} {{CURRENT_ITEM}}.social-share a'  =>  'color: {{VALUE}}'
+                        '{{WRAPPER}} {{CURRENT_ITEM}}.social-share a'  =>  'border-color: {{VALUE}}'
                     ]
                 ]
             );

@@ -1,4 +1,34 @@
 {
+    "news-blog-kit-one": {
+        "name": "News Blog Kit One",
+        "category": [ "blog" ],
+        "type": "free",
+        "pages": {
+            "home" : {
+                "name": "Home",
+                "preview_url": "https://prev.blazethemes.com/newsblog-elementor/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-blog-kit-one/home.jpg",
+                "data_route": "sites/news-blog-kit-one/home.json"
+            },
+            "single" : {
+                "name": "Single",
+                "preview_url": "https://prev.blazethemes.com/newsblog-elementor/2025/04/22/do-you-follow-any-beauty-influencers/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-blog-kit-one/single.jpg",
+                "data_route": "sites/news-blog-kit-one/single.json"
+            },
+            "archive" : {
+                "name": "Archive",
+                "preview_url": "https://prev.blazethemes.com/newsblog-elementor/category/lifestyle/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-blog-kit-one/archive.jpg",
+                "data_route": "sites/news-blog-kit-one/archive.json"
+            }
+        },
+        "navs": {
+            "menu-1": ""
+        },
+        "home_slug":  "nekit-home",
+        "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-blog-kit-one.zip"
+    },
     "free-one": {
         "name": "One",
         "category": [ "news", "blog" ],

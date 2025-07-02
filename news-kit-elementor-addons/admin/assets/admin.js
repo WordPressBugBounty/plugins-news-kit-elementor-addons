@@ -225,6 +225,9 @@ jQuery(document).ready(function($) {
                             deleteDialogContainer.removeClass( "loading-process" )
                             location.reload();
                         }
+                    },
+                    error: function(){
+                        $( '#nekit-delete-template-modal' ).hide()
                     }
                 })
             })

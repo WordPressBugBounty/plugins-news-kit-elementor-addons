@@ -2,7 +2,7 @@
 /**
  * Plugin Name: News Kit Elementor Addons
  * Description: Elementor addons for your website.
- * Version:     1.3.4
+ * Version:     1.3.5
  * Author:      BlazeThemes
  * Author URI:  http://blazethemes.com/
  * Text Domain: news-kit-elementor-addons

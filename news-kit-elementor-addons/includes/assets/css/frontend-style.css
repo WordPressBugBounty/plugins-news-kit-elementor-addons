@@ -3556,3 +3556,12 @@
 	.nekit-stories .swiper-arrow.next {
 		right: -130px;
 	}
+
+.elementor-icon.elementor-social-icon {
+	font-size: var(--icon-size, 25px);
+    height: calc(var(--icon-size, 25px) + 2 * var(--icon-padding, .5em));
+    line-height: var(--icon-size, 25px);
+    width: calc(var(--icon-size, 25px) + 2 * var(--icon-padding, .5em));
+	align-items: center;
+    justify-content: center;
+}
