@@ -887,11 +887,7 @@ jQuery(document).ready(function($) {
                 $scope.find( '.active-tab' ).text( preloadedActiveTabTitle )
                 $scope.on('click', '.filter-tab-wrapper', function() {
                     var _this = $(this)
-<<<<<<< HEAD
-                    _this.find( '.tab-title-wrap' ).toggle()
-=======
                     if( adjustLayout == 'on' ) _this.find( '.tab-title-wrap' ).toggle()
->>>>>>> dbf30bab0f7562aa432aa16d932811f1d363ae35
                     scriptHandlers.onElementOutsideClick( _this, function() {
                         _this.find( '.tab-title-wrap' ).hide()
                     })
