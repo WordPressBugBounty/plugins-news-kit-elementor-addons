@@ -1,4 +1,22 @@
 {
+    "news-brick-kit-one": {
+        "name": "News Brick Kit One",
+        "category": [ "news" ],
+        "type": "free",
+        "pages": {
+            "home" : {
+                "name": "Home",
+                "preview_url": "https://prev.blazethemes.com/news-brick-kit/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-brick-kit-one/home.jpg",
+                "data_route": "sites/news-brick-kit-one/home.json"
+            }
+        },
+        "navs": {
+            "menu-1": ""
+        },
+        "home_slug":  "nekit-home",
+        "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-brick-kit-one.zip"
+    },
     "news-blog-kit-one": {
         "name": "News Blog Kit One",
         "category": [ "blog" ],

@@ -3557,11 +3557,24 @@
 		right: -130px;
 	}
 
+/* elementor social icon */
 .elementor-icon.elementor-social-icon {
-	font-size: var(--icon-size, 25px);
+    font-size: var(--icon-size, 25px);
     height: calc(var(--icon-size, 25px) + 2 * var(--icon-padding, .5em));
     line-height: var(--icon-size, 25px);
     width: calc(var(--icon-size, 25px) + 2 * var(--icon-padding, .5em));
-	align-items: center;
+}
+
+.elementor-social-icon {
+    --e-social-icon-icon-color: #fff;
+    align-items: center;
+    background-color: #69727d;
+    cursor: pointer;
+    display: inline-flex;
     justify-content: center;
+    text-align: center;
+}
+
+.elementor-social-icon svg {
+    fill: var(--e-social-icon-icon-color);
 }

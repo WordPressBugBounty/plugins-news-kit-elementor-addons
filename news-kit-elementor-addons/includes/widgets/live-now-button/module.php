@@ -154,7 +154,7 @@ class Live_Now_Button_Module extends \Nekit_Widget_Base\Base {
                 'recommended'   => [
                     'fa-solid'  => ['play','play-circle','headset'],
                     'fa-regular'  => ['play-circle'],
-                    'fa-brand'  => ['youtube']
+                    'fa-brands'  => ['youtube']
                 ],
                 'label_block'  => false,
                 'default'   => [
