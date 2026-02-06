@@ -2,7 +2,7 @@
 /**
  * Base class to handle popup builder
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.2.3
  */
 
@@ -34,7 +34,7 @@
             ?>
                 <div id="nekit-admin-page">
                     <div class="page-header">
-                        <h2 class="page-title"><?php echo esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
+                        <h2 class="page-title"><?php echo esc_html__( 'News Kit Addons For Elementor', 'news-kit-elementor-addons' ); ?></h2>
                         <p><?php echo esc_html__( 'Manage popup builder settings', 'news-kit-elementor-addons' ); ?></p>
                         <button class="video-redirect-button"><a href="https://www.youtube.com/" target="_blank"><?php echo esc_html__( 'How Does Popup Builder Work?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
                     </div>

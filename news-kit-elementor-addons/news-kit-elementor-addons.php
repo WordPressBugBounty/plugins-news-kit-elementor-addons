@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name: News Kit Elementor Addons
+ * Plugin Name: News Kit Addons For Elementor
  * Description: Elementor addons for your website.
- * Version:     1.3.7
+ * Version:     1.4.2
  * Author:      BlazeThemes
  * Author URI:  http://blazethemes.com/
  * Text Domain: news-kit-elementor-addons
@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	/**
 	 * Load plugin
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 */
 	function news_kit_elementor_addons_init() {
 		// Load plugin file
@@ -44,7 +44,7 @@ if( ! function_exists( 'news_kit_elementor_addons_i18n' ) ) :
 	/**
 	 * Load text domain
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 */
 	function news_kit_elementor_addons_i18n() {
 		load_plugin_textdomain('news-kit-elementor-addons', false, NEKIT_PATH . '/languages');

@@ -2,7 +2,7 @@
 /**
  * Import class for xml
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 class Nekit_Importer {

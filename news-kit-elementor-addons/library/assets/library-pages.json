@@ -1,4 +1,22 @@
 {
+    "news-pick-kit-one": {
+        "name": "News Pick Kit One",
+        "category": [ "news" ],
+        "type": "free",
+        "pages": {
+            "home" : {
+                "name": "Home",
+                "preview_url": "https://prev.blazethemes.com/news-pick-kit/",
+                "screenshot": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-pick-kit-one/home.jpg",
+                "data_route": "sites/news-pick-kit-one/home.json"
+            }
+        },
+        "navs": {
+            "menu-1": ""
+        },
+        "home_slug":  "nekit-home",
+        "external_url": "https://prev.blazethemes.com/demo-data/news-kit-elementor-addons/sites/news-pick-kit-one.zip"
+    },
     "news-brick-kit-one": {
         "name": "News Brick Kit One",
         "category": [ "news" ],

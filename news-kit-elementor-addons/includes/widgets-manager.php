@@ -2,7 +2,7 @@
 /**
  * Widgets manager 
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -22,7 +22,7 @@ if( ! function_exists( 'nekit_register_custom_widgets' ) ) :
      * Register Wdigets for elementor editor 
      * 
      * @since 1.0.0
-     * @package News Kit Elementor Addons
+     * @package News Kit Addons For Elementor
      */
     function nekit_register_custom_widgets( $widgets_manager ) {
         require_once( __DIR__ . '/widgets/base.php' );

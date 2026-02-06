@@ -15,25 +15,25 @@ class Nekit_Data_Source extends \Elementor\TemplateLibrary\Source_Base {
 	}
 
 	public function get_title() {
-		return esc_html__( 'News Kit Elementor Addons Layout Manager', 'news-kit-elementor-addons' );
+		return esc_html__( 'News Kit Addons For Elementor Layout Manager', 'news-kit-elementor-addons' );
 	}
 
 	public function register_data() {}
 
 	public function save_item( $template_data ) {
-		return new \WP_Error( 'invalid_request', 'Cannot save template to a News Kit Elementor Addons layout manager' );
+		return new \WP_Error( 'invalid_request', 'Cannot save template to a News Kit Addons For Elementor layout manager' );
 	}
 
 	public function update_item( $new_data ) {
-		return new \WP_Error( 'invalid_request', 'Cannot update template to a News Kit Elementor Addons layout manager' );
+		return new \WP_Error( 'invalid_request', 'Cannot update template to a News Kit Addons For Elementor layout manager' );
 	}
 
 	public function delete_template( $template_id ) {
-		return new \WP_Error( 'invalid_request', 'Cannot delete template from a News Kit Elementor Addons layout manager' );
+		return new \WP_Error( 'invalid_request', 'Cannot delete template from a News Kit Addons For Elementor layout manager' );
 	}
 
 	public function export_template( $template_id ) {
-		return new \WP_Error( 'invalid_request', 'Cannot export template from a News Kit Elementor Addons layout manager' );
+		return new \WP_Error( 'invalid_request', 'Cannot export template from a News Kit Addons For Elementor layout manager' );
 	}
 
 	public function get_items( $args = [] ) {

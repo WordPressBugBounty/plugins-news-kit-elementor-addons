@@ -2,7 +2,7 @@
     /**
      * Nekit Divider Widget
      * 
-     * @package News Kit Elementor Addons
+     * @package News Kit Addons For Elementor
      * @since 1.3.2
      */
     namespace Nekit_Widgets;

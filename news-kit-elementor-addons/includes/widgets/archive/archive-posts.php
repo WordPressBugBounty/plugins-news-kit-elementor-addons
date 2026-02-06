@@ -2,7 +2,7 @@
 /**
  * Archive Posts Widget
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 namespace Nekit_Widgets\Archive;
@@ -1805,7 +1805,7 @@ class Posts extends \Nekit_Widget_Base\Base {
      * Generate the html template for widget
      * 
      * @since 1.0.0
-     * @since News Kit Elementor Addons
+     * @since News Kit Addons For Elementor
      */
     public function template_part( $part = 'default' ) {
         $settings = $this->get_settings_for_display();

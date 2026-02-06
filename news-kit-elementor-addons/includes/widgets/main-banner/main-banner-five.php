@@ -2,7 +2,7 @@
 /**
  * Main Banner Widget Five
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
  namespace Nekit_Widgets;
@@ -1732,7 +1732,8 @@ class Main_Banner_Widget_Five extends \Nekit_Widget_Base\Base {
 									'icon'  =>  isset( $settings['post_date_icon'] ) ? $settings['post_date_icon'] : [
 										'value' =>  'fas fa-calendar',
 										'library'   =>  'fa-solid'
-									]
+									],
+									'id'	=>	$args['popular_post_id']
 								]));
 							endif;
 						endif;

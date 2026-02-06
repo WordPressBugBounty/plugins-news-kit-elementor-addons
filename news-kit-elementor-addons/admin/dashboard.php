@@ -2,7 +2,7 @@
     /**
      * Nekit Admin Dashboard
      * 
-     * @package News Kit Elementor Addons
+     * @package News Kit Addons For Elementor
      * @since 1.3.1
      */
     namespace News_Kit_Elementor_Addons_Admin;
@@ -91,7 +91,7 @@
         public function welcome() {
             ?>
                 <div class="welcome-wrapper block">
-                    <h2 class="title"><?php echo esc_html__( 'Welcome to News Kit Elementor Addons.', 'news-kit-elementor-addons' ); ?></h2>
+                    <h2 class="title"><?php echo esc_html__( 'Welcome to News Kit Addons For Elementor.', 'news-kit-elementor-addons' ); ?></h2>
                     <p class="description"><?php echo esc_html__( 'All News focused elementor widgets that you are looking for in Elementor Page Builder. Currently, with 57 feature rich widgets and theme builder you can develop a complete news or blog website easily.', 'news-kit-elementor-addons' ); ?></p>
                 </div>
             <?php

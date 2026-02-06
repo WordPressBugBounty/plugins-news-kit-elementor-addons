@@ -1,9 +1,9 @@
-=== News Kit Elementor Addons ===
+=== News Kit Addons For Elementor ===
 Contributors: BlazeThemes
 Tags: elementor addons, news addon, theme builder
 Requires at least: 5.0
-Tested up to: 6.8
-Stable tag: 1.3.7
+Tested up to: 6.9
+Stable tag: 1.4.2
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -69,7 +69,7 @@ Note : As this plugin is addon, it only works with Elementor. Make sure you have
 The easy way to install the plugin is via WordPress.org plugin directory.
 <ol>
     <li>Go to WordPress Dashboard > Plugins > Add New</li>
-    <li>Search for "News Kit Elementor Addons" and install the plugin.</li>
+    <li>Search for "News Kit Addons For Elementor" and install the plugin.</li>
     <li>From file explorer > Upload the `my-plugin` directory to the "/wp-content/plugins/" directory</li>
     <li>Activate Plugin from "Plugins" menu in WordPress.</li>
 </ol>
@@ -91,21 +91,33 @@ The easy way to install the plugin is via WordPress.org plugin directory.
     After activating the plugin, go to any page or post editor with Elementor. You will find the new widgets under the "News Elementor Widgets" category.
 
     = Do I need Elementor Pro for this plugin to work? =
-    No, News Kit Elementor Addons works with the free version of Elementor.
+    No, News Kit Addons For Elementor works with the free version of Elementor.
 
     = Can I customize the design of the widgets? =
     Yes, all widgets are highly customizable using Elementor's design settings.
     
     = What themes are supported by this plugin?  =
-    News Kit Elementor Addons supports all the themes that are developed with WordPress compatibility
+    News Kit Addons For Elementor supports all the themes that are developed with WordPress compatibility
     
     = Does plugin widgets supported in all the themes?  =
     Yes, widgets can be used in any themes
 
     = Does plugin theme builder supported in all the themes?  =
-    News Kit Elementor Addons theme builder supports only the themes that are developed by BlazeThemes
+    News Kit Addons For Elementor theme builder supports only the themes that are developed by BlazeThemes
 
 == Changelog ==
+= 1.4.2 - Dec 1st, 2025 =
+    * Fixed - some admin css fixes
+
+= 1.4.1 - Oct 29th, 2025 =
+    * Fixed - wrong date display on posts issue fixed
+
+= 1.4.0 - Oct 16th, 2025 =
+    * Changed - plugin name and labels changed
+
+= 1.3.8 - Oct 7th, 2025 =
+    * Added - new demo added
+
 = 1.3.7 - Sep 5th, 2025 =
     * Added - new demo added
 

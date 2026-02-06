@@ -2,7 +2,7 @@
 /**
  * News List Widget Two
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 namespace Nekit_Widgets;

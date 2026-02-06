@@ -3,7 +3,7 @@
  * Endpoints for custom control
  * 
  * @since 1.0.0
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 

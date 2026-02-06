@@ -2,7 +2,7 @@
 /**
  * Main Banner Widget One
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 namespace Nekit_Widgets;
@@ -2323,7 +2323,8 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 																											'value' =>  'fas fa-calendar',
 																											'library'   =>  'fa-solid'
 																										],
-																										'url'	=>	'yes'
+																										'url'	=>	'yes',
+																										'id'	=>	$latest_tab_id
 																									]));
 																								?>
 																							</div>
@@ -2398,7 +2399,8 @@ class Main_Banner_Widget_One extends \Nekit_Widget_Base\Base {
 																												'value' =>  'fas fa-calendar',
 																												'library'   =>  'fa-solid'
 																											],
-																											'url'	=>	'yes'
+																											'url'	=>	'yes',
+																											'id'	=>	$popular_tab_id
 																										]));
 																									?>
 																								</div>

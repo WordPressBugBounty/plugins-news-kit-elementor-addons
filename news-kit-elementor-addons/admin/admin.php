@@ -2,7 +2,7 @@
 /**
  * Plugin admin class
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 namespace News_Kit_Elementor_Addons_Admin;
@@ -191,7 +191,7 @@ class Admin {
 		?>
 			<div id="nekit-admin-page">
 				<div class="page-header">
-					<h2 class="page-title"><?php echo esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
+					<h2 class="page-title"><?php echo esc_html__( 'News Kit Addons For Elementor', 'news-kit-elementor-addons' ); ?></h2>
 					<p><?php echo esc_html__( 'Manage news addon builder settings', 'news-kit-elementor-addons' ); ?></p>
 					<button class="video-redirect-button nekit-admin-button"><a href="https://www.youtube.com/watch?v=AhNQasgJ-AI&list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4" target="_blank"><?php echo esc_html__( 'How Does Builder Works?', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
 				</div>
@@ -210,7 +210,7 @@ class Admin {
 						switch($tab) {
 							case 'mega-menu-builder': ?>
 									<div class="tab-content-header">
-										<h2 class="tab-header-title"><?php echo esc_html__( 'How to create Mega Menu with News Kit Elementor Addons', 'news-kit-elementor-addons' ); ?></h2>
+										<h2 class="tab-header-title"><?php echo esc_html__( 'How to create Mega Menu with News Kit Addons For Elementor', 'news-kit-elementor-addons' ); ?></h2>
 										<button class="video-redirect-button"><a href="<?php echo esc_url('https://youtu.be/hrGdMMLqkEw?list=PLUhfyaBfMJ4k0ed1VNX48SqxNI0TuaCV4'); ?>" target="_blank"><?php echo esc_html__( 'Video Tutorial', 'news-kit-elementor-addons' ); ?><span class="dashicons dashicons-youtube"></span></a></button>
 									</div>
 									<div class="tab-content-body">
@@ -816,7 +816,7 @@ class Admin {
 		 );
 		 $args = array(
 			'labels'                => $labels,
-			'description'           => __( 'Manage news kit elementor addons mega menu builder', 'news-kit-elementor-addons' ),
+			'description'           => __( 'Manage news kit addons mega menu builder', 'news-kit-elementor-addons' ),
 			'public'                => true,
 			'hierarchical'          => false,
 			'exclude_from_search'   => true,
@@ -1699,7 +1699,7 @@ class Admin {
 	/**
 	 * Filter and Enqueue typography fonts
 	 * 
-	 * @package News Kit Elementor Addons Pro
+	 * @package News Kit Addons For Elementor Pro
 	 * @since 1.0.0
 	 */
 	function get_fonts_url() {
@@ -1747,7 +1747,7 @@ class Admin {
 	/**
 	 * Function to install or activate blaze demo importer
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function install_importer() {
@@ -1827,7 +1827,7 @@ class Admin {
 	 * Custom Menu page header
 	 * MARK: HEADER
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.2.4
 	 */
 	public function nekit_admin_header() {

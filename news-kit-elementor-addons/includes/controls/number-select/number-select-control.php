@@ -2,7 +2,7 @@
 /**
  * Number Select control
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.2.3
  */
 

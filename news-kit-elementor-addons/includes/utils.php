@@ -2,7 +2,7 @@
 /**
  * Plugin utilities class
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 namespace Nekit_Utilities;

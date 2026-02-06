@@ -2,7 +2,7 @@
 /**
  * Helper filters
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
@@ -53,7 +53,7 @@ endif;
     /**
      * Checks if the paramter format is valid and returns time 
     *
-    * @package News Kit Elementor Addons
+    * @package News Kit Addons For Elementor
     * @since 1.0.0
     */
     function nekit_get_local_time_with_format() {
@@ -67,7 +67,7 @@ endif;
     /**
      * Checks if the the post exists or returns site url 
     *
-    * @package News Kit Elementor Addons
+    * @package News Kit Addons For Elementor
     * @since 1.0.0
     */
     function nekit_get_random_news_url() {
@@ -86,7 +86,7 @@ endif;
     /**
      * Generates the possible order and orderby paramter and returns the array options 
     *
-    * @package News Kit Elementor Addons
+    * @package News Kit Addons For Elementor
     * @since 1.0.0
     */
     function nekit_get_widgets_post_order_options_array() {
@@ -102,7 +102,7 @@ endif;
     /**
      * Generates the possible card skin array options 
     *
-    * @package News Kit Elementor Addons
+    * @package News Kit Addons For Elementor
     * @since 1.0.0
     */
     function nekit_get_card_skin_effects_array() {
@@ -118,7 +118,7 @@ endif;
     /**
      * Generates the possible post title animation array options
     *
-    * @package News Kit Elementor Addons
+    * @package News Kit Addons For Elementor
     * @since 1.0.0
     */
     function nekit_get_post_title_animation_effects_array() {
@@ -349,7 +349,8 @@ endif;
      */
     function nekit_get_posts_date( $base ) {
         $target = isset( $base['target'] ) ? $base['target'] : '_self';
-        $date_string = get_the_date();
+        $id = isset( $base['id'] ) ? $base['id'] : get_the_ID();
+        $date_string = get_the_date( '', $id );
         $position = isset( $base['base'] ) ? $base['base'] : 'prefix';
         if( ! nekit_get_base_value( $base )  ) $position = 'none';
         switch($position) {

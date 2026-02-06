@@ -2,7 +2,7 @@
 /**
  * Class to handle plugin functions
  * 
- * @package News Kit Elementor Addons
+ * @package News Kit Addons For Elementor
  * @since 1.0.0
  */
 namespace Nekit_Addon;
@@ -278,7 +278,7 @@ final class Plugin {
 		$message = sprintf(
 			/* translators: 1: Plugin name 2: Elementor */
 			esc_html__( '"%1$s" requires "%2$s" to be installed and activated.', 'news-kit-elementor-addons' ),
-			'<strong>' . esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ) . '</strong>',
+			'<strong>' . esc_html__( 'News Kit Addons For Elementor', 'news-kit-elementor-addons' ) . '</strong>',
 			'<strong>' . esc_html__( 'Elementor', 'news-kit-elementor-addons' ) . '</strong>'
 		);
 
@@ -572,7 +572,7 @@ final class Plugin {
 		$message = sprintf(
 			/* translators: 1: Plugin name 2: Elementor 3: Required Elementor version */
 			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'news-kit-elementor-addons' ),
-			'<strong>' . esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ) . '</strong>',
+			'<strong>' . esc_html__( 'News Kit Addons For Elementor', 'news-kit-elementor-addons' ) . '</strong>',
 			'<strong>' . esc_html__( 'Elementor', 'news-kit-elementor-addons' ) . '</strong>',
 			 self::MINIMUM_ELEMENTOR_VERSION
 		);
@@ -593,7 +593,7 @@ final class Plugin {
 		$message = sprintf(
 			/* translators: 1: Plugin name 2: PHP 3: Required PHP version */
 			esc_html__( '"%1$s" requires "%2$s" version %3$s or greater.', 'news-kit-elementor-addons' ),
-			'<strong>' . esc_html__( 'News Kit Elementor Addons', 'news-kit-elementor-addons' ) . '</strong>',
+			'<strong>' . esc_html__( 'News Kit Addons For Elementor', 'news-kit-elementor-addons' ) . '</strong>',
 			'<strong>' . esc_html__( 'PHP', 'news-kit-elementor-addons' ) . '</strong>',
 			 self::MINIMUM_PHP_VERSION
 		);
@@ -687,7 +687,7 @@ final class Plugin {
 	/**
 	 * Posts ajax function with search query
 	 *
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function live_search_widget_posts_content() {
@@ -769,7 +769,7 @@ final class Plugin {
 	/**
 	 * Filter and Enqueue typography fonts
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function get_fonts_url() {
@@ -817,7 +817,7 @@ final class Plugin {
 	/**
 	 * News Filter Ajax Function
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function news_filter_widget_tab_content_change() {
@@ -1101,7 +1101,7 @@ final class Plugin {
 	/**
 	 * Archive Posts Ajax Function
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function archive_posts_ajax_load_more() {
@@ -1213,7 +1213,7 @@ final class Plugin {
 	/**
 	 * Grid widget AJAX Function
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function grid_widget_ajax_content() {
@@ -1466,7 +1466,7 @@ final class Plugin {
 	/**
 	 * List widget AJAX Function
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function list_widget_ajax_content() {
@@ -1710,7 +1710,7 @@ final class Plugin {
 	/**
 	 * Block widget AJAX Function
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function block_widget_ajax_content() {
@@ -2251,7 +2251,7 @@ final class Plugin {
 	/**
 	 * Single related posts widget AJAX Function
 	 * 
-	 * @package News Kit Elementor Addons
+	 * @package News Kit Addons For Elementor
 	 * @since 1.0.0
 	 */
 	function single_related_posts_widget_ajax_content() {
@@ -2448,7 +2448,7 @@ final class Plugin {
 	public function nekit_admin_footer_text( $footer_text ) {
 		global $plugin_page;
 		$is_nekit_page = in_array( $plugin_page, ['news-kit-elementor-addons', 'news-kit-elementor-addons-theme-builder', 'news-kit-elementor-addons-starter-sites','news-kit-elementor-addons-settings', 'news-kit-elementor-addons-popup-builder','news-kit-elementor-addons-pre-made-blocks' ] );
-		if( $is_nekit_page ) $footer_text = apply_filters( 'nekit_admin_footer_text_filter',  sprintf( esc_html__( 'Thank you for using News Kit Elementor Addons. Please leave us a %1$s', 'news-kit-elementor-addons' ), '<a href="'. esc_url( '//wordpress.org/support/plugin/news-kit-elementor-addons/reviews/?filter=5' ) .'" target="_blank">'. esc_html__( 'Rating', 'news-kit-elementor-addons' ) .'</a>' ) );
+		if( $is_nekit_page ) $footer_text = apply_filters( 'nekit_admin_footer_text_filter',  sprintf( esc_html__( 'Thank you for using News Kit Addons For Elementor. Please leave us a %1$s', 'news-kit-elementor-addons' ), '<a href="'. esc_url( '//wordpress.org/support/plugin/news-kit-elementor-addons/reviews/?filter=5' ) .'" target="_blank">'. esc_html__( 'Rating', 'news-kit-elementor-addons' ) .'</a>' ) );
 		return $footer_text;
 	}
 }
