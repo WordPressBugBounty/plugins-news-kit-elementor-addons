@@ -1585,6 +1585,7 @@ class Admin {
 	// save admin settings
     function create_template_action() {
         check_ajax_referer( 'nekit-admin-nonce', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) return;
         $template = isset($_POST['template']) ? sanitize_text_field(wp_unslash($_POST['template'])) : '';
         $templateTitle = isset($_POST['templateTitle']) ? sanitize_text_field(wp_unslash($_POST['templateTitle'])) : '';
 
