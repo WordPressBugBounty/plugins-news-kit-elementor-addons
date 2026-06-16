@@ -2,7 +2,7 @@
 /**
  * Plugin Name: News Kit Addons For Elementor
  * Description: Elementor addons for your website.
- * Version:     1.4.3
+ * Version:     1.4.2
  * Author:      BlazeThemes
  * Author URI:  http://blazethemes.com/
  * Text Domain: news-kit-elementor-addons
@@ -10,7 +10,7 @@
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  * Elementor tested up to: 4.1.2
- * Elementor Pro tested up to: 4.1.1
+ * Elementor Pro tested up to: 3.26.1
  */
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
@@ -171,9 +171,15 @@ add_action( 'wp', function() {
     foreach ( $types as $type ) {
         if ( $Nekit_render_templates_html->is_template_available( $type ) ) {
             $template_id = $Nekit_render_templates_html->get_current_builder_id();
-            if ( $template_id ) {
+            if( $template_id ) {
 				do_action( 'elementor/atomic-widgets/styles/clear', [ 'base' ] );
-                do_action( 'elementor/post/render', $template_id );
+				if( $type === 'popup' && is_array( $template_id ) ) {
+					foreach( $template_id as $id ) {
+						do_action( 'elementor/post/render', $id );
+					}
+				} else {
+					do_action( 'elementor/post/render', $template_id );
+				}
             }
         }
     }
@@ -189,8 +195,15 @@ add_action( 'elementor/preview/enqueue_styles', function() {
             if ( $template_id ) {
 				// Clear preview atomic styles so JS updates aren't overridden
 				do_action( 'elementor/atomic-widgets/styles/clear', [ 'base' ] );
-				do_action( 'elementor/atomic-widgets/styles/clear', [ 'local', $template_id, 'preview' ] );
-				do_action( 'elementor/atomic-widgets/styles/clear', [ 'global', $template_id, 'preview' ] );
+				if( $type === 'popup' && is_array( $template_id ) ) {
+					foreach( $template_id as $id ) {
+						do_action( 'elementor/atomic-widgets/styles/clear', [ 'local', $id, 'preview' ] );
+						do_action( 'elementor/atomic-widgets/styles/clear', [ 'global', $id, 'preview' ] );
+					}
+				} else {
+					do_action( 'elementor/atomic-widgets/styles/clear', [ 'local', $template_id, 'preview' ] );
+					do_action( 'elementor/atomic-widgets/styles/clear', [ 'global', $template_id, 'preview' ] );
+				}
             }
         }
     }

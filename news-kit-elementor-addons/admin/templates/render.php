@@ -71,6 +71,7 @@ class Nekit_Render_Templates_Html {
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
+							if( ! is_array( $this->current_builder_id ) ) $this->current_builder_id = [];
 							$this->current_builder_id[] = $popup_template_id;
 						else :
 							continue;
@@ -123,6 +124,7 @@ class Nekit_Render_Templates_Html {
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
+							if( ! is_array( $this->current_builder_id ) ) $this->current_builder_id = [];
 							$this->current_builder_id[] = $popup_template_id;
 						else :
 							continue;
@@ -175,6 +177,7 @@ class Nekit_Render_Templates_Html {
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
+							if( ! is_array( $this->current_builder_id ) ) $this->current_builder_id = [];
 							$this->current_builder_id[] = $popup_template_id;
 						else :
 							continue;
@@ -273,6 +276,7 @@ class Nekit_Render_Templates_Html {
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
+							if( ! is_array( $this->current_builder_id ) ) $this->current_builder_id = [];
 							$this->current_builder_id[] = $popup_template_id;
 						else :
 							continue;
@@ -325,6 +329,7 @@ class Nekit_Render_Templates_Html {
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
+							if( ! is_array( $this->current_builder_id ) ) $this->current_builder_id = [];
 							$this->current_builder_id[] = $popup_template_id;
 						else :
 							continue;
@@ -377,6 +382,7 @@ class Nekit_Render_Templates_Html {
 				if( ! empty( $popup_templates ) && is_array( $popup_templates ) ) :
 					foreach( $popup_templates as $popup_template_id ) :
 						if( get_post_status( $popup_template_id ) ) :
+							if( ! is_array( $this->current_builder_id ) ) $this->current_builder_id = [];
 							$this->current_builder_id[] = $popup_template_id;
 						else :
 							continue;
