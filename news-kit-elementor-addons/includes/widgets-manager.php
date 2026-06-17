@@ -240,6 +240,5 @@ if( ! function_exists( 'nekit_register_new_controls' ) ) :
 endif;
 
 require_once( __DIR__ . '/vendors/filters.php' );
-require_once( __DIR__ . '/vendors/vendors.php' );
 require_once( __DIR__ . '/utils.php' );
 require_once( __DIR__ . '/source.php' );

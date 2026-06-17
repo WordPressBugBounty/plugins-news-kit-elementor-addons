@@ -149,9 +149,9 @@ final class Plugin {
 		add_action( 'wp', [ $this, 'theme_builder_compatibility' ] );
 		add_action( 'elementor/preview/init', [ $this, 'nekit_library_modal_html' ] );
 		add_filter( 'admin_footer_text', [ $this, 'nekit_admin_footer_text' ] );
-		
+
 		// Load plugin file
-	    require_once( __DIR__ . '/widgets-manager.php' );
+		require_once( __DIR__ . '/widgets-manager.php' );
 	    require_once( __DIR__ . '/controls/select2-extend/select2-extend-api.php' );
 	    require_once( NEKIT_PATH . '/custom/meta.php' );
 

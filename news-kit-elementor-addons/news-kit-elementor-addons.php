@@ -2,7 +2,7 @@
 /**
  * Plugin Name: News Kit Addons For Elementor
  * Description: Elementor addons for your website.
- * Version:     1.4.2
+ * Version:     1.4.5
  * Author:      BlazeThemes
  * Author URI:  http://blazethemes.com/
  * Text Domain: news-kit-elementor-addons
@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 	 */
 	function news_kit_elementor_addons_init() {
 		// Load plugin file
+		require_once( __DIR__ . '/includes/vendors/vendors.php' );
 		require_once( __DIR__ . '/includes/plugin.php' );
 		require_once( __DIR__ . '/custom/custom-styles.php' );
 		require_once( __DIR__ . '/custom/popup/base.php' );
@@ -160,6 +161,9 @@ if( ! function_exists( 'nekit_preloader_html_preview' ) ) :
 endif;
 
 add_action( 'wp', function() {
+	if( ! did_action( 'elementor/loaded' ) ) {
+        return;
+    }
 	// Don't run in Elementor preview
     if ( \Elementor\Plugin::instance()->preview->is_preview_mode() ) {
         return;
@@ -183,7 +187,7 @@ add_action( 'wp', function() {
             }
         }
     }
-}, 1 ); // Priority 1 = before Elementor
+}, 20 ); // Priority 20 = after Elementor has initialized
 
 add_action( 'elementor/preview/enqueue_styles', function() {
     $Nekit_render_templates_html = new \Nekit_Render_Templates_Html();
