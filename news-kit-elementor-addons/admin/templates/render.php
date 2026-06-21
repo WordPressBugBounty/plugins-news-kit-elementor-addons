@@ -411,6 +411,10 @@ class Nekit_Render_Templates_Html {
 		$template = get_post($template_id);
 		if ( $template && ($template->post_status === 'publish' || current_user_can('read_post', $template_id)) ) {
 			$elementor = \Elementor\Plugin::instance();
+			// Ensure base frontend styles are registered before pulling in nested template content
+			if ( ! wp_style_is( 'elementor-frontend', 'registered' ) ) {
+				$elementor->frontend->register_styles();
+			}
 			$builder_content = $elementor->frontend->get_builder_content_for_display($template_id);
 			return $builder_content;
 		} else {

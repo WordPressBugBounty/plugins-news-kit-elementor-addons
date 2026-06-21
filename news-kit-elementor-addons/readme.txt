@@ -3,7 +3,7 @@ Contributors: BlazeThemes
 Tags: elementor addons, news addon, theme builder
 Requires at least: 5.0
 Tested up to: 6.9
-Stable tag: 1.4.5
+Stable tag: 1.4.6
 Requires PHP: 5.6
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -107,7 +107,10 @@ The easy way to install the plugin is via WordPress.org plugin directory.
 
 == Changelog ==
 
-= 1.5.0 - June 17th, 2026 =
+= 1.4.6 - June 21th, 2026 =
+    * Fixed - Depreciated function issue fixed
+
+= 1.4.5 - June 17th, 2026 =
     * Fixed - Atomic Element Compatinility issue fixed
 
 = 1.4.4 - June 16th, 2026 =

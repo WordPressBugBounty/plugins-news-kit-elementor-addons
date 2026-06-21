@@ -1290,7 +1290,11 @@ class Admin {
 						foreach( $hb_templates as $hb_template ) :
 							$template_id = $hb_template['id'];
 							$template_title = $hb_template['title'];
-							$assigned_pages['include'] = $hb_template['builder_placement'];
+							if( is_serialized( $hb_template['builder_placement'] ) ) {
+								$assigned_pages[ 'include' ] = unserialize( $hb_template[ 'builder_placement' ] );
+							} else {
+								$assigned_pages[ 'include' ] = $hb_template[ 'builder_placement' ];
+							}
 							$assigned_pages['exclude'] = $hb_template['builder_placement_exclude'];
 							$assigned_pages['use'] = $hb_template['nekit_builder_in_use'];
 							$nekit_admin_form_nonce = isset( $_POST['nekit_admin_form_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nekit_admin_form_nonce']) ): '';
