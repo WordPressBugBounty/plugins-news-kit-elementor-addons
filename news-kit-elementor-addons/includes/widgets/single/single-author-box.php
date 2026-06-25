@@ -828,7 +828,7 @@
                     <?php
                         if( $display_name ):
                             if( $settings['show_display_name'] == 'yes' ) 
-                                echo '<'. esc_attr($settings['html_tags']) . ' class="author-display-name">' . esc_html( $display_name ) . '</' . esc_attr($settings['html_tags']) . '>';
+                                echo '<'. \Elementor\Utils::validate_html_tag($settings['html_tags']) . ' class="author-display-name">' . esc_html( $display_name ) . '</' . \Elementor\Utils::validate_html_tag($settings['html_tags']) . '>';
                         endif;
 
                         if( $email ):

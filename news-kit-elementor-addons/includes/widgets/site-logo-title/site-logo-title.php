@@ -47,7 +47,7 @@ class Site_Logo_Title_Widget extends \Nekit_Modules\Site_Logo_Title_Module {
 					echo '<div class="site-title-description-wrap">';
 						if( $settings['site_title_option'] != 'none' ) :
 						$site_title = (is_front_page()) ? $settings["site_title_tag"] : $settings["site_title_innerpages_tag"];
-							echo '<' .esc_attr( $site_title ). ' class="site-title">';
+							echo '<' . \Elementor\Utils::validate_html_tag( $site_title ). ' class="site-title">';
 								if( $settings['site_title_frontpage_link_option'] != 'yes' || ! is_front_page() ) echo '<a href="' .esc_url(home_url()). '">';
 									switch($settings['site_title_option']) {
 										case 'custom': echo esc_html($settings['site_title']);
@@ -55,7 +55,7 @@ class Site_Logo_Title_Widget extends \Nekit_Modules\Site_Logo_Title_Module {
 										default: echo esc_html( get_bloginfo( 'name' ) );
 									}
 								if( $settings['site_title_frontpage_link_option'] != 'yes' || ! is_front_page() ) echo '</a>';
-							echo '</' .esc_attr( $site_title ). '>';
+							echo '</' . \Elementor\Utils::validate_html_tag( $site_title ). '>';
 						endif;
 
 						if( $settings['site_tagline_option'] != 'none' ) :
